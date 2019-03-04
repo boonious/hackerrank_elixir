@@ -4,7 +4,23 @@ defmodule Solution.FP do
   """
 
   @doc """
-  Evaluating e^x - https://www.hackerrank.com/challenges/eval-ex/problem
+  Reverse a list (without using Enum.reverse)
+  https://www.hackerrank.com/challenges/fp-reverse-a-list/problem
+  """
+  @spec reverse(list, list) :: list(integer)
+  def reverse([], results), do: results
+  def reverse(numbers, results) when length(numbers) >= 1 and length(numbers) <= 100  do
+     {last_number, remainder} = numbers |> List.pop_at(-1)
+     if(last_number >= 0 and last_number <= 100) do
+         reverse(remainder, results ++ [last_number])
+     end
+  end
+
+  def reverse(_numbers, _results), do: [] 
+     
+  @doc """
+  Evaluating e^x
+  https://www.hackerrank.com/challenges/eval-ex/problem
   """
   @spec exp(float, integer, list) :: float 
   def exp(x, no_of_terms, results \\ 1)

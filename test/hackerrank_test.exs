@@ -3,6 +3,14 @@ defmodule SolutionTest do
   doctest Solution.FP
 
   # https://www.hackerrank.com/challenges/eval-ex/problem
+  test "reverse - reverse a list" do
+    input = [19, 22, 3, 28, 26, 17, 18, 4, 28, 0]
+    results = []
+    output = input |> Solution.FP.reverse(results)
+    assert output == [0, 28, 4, 18, 17, 26, 28, 3, 22, 19]
+  end
+
+  # https://www.hackerrank.com/challenges/eval-ex/problem
   test "exp - Evaluating exponential, e^x" do
     test_cases = [20.0000, 5.0000, 0.5000, -0.5000]
     initial_results = 1 # initial a sum to be added to
