@@ -1,6 +1,6 @@
 defmodule Solution.FP do
   @moduledoc """
-  Elixir solutions for Hackerrank functional programming challenges.
+  Elixir solutions for HackerRank functional programming challenges.
   """
 
   @doc """
@@ -32,6 +32,30 @@ defmodule Solution.FP do
   defp nth_term(x, n), do: :math.pow(x,n) / factorial(n)
   defp factorial(0), do: 1
   defp factorial(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)
+
+  @doc """
+  Area and volume of a curve by definite integrals
+  https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
+  """
+  def area(c, p, l, r, dx) do
+    y = fn x -> f(c, p, x) end
+    n = ((r - l) / dx) |> trunc # total number of sub ntervals
+
+    # according to formula provided via HackerRank
+    # limit definition by definite integrals
+    0..n
+    |> Enum.map(&y.(l + &1 * dx)*dx)
+    |> Enum.sum
+    |> Float.round(1)
+  end
+
+  # construct algebraic series expression
+  defp f(c, p, x) when is_list(c) and is_list(p) do
+    Enum.zip(c, p)
+    |> Enum.reduce(0, fn cp, acc -> acc + f(cp, x) end)
+  end
+
+  defp f({c, p}, x), do: c * :math.pow(x, p)
 
 end
 

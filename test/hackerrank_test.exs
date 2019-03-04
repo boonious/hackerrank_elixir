@@ -21,4 +21,15 @@ defmodule SolutionTest do
     assert test_results == [2423600.1887, 143.6895, 1.6487, 0.6065]
   end
 
+  # https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
+  test "area - Area under curve by Definite Integrals" do
+    coefficients = [1, 2, 3, 4, 5]
+    powers = [6, 7, 8, 9, 10]
+    {left_x, right_x, subinterval} = {1, 4, 0.001} # x ranges and subinterval
+
+    area = Solution.FP.area(coefficients, powers, left_x, right_x, subinterval)
+
+    assert area == 2435300.3
+  end
+
 end
