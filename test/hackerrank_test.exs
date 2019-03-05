@@ -32,4 +32,15 @@ defmodule SolutionTest do
     assert area == 2435300.3
   end
 
+  # https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
+  test "volume - Volume of revolving curve by Definite Integrals" do
+    coefficients = [1, 2, 3, 4, 5]
+    powers = [6, 7, 8, 9, 10]
+    {left_x, right_x, subinterval} = {1, 4, 0.001} # x ranges and subinterval
+
+    volume = Solution.FP.volume(coefficients, powers, left_x, right_x, subinterval)
+
+    assert volume == 26172951168940.8
+  end
+
 end

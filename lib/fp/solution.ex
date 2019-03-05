@@ -49,6 +49,19 @@ defmodule Solution.FP do
     |> Float.round(1)
   end
 
+  # according to volume formula in
+  # https://www.wyzant.com/resources/lessons/math/calculus/integration/finding_volume
+  def volume(c, p, l, r, dx) do
+    y = fn x -> :math.pow(f(c, p, x), 2) end
+    n = ((r - l) / dx) |> trunc # total number of sub ntervals
+
+    0..n
+    |> Enum.map(&y.(l + &1 * dx) * dx)
+    |> Enum.sum
+    |> :erlang.*(:math.pi)
+    |> Float.round(1)
+  end
+
   # construct algebraic series expression
   defp f(c, p, x) when is_list(c) and is_list(p) do
     Enum.zip(c, p)
