@@ -14,3 +14,8 @@ https://www.hackerrank.com/challenges/lambda-calculus-reductions-2/problem
                          = z[z:=λz.w]
                          = λz.w
                          = w
+https://www.hackerrank.com/challenges/lambda-calculus-reductions-3/problem
+(λx.(x x))(λx.(x x)) = (xx)[x:=λx.(x x)]
+                     = (x[x:=λx.(x x)])(x[x:=λx.(x x)])
+                     = (λx.(x x))(λx.(x x))
+                     = Can't reduce to a single term
