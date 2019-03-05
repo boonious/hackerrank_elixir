@@ -19,3 +19,39 @@ https://www.hackerrank.com/challenges/lambda-calculus-reductions-3/problem
                      = (x[x:=λx.(x x)])(x[x:=λx.(x x)])
                      = (λx.(x x))(λx.(x x))
                      = Can't reduce to a single term
+                     
+
+https://www.hackerrank.com/challenges/lambda-calculus-reductions-4/problem
+λg.((λf.((λx.(f (x x)))(λx.(f (x x))))) g)
+
+let a = λf.((λx.(f (x x)))(λx.(f (x x))))
+      
+Quick answer
+============
+λg.((λf.((λx.(f (x x)))(λx.(f (x x))))) g)
+                   = λg.((a) g)
+                   = already single lambda term
+                   = Can't reduce
+
+
+Long answer reducing a, need verification
+=========================================
+a = λf.((λx.(f (x x)))(λx.(f (x x)))) = λf.(b) 
+
+where b = (λx.(f (x x)))(λx.(f (x x)))
+        = (f (x x))[x := λx.(f (x x))]
+        = (x[x := λx.(f (x x))]) ([x := λx.(f (x x))]) (f[x := λx.(f (x x))])
+        = (λx.(f (x x))) (λx.(f (x x))) (f)
+        = (λx.(f (x x))) ((f (x x))[x:=f])
+        = (λx.(f (x x))) (f f f)
+        = (f (x x))[x:=f f f]
+        = (x[x:=f f f]) ([x:=f f f]) (f[x:=f f f])
+        = (f f f)(f f f)(f)              
+  
+λg.( (a) g ) = λg.( (λf.(b))g )
+             = λg.( (λf.((f f f)(f f f)(f)))g )
+             = λg.( (f f f)(f f f)(f))[f:=g] )
+             = λg.( (g g g)(g g g)(g) )
+             = already single lambda term
+             = CAN'T REDUCE
+
