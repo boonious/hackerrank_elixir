@@ -1,5 +1,16 @@
 # https://www.hackerrank.com/challenges/lambda-calculus-reductions-1/problem
-((λx.(x y))(λz.z)) = (x y)[x : = λz.z]
-                   = (x [x : = λz.z] ) (y [x : = λz.z] )
+((λx.(x y))(λz.z)) = (x y)[x := λz.z]
+                   = (x [x := λz.z] ) (y [x := λz.z] )
                    = (λz.z) y
                    = y
+
+https://www.hackerrank.com/challenges/lambda-calculus-reductions-2/problem
+(λx.((λy.(x y))x))(λz.w) = (λx.((x y)[y := x]))(λz.w)
+                         = (λx.((x[y := x])(y[y := x])))(λz.w)
+                         = (λx.(xx))(λz.w)
+                         = (xx)([x:=λz.w])
+                         = (x[x:=λz.w])(x[x:=λz.w])
+                         = (λz.w)(λz.w)
+                         = z[z:=λz.w]
+                         = λz.w
+                         = w

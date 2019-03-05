@@ -41,7 +41,7 @@ defmodule Solution.FP do
     y = fn x -> f(c, p, x) end
     n = ((r - l) / dx) |> trunc # total number of sub ntervals
 
-    # according to formula provided via HackerRank
+    # according to the formula provided via HackerRank
     # limit definition by definite integrals
     0..n
     |> Enum.map(&y.(l + &1 * dx)*dx)
@@ -49,7 +49,7 @@ defmodule Solution.FP do
     |> Float.round(1)
   end
 
-  # according to volume formula in
+  # according to the volume formula in
   # https://www.wyzant.com/resources/lessons/math/calculus/integration/finding_volume
   def volume(c, p, l, r, dx) do
     y = fn x -> :math.pow(f(c, p, x), 2) end
