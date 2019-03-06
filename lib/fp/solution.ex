@@ -85,5 +85,24 @@ defmodule Solution.FP do
     |> is_nil # should be nil if all x, y pairs have 1-1 unique mapping
   end
 
+  @doc """
+  Compute the Perimeter of a Polygon.
+  https://www.hackerrank.com/challenges/lambda-march-compute-the-perimeter-of-a-polygon/problem
+
+  """
+  @spec perimeter(list(tuple)) :: float
+  def perimeter(coordinates), do: _perimeter(coordinates ++ [coordinates |> hd])
+
+  # recursively compute perimeter, when "coordinates"
+  # contain only 1 pt (last pt), return results
+  defp _perimeter(coordinates, distance \\ 0.0)
+  defp _perimeter(coordinates, distance) when length(coordinates) == 1, do: distance |> Float.round(7)
+  defp _perimeter([p1 | coordinates], distance) do
+    p2 = coordinates |> hd
+    _perimeter(coordinates, distance + _perimeter(p1, p2))
+  end
+
+  defp _perimeter({x1,y1}, {x2,y2}), do: :math.sqrt(:math.pow(y2-y1, 2) + :math.pow(x2-x1, 2))
+
 end
 

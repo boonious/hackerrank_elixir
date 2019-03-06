@@ -58,4 +58,13 @@ defmodule SolutionTest do
     assert Solution.FP.function?(test_case) == false
   end
 
+  #https://www.hackerrank.com/challenges/functions-or-not/problem
+  test "perimeter - Compute the perimeter of a polygon" do
+    coordinates = [{0,0},{0,1},{1,1},{1,0}]
+    assert Solution.FP.perimeter(coordinates) == 4.0
+
+    coordinates = [{1043,770},{551,990},{681,463}]
+    assert Solution.FP.perimeter(coordinates) == 1556.3949033
+  end
+
 end
