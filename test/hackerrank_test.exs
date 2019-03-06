@@ -67,4 +67,13 @@ defmodule SolutionTest do
     assert Solution.FP.perimeter(coordinates) == 1556.3949033
   end
 
+  #https://www.hackerrank.com/challenges/lambda-march-compute-the-area-of-a-polygon/problem
+  test "area_polygon - Compute the area of a polygon" do
+    coordinates = [{0,0},{0,1},{1,1},{1,0}]
+    assert Solution.FP.area_polygon(coordinates) == 1
+
+    coordinates = [{1043,770},{551,990},{681,463}]
+    assert Solution.FP.area_polygon(coordinates) == 115342.0
+  end
+
 end

@@ -104,5 +104,22 @@ defmodule Solution.FP do
 
   defp _perimeter({x1,y1}, {x2,y2}), do: :math.sqrt(:math.pow(y2-y1, 2) + :math.pow(x2-x1, 2))
 
+  @doc """
+  Compute the area of a Polygon.
+  https://www.hackerrank.com/challenges/lambda-march-compute-the-area-of-a-polygon/problem
+  """
+  @spec area_polygon(list(tuple)) :: float
+  def area_polygon(coordinates), do: _area_polygon(coordinates ++ [coordinates |> hd])
+
+  # using irregular polygon formula in https://www.mathopenref.com/coordpolygonarea.html
+  defp _area_polygon(coordinates, x \\ 0.0)
+  defp _area_polygon(coordinates, x) when length(coordinates) == 1, do: abs(x / 2) |> Float.round(7)
+  defp _area_polygon([p1 | coordinates], x) do
+    p2 = coordinates |> hd
+    _area_polygon(coordinates, x + _area_polygon(p1, p2))
+  end
+
+  defp _area_polygon({x1,y1}, {x2,y2}), do: (x1*y2 - y1*x2)
+
 end
 
