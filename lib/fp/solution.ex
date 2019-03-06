@@ -70,5 +70,20 @@ defmodule Solution.FP do
 
   defp f({c, p}, x), do: c * :math.pow(x, p)
 
+  @doc """
+  Function or not - validating values x, y or x and f(x).
+  Given a list of x, y values, this function determines
+  (true, false) whether the values could be input/output
+  for a valid function.
+  https://www.hackerrank.com/challenges/functions-or-not/problem
+  """
+  @spec function?(list(tuple)) :: boolean
+  def function?(xy) do
+    xy
+    |> Enum.group_by(&(elem(&1,0)), &(elem(&1,1))) # maps to x, y
+    |> Enum.find(fn {_k,v} -> length(v) > 1 end) # find any x with multiple y values, i.e. invalid relation
+    |> is_nil # should be nil if all x, y pairs have 1-1 unique mapping
+  end
+
 end
 

@@ -43,4 +43,19 @@ defmodule SolutionTest do
     assert volume == 26172951168940.8
   end
 
+  #https://www.hackerrank.com/challenges/functions-or-not/problem
+  test "function? - Function or not - validating x, y value pairs" do
+    test_case = [{1,1},{2,2},{3,3}]
+    assert Solution.FP.function?(test_case) == true
+
+    test_case = [{1,2},{2,4},{3,6},{4,8}]
+    assert Solution.FP.function?(test_case) == true
+
+    test_case = [{1,2},{2,4},{2,6}]
+    assert Solution.FP.function?(test_case) == false
+
+    test_case = [{1,2},{1,4},{1,6},{1,8}]
+    assert Solution.FP.function?(test_case) == false
+  end
+
 end
