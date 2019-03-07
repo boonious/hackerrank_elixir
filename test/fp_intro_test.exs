@@ -1,12 +1,12 @@
-defmodule SolutionTest do
+defmodule FPIntroTest do
   use ExUnit.Case
-  doctest Solution.FP
+  doctest FP.Intro
 
   # https://www.hackerrank.com/challenges/eval-ex/problem
   test "reverse - reverse a list" do
     input = [19, 22, 3, 28, 26, 17, 18, 4, 28, 0]
     results = []
-    output = input |> Solution.FP.reverse(results)
+    output = input |> FP.Intro.reverse(results)
     assert output == [0, 28, 4, 18, 17, 26, 28, 3, 22, 19]
   end
 
@@ -16,7 +16,7 @@ defmodule SolutionTest do
     initial_results = 1 # initial a sum to be added to
     number_of_terms = 9
 
-    test_results = test_cases |> Enum.map(&Solution.FP.exp(&1, number_of_terms, initial_results))
+    test_results = test_cases |> Enum.map(&FP.Intro.exp(&1, number_of_terms, initial_results))
 
     assert test_results == [2423600.1887, 143.6895, 1.6487, 0.6065]
   end
@@ -27,7 +27,7 @@ defmodule SolutionTest do
     powers = [6, 7, 8, 9, 10]
     {left_x, right_x, subinterval} = {1, 4, 0.001} # x ranges and subinterval
 
-    area = Solution.FP.area(coefficients, powers, left_x, right_x, subinterval)
+    area = FP.Intro.area(coefficients, powers, left_x, right_x, subinterval)
 
     assert area == 2435300.3
   end
@@ -38,7 +38,7 @@ defmodule SolutionTest do
     powers = [6, 7, 8, 9, 10]
     {left_x, right_x, subinterval} = {1, 4, 0.001} # x ranges and subinterval
 
-    volume = Solution.FP.volume(coefficients, powers, left_x, right_x, subinterval)
+    volume = FP.Intro.volume(coefficients, powers, left_x, right_x, subinterval)
 
     assert volume == 26172951168940.8
   end
@@ -46,34 +46,34 @@ defmodule SolutionTest do
   #https://www.hackerrank.com/challenges/functions-or-not/problem
   test "function? - Function or not - validating x, y value pairs" do
     test_case = [{1,1},{2,2},{3,3}]
-    assert Solution.FP.function?(test_case) == true
+    assert FP.Intro.function?(test_case) == true
 
     test_case = [{1,2},{2,4},{3,6},{4,8}]
-    assert Solution.FP.function?(test_case) == true
+    assert FP.Intro.function?(test_case) == true
 
     test_case = [{1,2},{2,4},{2,6}]
-    assert Solution.FP.function?(test_case) == false
+    assert FP.Intro.function?(test_case) == false
 
     test_case = [{1,2},{1,4},{1,6},{1,8}]
-    assert Solution.FP.function?(test_case) == false
+    assert FP.Intro.function?(test_case) == false
   end
 
   #https://www.hackerrank.com/challenges/functions-or-not/problem
   test "perimeter - Compute the perimeter of a polygon" do
     coordinates = [{0,0},{0,1},{1,1},{1,0}]
-    assert Solution.FP.perimeter(coordinates) == 4.0
+    assert FP.Intro.perimeter(coordinates) == 4.0
 
     coordinates = [{1043,770},{551,990},{681,463}]
-    assert Solution.FP.perimeter(coordinates) == 1556.3949033
+    assert FP.Intro.perimeter(coordinates) == 1556.3949033
   end
 
   #https://www.hackerrank.com/challenges/lambda-march-compute-the-area-of-a-polygon/problem
   test "area_polygon - Compute the area of a polygon" do
     coordinates = [{0,0},{0,1},{1,1},{1,0}]
-    assert Solution.FP.area_polygon(coordinates) == 1
+    assert FP.Intro.area_polygon(coordinates) == 1
 
     coordinates = [{1043,770},{551,990},{681,463}]
-    assert Solution.FP.area_polygon(coordinates) == 115342.0
+    assert FP.Intro.area_polygon(coordinates) == 115342.0
   end
 
 end

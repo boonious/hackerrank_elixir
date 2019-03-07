@@ -1,4 +1,4 @@
-defmodule Solution.FP do
+defmodule FP.Intro do
   @moduledoc """
   Elixir solutions for HackerRank functional programming challenges.
   """
