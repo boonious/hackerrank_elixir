@@ -13,12 +13,12 @@ using [interactive Elixir](https://elixir-lang.org/getting-started/introduction.
 
 ```elixir
     # evaluating e^5, with 9 additional terms in the series
-    Solution.FP.exp(5.0, 9)
+    iex> FP.Intro.exp(5.0, 9)
 ```
 
 Note: it is necessary to provide additional functional hooks
 to integrate the input and output data on HackerRank
 during code submission and evaluation, typically through
 `IO` calls in a `Solution.main` function to
-parse and cast multi-line data (into appropriate input data types),
+parse and cast multi-line data into appropriate input data types,
 as well as output results to stdout.
