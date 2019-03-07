@@ -35,6 +35,13 @@ defmodule FPRecursionTest do
       assert FP.Recursion.fibonacci(n) == 3
     end
 
+    #https://www.hackerrank.com/challenges/pascals-triangle/problem
+    test "pascal_tri - Pascal's triangle numbers" do
+      n = 4
+      assert FP.Recursion.pascal_tri_row(n-1) == [1,3,3,1]
+      assert FP.Recursion.pascal_tri(n) === [[1], [1,1], [1,2,1], [1,3,3,1]]
+    end
+
   end
 
 end

@@ -30,4 +30,26 @@ defmodule FP.Recursion do
   def fibonacci(n) when n <= 40, do: fibonacci(n-1) + fibonacci(n-2)
   def fibonacci(_n), do: ""
 
+  @doc """
+  Pascal's triangle
+  https://www.hackerrank.com/challenges/pascals-triangle/problem
+  """
+  def pascal_tri(k, m \\ 1, tri_data \\ [])
+  def pascal_tri(k, m, tri_data) when m > k, do: tri_data
+  def pascal_tri(k, m, tri_data) when k <= 10 do
+    coefficients = pascal_tri_row(m-1)
+    pascal_tri(k, m+1, tri_data ++ [coefficients])
+  end
+  def pascal_tri(_k, _m, _rows), do: nil
+
+  def pascal_tri_row(n \\ 0, r \\ 0, values \\ [])
+  def pascal_tri_row(n, r, values) when r == n + 1, do: values
+  def pascal_tri_row(n, r, values) do
+    coefficient = factorial(n)/(factorial(r)*factorial(n-r)) |> round
+    pascal_tri_row(n, r+1, values ++ [coefficient])
+  end
+
+  defp factorial(0), do: 1
+  defp factorial(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)
+
 end
