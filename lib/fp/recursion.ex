@@ -53,6 +53,64 @@ defmodule FP.Recursion do
   defp factorial(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)
 
   @doc """
+  Functions and fractals: Sierpinski triangle
+  https://www.hackerrank.com/challenges/functions-and-fractals-sierpinski-triangles/proble
+  """
+  @spec draw_triangles(integer) :: list
+  def draw_triangles(iterations) do
+    rows = 32
+    cols = 63
+
+    bound_left = fn y -> y end
+    bound_right = fn y -> 2*rows - y end
+
+    # draw first triangle
+    canvas = for x <- 1..cols, y <- 1..rows, into: %{} do
+      pt = {x, y}
+      char = if x >= bound_left.(y) and x <= bound_right.(y), do: "1", else: "_"
+      {pt, char}
+    end
+
+    vertex = [{32,32}]
+    # fractalisation via recursion and update canvas
+    canvas = fractal(vertex, iterations, rows, cols, canvas)
+    output = for y <- rows..1, into: [] do
+      line = for x <- 1..cols, into: "" do
+        pt = {x, y}
+        canvas[pt]
+      end
+      line
+    end
+    output
+  end
+
+  defp fractal(_vertices, 0, _rows, _cols, canvas), do: canvas
+  defp fractal(vertices, iterations, rows, cols, canvas) do
+    v = vertices |> Enum.map(&spawn_vertices(&1,rows))
+    update_vertices = v |> Enum.map(&(&1 |> hd))
+    updated_canvases = update_vertices |> Enum.map(&update(&1, round(rows/2), round(cols/2)-1, %{}))
+    new_canvas = updated_canvases |> Enum.reduce(canvas, fn x, acc -> Map.merge(acc, x) end)
+
+    fractal(v |> List.flatten, iterations - 1, rows / 2, cols / 2, new_canvas)
+  end
+
+  defp spawn_vertices(v, rows) do
+    v1 = {round(elem(v,0) - rows/2), round(elem(v,1) - rows/2)}
+    v2 = {round(elem(v,0) + rows/2), round(elem(v,1) - rows/2)}
+    [v1,v2,v]
+  end
+
+  defp update({_x, _y}, 0, _cols, flipped_canvas), do: flipped_canvas
+  defp update({x, y}, rows, cols, flipped_canvas) do
+    flipped_line = for i <- 1..cols, into: %{} do
+      pt = {x + i, y}
+      {pt, "_"}
+    end
+
+    update({x+1, y-1}, rows-1, cols-2, Map.merge(flipped_canvas, flipped_line))
+  end
+
+  @doc """
   String-o-Permute
   https://www.hackerrank.com/challenges/string-o-permute/problem
   """
