@@ -42,4 +42,21 @@ defmodule FP.AdHoc do
     rotate(y ++ [x] , iterations - 1, results ++ [(y |> Enum.join("")) <> x])
   end
 
+
+  # according to the easier method
+  # https://www.youtube.com/watch?v=AHOvHb3Ej_I
+  def prime_factorise(num, primes \\ @primes, factors \\ [])
+  def prime_factorise(1, _primes, []), do: 1
+  def prime_factorise(1, _primes, factors), do: factors
+  def prime_factorise(num, [], factors), do: factors ++ [num]
+  def prime_factorise(num, primes, factors) do
+    prime = primes |> hd
+
+    if(rem(num,prime) == 0) do
+      prime_factorise(div(num, prime), primes, factors ++ [prime])
+    else
+      prime_factorise(num, primes |> tl, factors)
+    end
+  end
+
 end

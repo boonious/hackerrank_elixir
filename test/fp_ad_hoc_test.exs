@@ -21,6 +21,14 @@ defmodule FPAdHocTest do
       assert FP.AdHoc.rotate("z") == ["z"]
     end
 
+    #https://www.hackerrank.com/challenges/huge-gcd-fp/problem
+    test "prime_factorise - Huge GCD numbers" do
+      # 'prime_factorise' function is required to factorise number into primes
+      # for computing GCD of huge numbers by prime decomposition
+      assert FP.AdHoc.prime_factorise(170) == [2, 5, 17]
+      assert FP.AdHoc.prime_factorise(6561) == [3, 3, 3, 3, 3, 3, 3, 3]
+      assert FP.AdHoc.prime_factorise(255) == [3, 5, 17]
+    end
   end
 
 end
