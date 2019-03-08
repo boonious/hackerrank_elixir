@@ -25,4 +25,21 @@ defmodule FP.AdHoc do
     _dedup(y, a, b)
   end
 
+
+  @doc """
+  Rotate string
+  https://www.hackerrank.com/challenges/rotate-string/problem
+  """
+  @spec rotate(binary) :: list(binary)
+  def rotate(str) when is_bitstring(str) do
+    chars = String.split(str, "", trim: true)
+    rotate(chars, length(chars))
+  end
+
+  def rotate(chars, iterations, results \\ [])
+  def rotate(_chars, 0, results), do: results
+  def rotate([x|y], iterations, results) do
+    rotate(y ++ [x] , iterations - 1, results ++ [(y |> Enum.join("")) <> x])
+  end
+
 end

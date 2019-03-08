@@ -12,6 +12,15 @@ defmodule FPAdHocTest do
       assert FP.AdHoc.dedup("sdfsdewrmmweswerpsdfpmssfaql") == "sdfewrmpaql"
     end
 
+    #https://www.hackerrank.com/challenges/rotate-string/problem
+    test "rotate - Rotate string" do
+      assert FP.AdHoc.rotate("abc") == ["bca", "cab", "abc"]
+      assert FP.AdHoc.rotate("abcde") == ["bcdea", "cdeab", "deabc", "eabcd", "abcde"]
+      assert FP.AdHoc.rotate("abab") == ["baba", "abab", "baba", "abab"]
+      assert FP.AdHoc.rotate("aaa") == ["aaa", "aaa", "aaa"]
+      assert FP.AdHoc.rotate("z") == ["z"]
+    end
+
   end
 
 end
