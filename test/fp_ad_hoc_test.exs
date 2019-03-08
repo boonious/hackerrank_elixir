@@ -29,6 +29,22 @@ defmodule FPAdHocTest do
       assert FP.AdHoc.prime_factorise(6561) == [3, 3, 3, 3, 3, 3, 3, 3]
       assert FP.AdHoc.prime_factorise(255) == [3, 5, 17]
     end
+
+    test "gcd - Huge GCD " do
+      # for gcd(2x2x3x3x2x5, 8x1x6x170)
+      x = [[2, 2, 3, 3, 25], [8, 1, 6, 170]]
+      assert FP.AdHoc.gcd(x) == 60
+
+      x = [[1, 2, 4, 8, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192], [1, 3, 9, 27, 81, 243, 729, 2187, 6561]]
+      assert FP.AdHoc.gcd(x) == 1
+
+      x = [[2, 3, 5], [4, 5]]
+      assert FP.AdHoc.gcd(x) == 10
+
+      x = [[55,555,5,64,23,66,23,45,33,563], [2,3,4,5,7]]
+      assert FP.AdHoc.gcd(x) == 120
+    end
+
   end
 
 end

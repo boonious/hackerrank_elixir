@@ -63,6 +63,21 @@ defmodule FP.AdHoc do
     rotate(y ++ [x] , iterations - 1, results ++ [(y |> Enum.join("")) <> x])
   end
 
+  @doc """
+  Huge GCD
+  https://www.hackerrank.com/challenges/huge-gcd-fp/problem
+
+  Compute GCD for huge numbers via prime number decomposition.
+  """
+  @spec gcd(list) :: integer
+  def gcd([a, b]) do
+    prime_factors_a = a |> Enum.map(&prime_factorise(&1)) |> List.flatten
+    prime_factors_b = b |> Enum.map(&prime_factorise(&1)) |> List.flatten
+    prime_diff = prime_factors_b -- prime_factors_a
+    (prime_factors_b -- prime_diff)
+    |> Enum.reduce(&:erlang.*/2)
+    |> rem(1000000007) # print results in modulo 1000000007
+  end
 
   # according to the easier method
   # https://www.youtube.com/watch?v=AHOvHb3Ej_I
