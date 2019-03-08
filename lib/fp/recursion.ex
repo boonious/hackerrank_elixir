@@ -52,4 +52,34 @@ defmodule FP.Recursion do
   defp factorial(0), do: 1
   defp factorial(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)
 
+  @doc """
+  String-o-Permute
+  https://www.hackerrank.com/challenges/string-o-permute/problem
+  """
+  def permute_string(string) when is_bitstring(string) do
+    string
+    |> String.split("", trim: true)
+    |> Enum.chunk_every(2)
+    |> Enum.map(&permute_string(&1))
+    |> List.flatten
+    |> Enum.join("")
+  end
+
+  def permute_string([a,b]), do: [b,a]
+
+  @doc """
+  String mingling
+  https://www.hackerrank.com/challenges/string-mingling/problem
+  """
+  def mingle_string([a,b]) do
+    string_list1 = a |> String.split("", trim: true)
+    string_list2 = b |> String.split("", trim: true)
+
+    mingle_string(string_list1, string_list2)
+  end
+
+  def mingle_string(string1, string2, new_string \\ "")
+  def mingle_string([],[], new_string), do: new_string
+  def mingle_string([c|d],[e|f], new_string), do: mingle_string(d,f,new_string <> c <> e)
+
 end

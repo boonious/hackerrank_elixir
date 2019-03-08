@@ -42,6 +42,20 @@ defmodule FPRecursionTest do
       assert FP.Recursion.pascal_tri(n) === [[1], [1,1], [1,2,1], [1,3,3,1]]
     end
 
+
+    #https://www.hackerrank.com/challenges/string-o-permute/problem
+    test "permute_string - String-o-permute" do
+      assert FP.Recursion.permute_string("abcdpqrs") == "badcqpsr"
+      assert FP.Recursion.permute_string("az") == "za"
+    end
+
+    #https://www.hackerrank.com/challenges/string-mingling/problem
+    test "mingle_string - String mingling" do
+      assert FP.Recursion.mingle_string(["abcde", "pqrst"]) == "apbqcrdset"
+      assert FP.Recursion.mingle_string(["hacker", "ranker"]) == "hraacnkkeerr"
+    end
+
+
   end
 
 end
