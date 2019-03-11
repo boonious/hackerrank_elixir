@@ -99,6 +99,11 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert FP.Recursion.mingle_string(["hacker", "ranker"]) == "hraacnkkeerr"
     end
 
+    #https://www.hackerrank.com/challenges/string-compression/problem
+    test "compress_string - String compression" do
+      assert FP.Recursion.compress_string("aaabaaaaccaaaaba") == "a3ba4c2a4ba"
+    end
+
 
   end
 

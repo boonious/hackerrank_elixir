@@ -140,4 +140,25 @@ defmodule FP.Recursion do
   def mingle_string([],[], new_string), do: new_string
   def mingle_string([c|d],[e|f], new_string), do: mingle_string(d,f,new_string <> c <> e)
 
+  @doc """
+  String compression
+  https://www.hackerrank.com/challenges/string-compression/problem
+  """
+  def compress_string(str) when is_binary(str) do
+    str
+    |> String.split("", trim: true)
+    |> compress_string
+  end
+
+  def compress_string(chars, results \\ "", count \\ 1)
+  def compress_string([], results, _count), do: results
+  def compress_string([x|y], results, count) do
+    if y != [] and (x == y |> hd) do
+      compress_string(y, results, count + 1)
+    else
+      char = if count == 1, do: x, else: x <> (count |> Integer.to_string)
+      compress_string(y, results <> char, 1)
+    end
+  end
+
 end
