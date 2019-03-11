@@ -140,6 +140,78 @@ defmodule FP.Recursion do
   def mingle_string([],[], new_string), do: new_string
   def mingle_string([c|d],[e|f], new_string), do: mingle_string(d,f,new_string <> c <> e)
 
+  #==============================================================
+  @doc """
+  Functions and Fractals - Recursive Trees
+  https://www.hackerrank.com/challenges/fractal-trees/problem
+  """
+  @spec draw_trees(integer) :: list
+  def draw_trees(iterations) do
+    rows = 63
+    cols = 100
+
+    # initiailise a Map canvas
+    canvas = for x <- 1..cols, y <- 1..rows, into: %{} do
+      pt = {x, y}
+      {pt, "_"}
+    end
+
+    root = [{50,0}]
+    height = 16
+
+    # fractalisation via recursion and update canvas
+    canvas = fractal_tree(root, iterations, height, canvas)
+
+    output = for y <- rows..1, into: [] do
+      line = for x <- 1..cols, into: "" do
+        pt = {x, y}
+        canvas[pt]
+      end
+      line
+    end
+    output
+  end
+
+  defp fractal_tree(_roots, 0, _height, canvas), do: canvas
+  defp fractal_tree(roots, iterations, height, canvas) when is_list(roots) do
+    trees = roots
+    |> Enum.map(&fractal_tree(&1, height))
+    |> Enum.reduce(fn x, acc -> Map.merge(acc, x) end)
+
+    # get the tree top height of tree branches
+    # use it to find the branch tips to use as
+    # roots to grow tree in the next iteration
+    new_height = trees |> Map.keys |> Enum.max_by(&(elem(&1,1))) |> elem(1) # tree top height
+    new_roots = trees |> Map.keys |> Enum.filter(&( elem(&1,1) == new_height) ) # branch tips
+
+    fractal_tree(new_roots, iterations - 1, round(height / 2), Map.merge(canvas, trees))
+  end
+
+  # drawing the tree from a root coordinate
+  # (trunk, branches) and return tree canvas map data
+  defp fractal_tree({x, y}, height) do
+    # grow trunk
+    trunk = for i <- 0..height, into: %{} do
+      pt = {x, y + i}
+      {pt, "1"}
+    end
+    trunk_tip = trunk |> Map.keys |> Enum.max_by(&(elem(&1,1)))
+
+    # grow branches
+    {a,b} = trunk_tip
+    left_branch = for i <- 0..height, into: %{} do
+      pt = {a - i, b + i}
+      {pt, "1"}
+    end
+    right_branch = for i <- 0..height, into: %{} do
+      pt = {a + i, b + i}
+      {pt, "1"}
+    end
+
+    tree = Map.merge(trunk, left_branch) |> Map.merge(right_branch)
+    tree
+  end
+
   @doc """
   String compression
   https://www.hackerrank.com/challenges/string-compression/problem
