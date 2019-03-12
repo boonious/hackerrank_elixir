@@ -212,6 +212,7 @@ defmodule FP.Recursion do
     tree
   end
 
+  #==============================================================
   @doc """
   String compression
   https://www.hackerrank.com/challenges/string-compression/problem
@@ -232,5 +233,73 @@ defmodule FP.Recursion do
       compress_string(y, results <> char, 1)
     end
   end
+
+  #==============================================================
+  def graham_scan(points) do
+    # find the lowest y
+    {_, y0} = points |> Enum.min_by(fn {_x, y} -> y end)
+
+    # use y0 to find the lowest leftmost point
+    p0 = points |> Enum.filter(fn {_x,y} -> y == y0 end) |> Enum.min_by(fn {x,_y} -> x end)
+
+    [p1 | x] = points
+    |> List.delete(p0)
+    |> Enum.group_by(fn{x,y} -> polar_angle({x,y}, p0) end)
+    |> Enum.sort_by(fn {angle, _pts} ->  angle end)
+    |> Enum.map(fn {_angle, pts} -> Enum.max_by(pts, fn pt -> _perimeter(p0,pt) end) end)
+
+    convex_hull = graham_scan(x, [p1,p0])
+    # prepending list for efficiency purpose
+    [p0 | convex_hull] |> Enum.reverse
+  end
+
+  def graham_scan([], convex_hull), do: convex_hull
+  def graham_scan([i|j], convex_hull) do
+    [p1, p0] = convex_hull |> Enum.take(2)
+    p2 = i
+
+    # cross product measure which finds if 3 points
+    # is forming left or right turn, or collinear (z=0)
+    # the measure if then used to discard points not
+    # on convex based Graham scan algorithm
+    z = counter_clockwise?(p0,p1,p2)
+    cond do
+      z == 0 ->
+        if which_further?(p0,p1,p2) == 1, do: graham_scan(j, [p1|convex_hull]), else: graham_scan(j, [p2|convex_hull])
+      z > 0 ->
+        graham_scan(j, [p2|convex_hull]) # ccw, add point to convex hull
+      z < 0 ->
+        # anti-clockwise, remove point and
+        # redo checks of p2/i in the next interation,
+        # i.e. reset/don't move ahead yet in sequence evaluation
+        graham_scan([i|j], tl(convex_hull))
+    end
+  end
+
+  # cross vector product to determine whether 3 points does a left turn
+  # see:   https://en.wikipedia.org/wiki/Graham_scan
+  def counter_clockwise?({x0,y0},{x1,y1},{x2,y2}), do: (x1-x0)*(y2-y0)-(y1-y0)*(x2-x0)
+
+  # select further collinear point
+  def which_further?({x0,y0},{x1,y1},{x2,y2}) do
+    d1 = _perimeter({x0,y0}, {x1,y1})
+    d2 = _perimeter({x0,y0}, {x2,y2})
+    if d1 > d2, do: 1, else: 2
+  end
+
+  defp polar_angle({x,y},{x0,y0}), do: :math.atan2(y - y0,x - x0)
+
+  # recursively compute perimeter, when "coordinates"
+  # referred from previous polygon perimeter challenge
+  def perimeter(coordinates), do: _perimeter(coordinates)
+
+  defp _perimeter(coordinates, distance \\ 0.0)
+  defp _perimeter(coordinates, distance) when length(coordinates) == 1, do: distance |> Float.round(1)
+  defp _perimeter([p1 | coordinates], distance) do
+    p2 = coordinates |> hd
+    _perimeter(coordinates, distance + _perimeter(p1, p2))
+  end
+
+  defp _perimeter({x1,y1}, {x2,y2}), do: :math.sqrt(:math.pow(y2-y1, 2) + :math.pow(x2-x1, 2))
 
 end
