@@ -235,6 +235,17 @@ defmodule FP.Recursion do
   end
 
   #==============================================================
+  @doc """
+  Convex hull
+  https://www.hackerrank.com/challenges/convex-hull-fp/problem
+
+  Find the perimeter of a convex hull from a series of coordinates,
+  opted to implement Graham's scan algorithm.
+  https://en.wikipedia.org/wiki/Graham_scan
+  """
+  @spec convex_hull_perimeter(list(tuple)) :: number
+  def convex_hull_perimeter(points), do: graham_scan(points) |> perimeter
+
   def graham_scan(points) do
     # find the lowest y
     {_, y0} = points |> Enum.min_by(fn {_x, y} -> y end)
