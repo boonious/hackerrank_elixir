@@ -336,4 +336,21 @@ defmodule FP.Recursion do
     if a == b, do: prefix_compress(c, prefix <> a, count + 1), else: prefix_compress([], prefix, count)
   end
 
+  #==============================================================
+  @doc """
+  String reductions
+
+  https://www.hackerrank.com/challenges/string-reductions/problem
+  """
+  def string_reduce(str) do
+    str
+    |> String.split("")
+    |> string_reduce([])
+  end
+
+  def string_reduce([], output), do: Enum.reverse(output) |> Enum.join("")
+  def string_reduce([a|b], output) do
+    if Enum.member?(output, a), do: string_reduce(b,output), else: string_reduce(b, [a|output])
+  end
+
 end

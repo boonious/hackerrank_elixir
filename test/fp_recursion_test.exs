@@ -202,6 +202,13 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert FP.Recursion.prefix_compress(["puppy","puppy"]) == [{5,"puppy"},{0,""},{0,""}]
     end
 
+    #https://www.hackerrank.com/challenges/string-reductions/problem
+    test "string_reduce - String reduction" do
+      assert FP.Recursion.string_reduce("accabb") == "acb"
+      assert FP.Recursion.string_reduce("abc") == "abc"
+      assert FP.Recursion.string_reduce("pprrqq") == "prq"
+    end
+
   end
 
 end
