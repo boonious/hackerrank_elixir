@@ -195,6 +195,13 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert FP.Recursion.convex_hull_perimeter(points) == 3589.2
     end
 
+    #https://www.hackerrank.com/challenges/prefix-compression/problem
+    test "prefix_compress - Prefix compression" do
+      assert FP.Recursion.prefix_compress(["abcdefpr","abcpqr"]) == [{3,"abc"},{5,"defpr"},{3,"pqr"}]
+      assert FP.Recursion.prefix_compress(["kitkat","kit"]) == [{3,"kit"},{3,"kat"},{0,""}]
+      assert FP.Recursion.prefix_compress(["puppy","puppy"]) == [{5,"puppy"},{0,""},{0,""}]
+    end
+
   end
 
 end

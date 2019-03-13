@@ -313,4 +313,27 @@ defmodule FP.Recursion do
 
   defp _perimeter({x1,y1}, {x2,y2}), do: :math.sqrt(:math.pow(y2-y1, 2) + :math.pow(x2-x1, 2))
 
+  #==============================================================
+  @doc """
+  Prefix compression
+
+  https://www.hackerrank.com/challenges/prefix-compression/problem
+  """
+  @spec prefix_compress(list(binary)) :: list(tuple)
+  def prefix_compress(data) do
+    [str_token1, str_token2] = data |> Enum.map(&String.split(&1,"", trim: true))
+
+    prefix = Enum.zip(str_token1, str_token2) |> prefix_compress("", 0)
+    pos = elem(prefix, 0)
+
+    substring1 = Enum.drop(str_token1, pos) |> Enum.join("")
+    substring2 = Enum.drop(str_token2, pos) |> Enum.join("")
+    [prefix, {String.length(substring1),substring1}, {String.length(substring2), substring2}]
+  end
+
+  def prefix_compress([], prefix, count), do: {count, prefix}
+  def prefix_compress([{a,b}|c], prefix, count) do
+    if a == b, do: prefix_compress(c, prefix <> a, count + 1), else: prefix_compress([], prefix, count)
+  end
+
 end
