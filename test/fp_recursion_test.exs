@@ -209,6 +209,13 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert FP.Recursion.string_reduce("pprrqq") == "prq"
     end
 
+    #https://www.hackerrank.com/challenges/functional-programming-the-sums-of-powers/problem
+    test "sum_of_powers - The sums of power" do
+      #assert FP.Recursion.sum_of_powers([10,2]) == 1
+      assert FP.Recursion.sum_of_powers([100,2]) == 3
+      #assert FP.Recursion.sum_of_powers([100,3]) == 1
+    end
+
   end
 
 end

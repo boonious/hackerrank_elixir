@@ -353,4 +353,44 @@ defmodule FP.Recursion do
     if Enum.member?(output, a), do: string_reduce(b,output), else: string_reduce(b, [a|output])
   end
 
+  #==============================================================
+  @doc """
+  The Sum of powers
+
+  https://www.hackerrank.com/challenges/functional-programming-the-sums-of-powers/problem
+  """
+  def sum_of_powers([num, power]) do
+    # find out the max number for evaluation
+    # e.g. 100 -> 10, as 11^x exceeds 100, for x >= 2
+    max_num = :math.pow(num, 1/power) |> round
+
+    # check map series of nth power, starting from 1 to max num
+    # this function return a list of "true" elements, indicating
+    # the possible ways
+    check_power(1..max_num |> Enum.to_list, num, power, max_num)
+    |> length
+  end
+
+  # return true if series reduced to 0, i.e. a solution found
+  def check_power(_num, sum, _pow, _max_num) when sum == 0, do: true
+
+  # the sum > 0 guard, ensure recursion checking is proceeding
+  def check_power(num, sum, pow, max_num) when is_list(num) and sum > 0 do
+    Enum.map(num, &check_power(&1, sum, pow, max_num))
+    |> List.flatten
+    |> Enum.filter(&(&1 == true))
+  end
+
+  # recursively checking series based on a method using the remainder after
+  # substraction for a nth power term,
+  # the remainder subsequently becomes
+  # 0 (solution) or negative (abort, not a solution)
+  def check_power(num, sum, pow, max_num) when sum >= 0 and num <= max_num do
+    remainder = sum - :math.pow(num, pow)
+    check_power((num + 1..max_num |> Enum.to_list), remainder, pow, max_num)
+  end
+
+  # otherwise sum < 0, return false indicating the power sequence isn't solution
+  def check_power(_num, _sum, _pow, _max_num), do: false
+
 end
