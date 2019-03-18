@@ -13,19 +13,22 @@ defmodule FP.Structures do
   # define a binary tree node of value (v) with left (l), right (r) leaves
   def n(value), do: %{v: value, l: nil, r: nil}
 
-  # functions for adding left, right nodes when leaf is "nil" (empty)
-  def add(%{v: v, l: l, r: r} = _n, {lv,rv}) when is_nil(l) and is_nil(r), do: %{v: v, l: n(lv), r: n(rv)}
+  # start building tree with a n[1] root, count of 1 at depth 1
+  def build_tree(data) do
+    root = n(1)
+    node_count = 1
+    depth = 1
 
-  # start building tree with a n[1] root, count of 1
-  def build_tree(data), do: build_tree(data, n(1), 1)
+    build_tree(data, root, node_count, depth)
+  end
 
-  def build_tree([], tree, _count), do: tree
-  def build_tree(data, tree, count) do
+  def build_tree([], tree, _, _), do: tree
+  def build_tree(data, tree, count, depth) do
     nodes = data |> Enum.take(count)
     remaining_nodes = data |> Enum.drop(count)
 
     # add nodes to tree
-    new_tree = build_tree(nodes, tree)
+    new_tree = build_tree(nodes, tree, depth)
 
     # calculate the next batch of nodes in the next level
     new_count = nodes
@@ -33,21 +36,25 @@ defmodule FP.Structures do
     |> Enum.filter(&(&1!=-1))
     |> length
 
-    # build the next level tree nodes
-    build_tree(remaining_nodes, new_tree, new_count)
+    # build the remaining tree nodes on the next depth
+    build_tree(remaining_nodes, new_tree, new_count, depth + 1)
   end
 
-  # functions for adding nodes to tree
-  def build_tree([], tree), do: tree
-  def build_tree([n|nodes], tree), do: build_tree(nodes, tree |> add(n))
+  # adding nodes to tree
+  def build_tree([], tree, _), do: tree
+  def build_tree([data|nodes], tree, depth), do: build_tree(nodes, tree |> add(data, depth), depth)
 
-  # functions for adding left, right nodes alternately when leaf is "nil" (empty)
-  def add(%{v: v, l: l, r: r} = _n, [lv,rv]) when is_nil(l) and is_nil(r), do: %{v: v, l: n(lv), r: n(rv)}
-  def add(%{v: v, l: l, r: r} = _n, value) do
+  # adding left, right nodes alternately when leaf in the current depth is "nil" (empty)
+  def add(%{v: v, l: l, r: r} = _n, [lv,rv], _depth) when is_nil(l) and is_nil(r), do: %{v: v, l: n(lv), r: n(rv)}
+  def add(%{v: v, l: l, r: r} = _n, value, depth) do
+    # depth info for checking nested node
+    check_path = List.duplicate(:l, depth - 1)
     cond do
-      l.l == nil -> %{v: v, l: l |> add(value), r: r}
-      r.l == nil -> %{v: v, l: l, r: r |> add(value)}
+      nil_leaf?(l, check_path) -> %{v: v, l: l |> add(value, depth), r: r}
+      nil_leaf?(r, check_path) -> %{v: v, l: l, r: r |> add(value, depth)}
     end
   end
+
+  defp nil_leaf?(leaf, check_path), do: get_in(leaf, check_path) == nil
 
 end

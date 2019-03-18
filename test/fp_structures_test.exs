@@ -9,7 +9,9 @@ defmodule FPStructuresTest do
 
     test "n - binary tree node creation / addition" do
       assert n(1) ==  %{l: nil, r: nil, v: 1}
-      assert n(1) |> add([2,3]) == %{v: 1, l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}}
+
+      depth = 2
+      assert n(1) |> add([2,3], depth) == %{v: 1, l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}}
     end
 
     test "build_tree - binary tree building" do
