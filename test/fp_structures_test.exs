@@ -1,5 +1,7 @@
 defmodule FPStructuresTest do
   use ExUnit.Case
+  import FP.Structures
+
   doctest FP.Structures
   
   describe "structures" do
