@@ -53,8 +53,9 @@ defmodule FP.Structures do
     %{v: v, l: n(lv), r: n(rv)}
   end
 
+  # this recursively traverse tree, and find the next leaf node
+  # to add the new node pair to
   def add(%{v: v, l: l, r: r} = _n, value, depth) do
-    # depth info for checking nested node
     cond do
       nil_leaf?(l, depth) -> %{v: v, l: l |> add(value, depth - 1), r: r}
       nil_leaf?(l, depth, :right) -> %{v: v, l: l |> add(value, depth - 1), r: r}
@@ -74,22 +75,29 @@ defmodule FP.Structures do
     x and y
   end
 
+  # check all 4 leaf nodes per pair of nodes (as per HackerRank input), i.e. 2x left, right nodes
+  # this finds the next valid leaf node (not terminated) for adding the next child node pair to
   defp nil_leaf?(leaf, depth, side) do
     p = List.duplicate(:l, depth - 1)
-    path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
-    v_path =  path |> List.replace_at(-1, :v)
 
-    x1 = get_in(leaf, path) == nil
-    y1 = get_in(leaf, v_path) != -1
-    z1 = get_in(leaf, v_path) != nil
+    lll_p = if side == :left, do: p, else: p |> List.replace_at(0, :r)
+    llv_p =  lll_p |> List.replace_at(-1, :v)
 
-    x2 = get_in(leaf, path |> List.replace_at(-2, :r)) == nil
-    y2 = get_in(leaf, v_path |>  List.replace_at(-2, :r)) != -1
-    z2 = get_in(leaf, v_path |> List.replace_at(-2, :r)) != nil
+    lrl_p = lll_p |> List.replace_at(-2, :r)
+    lrv_p = llv_p |> List.replace_at(-2, :r)
+
+    rll_p = lll_p |> List.replace_at(-3, :r)
+    rlv_p = llv_p |> List.replace_at(-3, :r)
     
+    rrl_p = lrl_p |> List.replace_at(-3, :r)
+    rrv_p = lrv_p |> List.replace_at(-3, :r)
+
     cond do
-      x1 and y1 and z1 -> true
-      true -> x2 and y2 and z2
+      get_in(leaf, lll_p) == nil and get_in(leaf, llv_p) != -1 and get_in(leaf, llv_p) != nil -> true
+      get_in(leaf, lrl_p) == nil and get_in(leaf, lrv_p) != -1 and get_in(leaf, lrv_p) != nil -> true
+      get_in(leaf, rll_p) == nil and get_in(leaf, rlv_p) != -1 and get_in(leaf, rlv_p) != nil -> true
+      get_in(leaf, rrl_p) == nil and get_in(leaf, rrv_p) != -1 and get_in(leaf, rrv_p) != nil -> true
+      true -> false # this is not a valid leaf node (-1 terminated leaf)
     end
 
   end

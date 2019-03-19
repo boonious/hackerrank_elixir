@@ -23,7 +23,6 @@ defmodule FPStructuresTest do
         r: %{v: 3, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
       }
 
-      #unbalanced tree building
       assert build_tree([[2, 3], [-1, 4], [-1, 5], [-1, -1], [-1, -1]])
       == %{
         v: 1,
@@ -46,8 +45,9 @@ defmodule FPStructuresTest do
           }
         }
       }
-
-      #unbalanced tree building
+    end
+    
+    test "build_tree - binary tree building: large and unbalanced" do
       assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, -1],[-1, -1],[-1, -1]])
       == %{
         l: %{
@@ -64,6 +64,80 @@ defmodule FPStructuresTest do
             l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
             r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 8},
             v: 5
+          },
+          r: %{l: nil, r: nil, v: -1},
+          v: 3
+        },
+        v: 1
+      }
+
+      assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, 9],[-1, -1],[10, 11],[-1, -1],[-1, -1],[-1, -1]])
+      == %{
+        l: %{
+          l: %{
+            l: %{
+              l: %{l: nil, r: nil, v: -1},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
+              v: 6
+            },
+            r: %{l: nil, r: nil, v: -1},
+            v: 4
+          },
+          r: %{l: nil, r: nil, v: -1},
+          v: 2
+        },
+        r: %{
+          l: %{
+            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
+            r: %{
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 10},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 11},
+              v: 8
+            },
+            v: 5
+          },
+          r: %{l: nil, r: nil, v: -1},
+          v: 3
+        },
+        v: 1
+      }
+
+      assert build_tree([[2, 3],[4, 5],[6, -1],[-1, 7],[8, 9],[10, 11],[12, 13],[-1, 14],[-1, -1],[15, -1],[16, 17],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1]])
+      == %{
+        l: %{
+          l: %{
+            l: %{l: nil, r: nil, v: -1},
+            r: %{
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 12},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 13},
+              v: 7
+            },
+            v: 4
+          },
+          r: %{
+            l: %{
+              l: %{l: nil, r: nil, v: -1},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 14},
+              v: 8
+            },
+            r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
+            v: 5
+          },
+          v: 2
+        },
+        r: %{
+          l: %{
+            l: %{
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 15},
+              r: %{l: nil, r: nil, v: -1},
+              v: 10
+            },
+            r: %{
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 16},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 17},
+              v: 11
+            },
+            v: 6
           },
           r: %{l: nil, r: nil, v: -1},
           v: 3
