@@ -3,7 +3,7 @@ defmodule FPStructuresTest do
   import FP.Structures
 
   doctest FP.Structures
-  
+
   describe "structures" do
     @describetag :structures
 
@@ -22,8 +22,32 @@ defmodule FPStructuresTest do
         l: %{v: 2, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
         r: %{v: 3, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
       }
+
+      #unbalanced tree building
+      assert build_tree([[2, 3], [-1, 4], [-1, 5], [-1, -1], [-1, -1]])
+      == %{
+        v: 1,
+        l: %{
+          v: 2,
+          l: %{
+            v: -1, l: nil, r: nil
+          },
+          r: %{
+            v: 4, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
+          }
+        },
+        r: %{
+          v: 3,
+          l: %{
+            v: -1, l: nil, r: nil
+          },
+          r: %{
+            v: 5, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
+          }
+        }
+      }
     end
 
-    end
+  end
 
 end
