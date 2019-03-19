@@ -45,16 +45,30 @@ defmodule FP.Structures do
   def build_tree([data|nodes], tree, depth), do: build_tree(nodes, tree |> add(data, depth), depth)
 
   # adding left, right nodes alternately when leaf in the current depth is "nil" (empty)
-  def add(%{v: v, l: l, r: r} = _n, [lv,rv], _depth) when is_nil(l) and is_nil(r), do: %{v: v, l: n(lv), r: n(rv)}
+  def add(%{v: v, l: l, r: r} = _n, [lv,rv], _depth)
+      when is_nil(l) and
+      is_nil(r) and
+      v != -1 do 
+
+    %{v: v, l: n(lv), r: n(rv)}
+  end
+
   def add(%{v: v, l: l, r: r} = _n, value, depth) do
     # depth info for checking nested node
-    check_path = List.duplicate(:l, depth - 1)
     cond do
-      nil_leaf?(l, check_path) -> %{v: v, l: l |> add(value, depth), r: r}
-      nil_leaf?(r, check_path) -> %{v: v, l: l, r: r |> add(value, depth)}
+      nil_leaf?(l, depth) -> %{v: v, l: l |> add(value, depth), r: r}
+      nil_leaf?(r, depth) -> %{v: v, l: l, r: r |> add(value, depth)}
     end
   end
 
-  defp nil_leaf?(leaf, check_path), do: get_in(leaf, check_path) == nil
+  defp nil_leaf?(leaf, depth, side \\ :l) do 
+    path = List.duplicate(:l, depth - 1)
+
+    check_path = if side == :l, do: path, else: path |> List.replace_at(0, :r)
+    x = get_in(leaf, check_path) == nil
+    y = get_in(leaf, check_path |> List.replace_at(-1, :v)) != -1
+
+    (x and y)
+  end
 
 end
