@@ -63,7 +63,18 @@ defmodule FP.Structures do
     end
   end
 
-  defp nil_leaf?(leaf, depth, side \\ :left) do 
+  defp nil_leaf?(leaf, depth, side \\ :left)
+  defp nil_leaf?(leaf, depth, side) when depth <= 2 do
+    p = List.duplicate(:l, depth - 1)
+    path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
+    v_path =  path |> List.replace_at(-1, :v)
+
+    x = get_in(leaf, path) == nil
+    y = get_in(leaf, v_path) != -1
+    x and y
+  end
+
+  defp nil_leaf?(leaf, depth, side) do
     p = List.duplicate(:l, depth - 1)
     path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
     v_path =  path |> List.replace_at(-1, :v)
@@ -75,14 +86,10 @@ defmodule FP.Structures do
     x2 = get_in(leaf, path |> List.replace_at(-2, :r)) == nil
     y2 = get_in(leaf, v_path |>  List.replace_at(-2, :r)) != -1
     z2 = get_in(leaf, v_path |> List.replace_at(-2, :r)) != nil
-
-    if depth > 2 do
-      cond do
-        x1 and y1 and z1 -> true
-        true -> x2 and y2 and z2
-      end
-    else
-      x1 and y1
+    
+    cond do
+      x1 and y1 and z1 -> true
+      true -> x2 and y2 and z2
     end
 
   end
