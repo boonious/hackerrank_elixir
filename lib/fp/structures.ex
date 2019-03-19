@@ -56,25 +56,35 @@ defmodule FP.Structures do
   def add(%{v: v, l: l, r: r} = _n, value, depth) do
     # depth info for checking nested node
     cond do
-      nil_leaf?(l, depth) -> %{v: v, l: l |> add(value, depth), r: r}
-      nil_leaf?(l, depth, :right) -> %{v: v, l: l |> add(value, depth), r: r}
-      nil_leaf?(r, depth) -> %{v: v, l: l, r: r |> add(value, depth)}
-      nil_leaf?(r, depth, :right) -> %{v: v, l: l, r: r |> add(value, depth)}
-      l.v != -1 -> %{v: v, l: l |> add(value, depth), r: r}
-      r.v != -1 -> %{v: v, l: l, r: r |> add(value, depth)}
+      nil_leaf?(l, depth) -> %{v: v, l: l |> add(value, depth - 1), r: r}
+      nil_leaf?(l, depth, :right) -> %{v: v, l: l |> add(value, depth - 1), r: r}
+      nil_leaf?(r, depth) -> %{v: v, l: l, r: r |> add(value, depth - 1)}
+      nil_leaf?(r, depth, :right) -> %{v: v, l: l, r: r |> add(value, depth - 1)}
     end
   end
 
-  defp nil_leaf?(leaf, depth, side \\ :l) do 
-    path = List.duplicate(:l, depth - 1)
+  defp nil_leaf?(leaf, depth, side \\ :left) do 
+    p = List.duplicate(:l, depth - 1)
+    path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
+    v_path =  path |> List.replace_at(-1, :v)
 
-    check_path = if side == :l, do: path, else: path |> List.replace_at(0, :r)
-    value = get_in(leaf, check_path |> List.replace_at(-1, :v))
+    x1 = get_in(leaf, path) == nil
+    y1 = get_in(leaf, v_path) != -1
+    z1 = get_in(leaf, v_path) != nil
 
-    x = get_in(leaf, check_path) == nil
-    y =  if value != -1 and value != nil, do: true, else: false
+    x2 = get_in(leaf, path |> List.replace_at(-2, :r)) == nil
+    y2 = get_in(leaf, v_path |>  List.replace_at(-2, :r)) != -1
+    z2 = get_in(leaf, v_path |> List.replace_at(-2, :r)) != nil
 
-    (x and y)
+    if depth > 2 do
+      cond do
+        x1 and y1 and z1 -> true
+        true -> x2 and y2 and z2
+      end
+    else
+      x1 and y1
+    end
+
   end
 
 end

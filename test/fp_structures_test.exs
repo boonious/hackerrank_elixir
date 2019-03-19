@@ -46,6 +46,30 @@ defmodule FPStructuresTest do
           }
         }
       }
+
+      #unbalanced tree building
+      assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, -1],[-1, -1],[-1, -1]])
+      == %{
+        l: %{
+          l: %{
+            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 6},
+            r: %{l: nil, r: nil, v: -1},
+            v: 4
+          },
+          r: %{l: nil, r: nil, v: -1},
+          v: 2
+        },
+        r: %{
+          l: %{
+            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
+            r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 8},
+            v: 5
+          },
+          r: %{l: nil, r: nil, v: -1},
+          v: 3
+        },
+        v: 1
+      }
     end
 
   end
