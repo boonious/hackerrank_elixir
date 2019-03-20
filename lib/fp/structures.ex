@@ -22,7 +22,7 @@ defmodule FP.Structures do
     build_tree(data, root, node_count, depth)
   end
 
-  def build_tree([], tree, _, _), do: tree
+  def build_tree([], tree, _, depth), do: {depth, tree}
   def build_tree(data, tree, count, depth) do
     nodes = data |> Enum.take(count)
     remaining_nodes = data |> Enum.drop(count)

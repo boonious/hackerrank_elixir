@@ -15,33 +15,39 @@ defmodule FPStructuresTest do
     end
 
     test "build_tree - binary tree building" do
-      assert build_tree([[2, 3]]) ==  %{l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}, v: 1}
+      assert build_tree([[2, 3]]) ==  {2, %{l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}, v: 1}}
       assert build_tree([[2, 3], [-1, -1], [-1, -1]])
-      == %{
-        v: 1,
-        l: %{v: 2, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
-        r: %{v: 3, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
+      == {
+        3, 
+        %{
+          v: 1,
+          l: %{v: 2, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
+          r: %{v: 3, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}},
+        }
       }
 
       assert build_tree([[2, 3], [-1, 4], [-1, 5], [-1, -1], [-1, -1]])
-      == %{
-        v: 1,
-        l: %{
-          v: 2,
+      == {
+        4,
+        %{
+          v: 1,
           l: %{
-            v: -1, l: nil, r: nil
+            v: 2,
+            l: %{
+              v: -1, l: nil, r: nil
+            },
+            r: %{
+              v: 4, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
+            }
           },
           r: %{
-            v: 4, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
-          }
-        },
-        r: %{
-          v: 3,
-          l: %{
-            v: -1, l: nil, r: nil
-          },
-          r: %{
-            v: 5, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
+            v: 3,
+            l: %{
+              v: -1, l: nil, r: nil
+            },
+            r: %{
+              v: 5, l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}
+            }
           }
         }
       }
@@ -49,100 +55,109 @@ defmodule FPStructuresTest do
     
     test "build_tree - binary tree building: large and unbalanced" do
       assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, -1],[-1, -1],[-1, -1]])
-      == %{
-        l: %{
-          l: %{
-            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 6},
-            r: %{l: nil, r: nil, v: -1},
-            v: 4
-          },
-          r: %{l: nil, r: nil, v: -1},
-          v: 2
-        },
-        r: %{
-          l: %{
-            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
-            r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 8},
-            v: 5
-          },
-          r: %{l: nil, r: nil, v: -1},
-          v: 3
-        },
-        v: 1
-      }
-
-      assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, 9],[-1, -1],[10, 11],[-1, -1],[-1, -1],[-1, -1]])
-      == %{
-        l: %{
+      == {
+        5,
+          %{
           l: %{
             l: %{
-              l: %{l: nil, r: nil, v: -1},
-              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
-              v: 6
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 6},
+              r: %{l: nil, r: nil, v: -1},
+              v: 4
             },
             r: %{l: nil, r: nil, v: -1},
-            v: 4
-          },
-          r: %{l: nil, r: nil, v: -1},
-          v: 2
-        },
-        r: %{
-          l: %{
-            l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
-            r: %{
-              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 10},
-              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 11},
-              v: 8
-            },
-            v: 5
-          },
-          r: %{l: nil, r: nil, v: -1},
-          v: 3
-        },
-        v: 1
-      }
-
-      assert build_tree([[2, 3],[4, 5],[6, -1],[-1, 7],[8, 9],[10, 11],[12, 13],[-1, 14],[-1, -1],[15, -1],[16, 17],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1]])
-      == %{
-        l: %{
-          l: %{
-            l: %{l: nil, r: nil, v: -1},
-            r: %{
-              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 12},
-              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 13},
-              v: 7
-            },
-            v: 4
+            v: 2
           },
           r: %{
             l: %{
-              l: %{l: nil, r: nil, v: -1},
-              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 14},
-              v: 8
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 8},
+              v: 5
             },
-            r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
-            v: 5
+            r: %{l: nil, r: nil, v: -1},
+            v: 3
           },
-          v: 2
-        },
-        r: %{
+          v: 1
+        }
+      }
+
+      assert build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, 9],[-1, -1],[10, 11],[-1, -1],[-1, -1],[-1, -1]])
+      == {
+        6,
+        %{
           l: %{
             l: %{
-              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 15},
+              l: %{
+                l: %{l: nil, r: nil, v: -1},
+                r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
+                v: 6
+              },
               r: %{l: nil, r: nil, v: -1},
-              v: 10
+              v: 4
+            },
+            r: %{l: nil, r: nil, v: -1},
+            v: 2
+          },
+          r: %{
+            l: %{
+              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 7},
+              r: %{
+                l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 10},
+                r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 11},
+                v: 8
+              },
+              v: 5
+            },
+            r: %{l: nil, r: nil, v: -1},
+            v: 3
+          },
+          v: 1
+        }
+      }
+
+      assert build_tree([[2, 3],[4, 5],[6, -1],[-1, 7],[8, 9],[10, 11],[12, 13],[-1, 14],[-1, -1],[15, -1],[16, 17],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1]])
+      == {
+        6,
+        %{
+          l: %{
+            l: %{
+              l: %{l: nil, r: nil, v: -1},
+              r: %{
+                l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 12},
+                r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 13},
+                v: 7
+              },
+              v: 4
             },
             r: %{
-              l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 16},
-              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 17},
-              v: 11
+              l: %{
+                l: %{l: nil, r: nil, v: -1},
+                r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 14},
+                v: 8
+              },
+              r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 9},
+              v: 5
             },
-            v: 6
+            v: 2
           },
-          r: %{l: nil, r: nil, v: -1},
-          v: 3
-        },
-        v: 1
+          r: %{
+            l: %{
+              l: %{
+                l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 15},
+                r: %{l: nil, r: nil, v: -1},
+                v: 10
+              },
+              r: %{
+                l: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 16},
+                r: %{l: %{l: nil, r: nil, v: -1}, r: %{l: nil, r: nil, v: -1}, v: 17},
+                v: 11
+              },
+              v: 6
+            },
+            r: %{l: nil, r: nil, v: -1},
+            v: 3
+          },
+          v: 1
+        }
       }
     end
 
