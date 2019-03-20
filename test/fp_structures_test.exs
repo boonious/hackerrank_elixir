@@ -164,8 +164,9 @@ defmodule FPStructuresTest do
     test "swap - swap function which returns binary tree as Map" do
       {depth, tree} = build_tree([[2, 3], [-1, -1], [-1, -1]])
       k = [1,2]
+      current_depth = 1
 
-      assert FP.Structures.swap(tree, depth, k)
+      assert FP.Structures.swap(tree, current_depth, depth, k)
       == %{
         r: %{
           l: %{l: nil, r: nil, v: -1},
@@ -183,7 +184,7 @@ defmodule FPStructuresTest do
       {depth, tree} = build_tree([[2, 3], [-1, 4], [-1, 5], [-1, -1], [-1, -1]])
       k = [2]
 
-      assert FP.Structures.swap(tree, depth, k)
+      assert FP.Structures.swap(tree, current_depth, depth, k)
       == %{
         v: 1,
         l: %{

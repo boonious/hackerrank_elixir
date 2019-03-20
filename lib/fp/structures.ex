@@ -13,14 +13,15 @@ defmodule FP.Structures do
   # define a binary tree node of value (v) with left (l), right (r) leaves
   def n(value), do: %{v: value, l: nil, r: nil}
 
-  def swap(tree, 1, _k), do: tree
-  def swap(%{v: v, l: l, r: r} = _tree, depth, k) do
+  def swap(tree, current_depth, depth, _k) when current_depth == depth, do: tree
+  def swap(%{l: nil, r: nil, v: -1}, _, _, _), do: %{l: nil, r: nil, v: -1}
+  def swap(%{v: v, l: l, r: r} = _tree, current_depth, depth, k) do
   # swap left/right nodes only if depth corresponds to
   # the specified series of depth levels (k, 2k, 3k..)
-    if Enum.member? k, (depth - 1) do
-      %{v: v, l: swap(r, depth - 1, k), r: swap(l, depth - 1, k)}
+    if Enum.member? k, current_depth do
+      %{v: v, l: swap(r, current_depth + 1, depth, k), r: swap(l, current_depth + 1, depth, k)}
     else
-      %{v: v, l: swap(l, depth - 1, k), r: swap(r, depth - 1, k)}
+      %{v: v, l: swap(l, current_depth + 1, depth, k), r: swap(r, current_depth + 1, depth, k)}
     end
   end
 
