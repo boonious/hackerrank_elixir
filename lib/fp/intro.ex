@@ -10,10 +10,7 @@ defmodule FP.Intro do
   @spec reverse(list, list) :: list(integer)
   def reverse([], results), do: results
   def reverse(numbers, results) when length(numbers) >= 1 and length(numbers) <= 100  do
-     {last_number, remainder} = numbers |> List.pop_at(-1)
-     if(last_number >= 0 and last_number <= 100) do
-         reverse(remainder, results ++ [last_number])
-     end
+    reverse(numbers |> tl, [(numbers |> hd)|results])
   end
 
   def reverse(_numbers, _results), do: [] 
