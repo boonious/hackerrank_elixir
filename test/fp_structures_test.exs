@@ -208,10 +208,20 @@ defmodule FPStructuresTest do
     end
 
     test "inorder_traverse - binary tree traversal" do
-      nodes_data = [[2, 3], [-1, -1], [-1, -1]]
-      {_, tree} = build_tree(nodes_data)
-
+      {_, tree} = build_tree([[2, 3], [-1, -1], [-1, -1]])
       assert FP.Structures.inorder_traverse(tree) == [2,1,3]
+
+      {_, tree} = build_tree([[2, 3],[4, -1],[5, -1],[-1, -1],[-1, -1]])
+      assert FP.Structures.inorder_traverse(tree) == [4,2,1,5,3]
+
+      {_, tree} = build_tree([[2, 3], [-1, 4], [-1, 5],[-1, -1],[-1, -1]])
+      assert FP.Structures.inorder_traverse(tree) == [2,4,1,3,5]
+
+      {_, tree} = build_tree([[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, 9],[-1, -1],[10, 11],[-1, -1],[-1, -1],[-1, -1]])
+      assert FP.Structures.inorder_traverse(tree) == [6,9,4,2,1,7,5,10,8,11,3]
+
+      {_, tree} = build_tree([[2, 3],[4, 5],[6, -1],[-1, 7],[8, 9],[10, 11],[12, 13],[-1, 14],[-1, -1],[15, -1],[16, 17],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1],[-1, -1]])
+      assert FP.Structures.inorder_traverse(tree) == [4,12,7,13,2,8,14,5,9,1,15,10,6,16,11,17,3]
     end
 
   end

@@ -38,16 +38,31 @@ defmodule FP.Structures do
   defp inorder(%{v: v, l: l, r: r} = _tree, s, out, {:l,:d}) do
     cond do
       l.v == -1 and r.v == -1 -> inorder(l, s, [v|out], {:l,:u})
+      l.v == -1 and r.v != -1 -> inorder(r, s, [v|out], {:r,:d})
+      l.v != -1 and r.v == -1 -> inorder(l, [{v,nil}|s], out)
+      l.v != -1 and r.v != -1 -> inorder(l, [{v,r}|s], out)
     end
   end
 
   defp inorder(%{v: v, l: l, r: r} = _tree, s, out, {:r,:d}) do
     cond do
       l.v == -1 and r.v == -1 -> inorder(r, s, [v|out], {:r,:u})
+      l.v == -1 and r.v != -1 -> inorder(r, s, [v|out], {:r,:d})
+      l.v != -1 and r.v == -1 -> inorder(l, [{v,nil}|s], out)
+      l.v != -1 and r.v != -1 -> inorder(l, [{v,r}|s], out)
     end
   end
 
-  defp inorder(_, [], out, {_,:u}), do: out
+  defp inorder(_, [], out, {_,:u}), do: out |> Enum.reverse
+  defp inorder(_tree, s, out, {_,:u}) do
+    {v,r_node} = s |> hd
+
+    if r_node != nil do 
+      inorder(r_node, s |> tl, [v|out], {:r,:d})
+    else
+      inorder(r_node, s |> tl, [v|out], {:l,:u})
+    end 
+  end
 
   # start building tree with a n[1] root, count of 1 at depth 1
   def build_tree(data) do
