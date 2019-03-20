@@ -14,7 +14,7 @@ defmodule FP.Intro do
   end
 
   def reverse(_numbers, _results), do: [] 
-     
+
   @doc """
   Evaluating e^x
   https://www.hackerrank.com/challenges/eval-ex/problem

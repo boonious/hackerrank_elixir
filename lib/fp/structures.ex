@@ -24,6 +24,31 @@ defmodule FP.Structures do
     end
   end
 
+  def inorder_traverse(tree) do
+    {stack, output} = {[], []}
+
+    # :l left, :r right, :d down, :u up
+    left = inorder(tree.l, stack, output, {:l,:d})
+    right = inorder(tree.r, stack, output, {:r,:d})
+
+    left ++ [1] ++ right
+  end
+
+  defp inorder(tree, stack, output, direction \\ {:l,:d})
+  defp inorder(%{v: v, l: l, r: r} = _tree, s, out, {:l,:d}) do
+    cond do
+      l.v == -1 and r.v == -1 -> inorder(l, s, [v|out], {:l,:u})
+    end
+  end
+
+  defp inorder(%{v: v, l: l, r: r} = _tree, s, out, {:r,:d}) do
+    cond do
+      l.v == -1 and r.v == -1 -> inorder(r, s, [v|out], {:r,:u})
+    end
+  end
+
+  defp inorder(_, [], out, {_,:u}), do: out
+
   # start building tree with a n[1] root, count of 1 at depth 1
   def build_tree(data) do
     root = n(1)

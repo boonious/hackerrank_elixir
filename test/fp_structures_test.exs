@@ -161,7 +161,7 @@ defmodule FPStructuresTest do
       }
     end
 
-    test "swap - Swap function which returns binary tree as Map" do
+    test "swap - swap function which returns binary tree as Map" do
       {depth, tree} = build_tree([[2, 3], [-1, -1], [-1, -1]])
       k = [1,2]
 
@@ -205,6 +205,13 @@ defmodule FPStructuresTest do
           }
         }
       }
+    end
+
+    test "inorder_traverse - binary tree traversal" do
+      nodes_data = [[2, 3], [-1, -1], [-1, -1]]
+      {_, tree} = build_tree(nodes_data)
+
+      assert FP.Structures.inorder_traverse(tree) == [2,1,3]
     end
 
   end
