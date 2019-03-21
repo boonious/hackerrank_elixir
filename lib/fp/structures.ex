@@ -36,6 +36,9 @@ defmodule FP.Structures do
   end
 
   defp inorder(tree, stack, output, direction \\ {:l,:d})
+  defp inorder(%{l: nil, r: nil, v: -1}, s, out, {:l,:d}), do: inorder(nil, s, out, {:l,:u})
+  defp inorder(%{l: nil, r: nil, v: -1}, s, out, {:r,:d}), do: inorder(nil, s, out, {:r,:u})
+
   defp inorder(%{v: v, l: l, r: r} = _tree, s, out, {:l,:d}) do
     cond do
       l.v == -1 and r.v == -1 -> inorder(l, s, [v|out], {:l,:u})
@@ -117,6 +120,7 @@ defmodule FP.Structures do
   end
 
   defp nil_leaf?(leaf, depth, side \\ :left)
+  defp nil_leaf?( %{l: nil, r: nil, v: -1}, _, _), do: false
   defp nil_leaf?(leaf, depth, side) when depth <= 2 do
     p = List.duplicate(:l, depth - 1)
     path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
@@ -127,30 +131,28 @@ defmodule FP.Structures do
     x and y
   end
 
-  # check all 4 leaf nodes per pair of nodes (as per HackerRank input), i.e. 2x left, right nodes
-  # this finds the next valid leaf node (not terminated) for adding the next child node pair to
-  defp nil_leaf?(leaf, depth, side) do
-    p = List.duplicate(:l, depth - 1)
+  # For larger and deeper tree: recursively retrieve all innermost 
+  # leaf nodes to find the next valid leaf node
+  # for adding the next child node pair to
+  #
+  # FIXME: this involves recursion into nested depth nodes, 
+  # as the calling "add" is alreading recursing, this is
+  # not performant for very deep large tree, 
+  # e.g the last 2 HackerRank test case for tree with nodes > 1000 nodes
+  #
+  # The algorithm to fix this I'm currently thinking: pre-storing (single depth) 
+  # nodes in a stack while adding them, so that these can be used for
+  # the next depth level node building. This eliminates this recursive function.
+  defp nil_leaf?(node, depth, _side) do
+    leaves = leaf_nodes([node], depth) |> Enum.find(fn x -> x.l == nil and x.v != -1 end)
+    if (leaves != nil), do: true, else: false
+  end
 
-    lll_p = if side == :left, do: p, else: p |> List.replace_at(0, :r)
-    llv_p =  lll_p |> List.replace_at(-1, :v)
-
-    lrl_p = lll_p |> List.replace_at(-2, :r)
-    lrv_p = llv_p |> List.replace_at(-2, :r)
-
-    rll_p = lll_p |> List.replace_at(-3, :r)
-    rlv_p = llv_p |> List.replace_at(-3, :r)
-    
-    rrl_p = lrl_p |> List.replace_at(-3, :r)
-    rrv_p = lrv_p |> List.replace_at(-3, :r)
-
-    cond do
-      get_in(leaf, lll_p) == nil and get_in(leaf, llv_p) != -1 and get_in(leaf, llv_p) != nil -> true
-      get_in(leaf, lrl_p) == nil and get_in(leaf, lrv_p) != -1 and get_in(leaf, lrv_p) != nil -> true
-      get_in(leaf, rll_p) == nil and get_in(leaf, rlv_p) != -1 and get_in(leaf, rlv_p) != nil -> true
-      get_in(leaf, rrl_p) == nil and get_in(leaf, rrv_p) != -1 and get_in(leaf, rrv_p) != nil -> true
-      true -> false # this is not a valid leaf node (-1 terminated leaf)
-    end
+  defp leaf_nodes(leaves, depth) when depth == 2, do: leaves
+  defp leaf_nodes(leaves, depth) do
+    x = leaves |> Enum.map( &(Map.values(&1) |> Enum.filter(fn x-> is_map(x) end)) ) |> List.flatten
+    leaf_nodes(x, depth - 1)
+  end
 
   end
 
