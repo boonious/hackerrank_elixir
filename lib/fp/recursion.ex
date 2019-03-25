@@ -402,11 +402,13 @@ defmodule FP.Recursion do
 
   # parse list of "+", "-" string grid rows
   # into a raw coordinate system of fit-able cells ("-")
-  @spec parse(list(binary), atom) :: list
+  @spec parse(list(binary)) :: list
+  def parse(grid), do: parse(grid, :across) ++ parse(grid, :down)
+
   def parse([x|y], :across) when is_bitstring(x) do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
-    |> parse(1, [], :across)
+    |> _parse(1, [], :across)
     |> Enum.filter(&(is_sequence?(&1)))
   end
 
@@ -414,25 +416,25 @@ defmodule FP.Recursion do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
     |> List.zip |> Enum.map(&Tuple.to_list(&1))
-    |> parse(1, [], :down)
+    |> _parse(1, [], :down)
     |> Enum.filter(&(is_sequence?(&1)))
   end
 
-  def parse([], _, grid, _), do: grid |> Enum.reverse
-  def parse([row|rows], row_no, grid, direction) do
-    coordinates = parse(row, row_no, 1, [], direction)
-    parse(rows, row_no + 1, [coordinates|grid], direction)
+  defp _parse([], _, grid, _), do: grid |> Enum.reverse
+  defp _parse([row|rows], row_no, grid, direction) do
+    coordinates = _parse(row, row_no, 1, [], direction)
+    _parse(rows, row_no + 1, [coordinates|grid], direction)
   end
 
-  def parse([], _, _, coordinates, _), do: coordinates |> Enum.reverse
-  def parse(["-"|y], row_no, col_no, coordinates, :across), do: parse(y, row_no, col_no + 1, [{col_no,row_no}|coordinates], :across)
-  def parse(["-"|y], row_no, col_no, coordinates, :down), do: parse(y, row_no, col_no + 1, [{row_no,col_no}|coordinates], :down)
-  def parse(["+"|y], row_no, col_no, coordinates, direction), do: parse(y, row_no, col_no + 1, coordinates, direction)
+  defp _parse([], _, _, coordinates, _), do: coordinates |> Enum.reverse
+  defp _parse(["-"|y], row_no, col_no, coordinates, :across), do: _parse(y, row_no, col_no + 1, [{col_no,row_no}|coordinates], :across)
+  defp _parse(["-"|y], row_no, col_no, coordinates, :down), do: _parse(y, row_no, col_no + 1, [{row_no,col_no}|coordinates], :down)
+  defp _parse(["+"|y], row_no, col_no, coordinates, direction), do: _parse(y, row_no, col_no + 1, coordinates, direction)
 
-  def is_sequence?([]), do: false
-  def is_sequence?([_|y]) when y == [], do: false
-  def is_sequence?([x|y]), do: is_sequence?(x,y|>hd)
-  def is_sequence?({x1,y1},{x2,y2}) do
+  defp is_sequence?([]), do: false
+  defp is_sequence?([_|y]) when y == [], do: false
+  defp is_sequence?([x|y]), do: is_sequence?(x,y|>hd)
+  defp is_sequence?({x1,y1},{x2,y2}) do
     if (x2 - x1 == 1) or (y2 - y1 == 1), do: true, else: false
   end
 
