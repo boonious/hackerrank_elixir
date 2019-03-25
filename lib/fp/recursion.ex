@@ -393,4 +393,38 @@ defmodule FP.Recursion do
   # otherwise sum < 0, return false indicating the power sequence isn't solution
   def check_power(_num, _sum, _pow, _max_num), do: false
 
+  #===========================================================================
+  @doc """
+  Crosswords-101
+
+  https://www.hackerrank.com/challenges/crosswords-101/problem
+  """
+
+  # parse list of "+", "-" string grid rows
+  # into a raw coordinate system of fit-able cells ("-")
+  @spec parse(list(binary), atom) :: list
+  def parse([x|y], :across) when is_bitstring(x) do
+    [x|y]
+    |> Enum.map(&String.split(&1,"", trim: true))
+    |> parse(1, [], :across)
+  end
+
+  def parse([x|y], :down) when is_bitstring(x) do
+    [x|y]
+    |> Enum.map(&String.split(&1,"", trim: true))
+    |> List.zip |> Enum.map(&Tuple.to_list(&1))
+    |> parse(1, [], :down)
+  end
+
+  def parse([], _, grid, _), do: grid |> Enum.reverse
+  def parse([row|rows], row_no, grid, direction) do
+    coordinates = parse(row, row_no, 1, [], direction)
+    parse(rows, row_no + 1, [coordinates|grid], direction)
+  end
+
+  def parse([], _, _, coordinates, _), do: coordinates |> Enum.reverse
+  def parse(["-"|y], row_no, col_no, coordinates, :across), do: parse(y, row_no, col_no + 1, [{col_no,row_no}|coordinates], :across)
+  def parse(["-"|y], row_no, col_no, coordinates, :down), do: parse(y, row_no, col_no + 1, [{row_no,col_no}|coordinates], :down)
+  def parse(["+"|y], row_no, col_no, coordinates, direction), do: parse(y, row_no, col_no + 1, coordinates, direction)
+
 end
