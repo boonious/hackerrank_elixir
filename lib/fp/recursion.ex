@@ -407,6 +407,7 @@ defmodule FP.Recursion do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
     |> parse(1, [], :across)
+    |> Enum.filter(&(is_sequence?(&1)))
   end
 
   def parse([x|y], :down) when is_bitstring(x) do
@@ -414,6 +415,7 @@ defmodule FP.Recursion do
     |> Enum.map(&String.split(&1,"", trim: true))
     |> List.zip |> Enum.map(&Tuple.to_list(&1))
     |> parse(1, [], :down)
+    |> Enum.filter(&(is_sequence?(&1)))
   end
 
   def parse([], _, grid, _), do: grid |> Enum.reverse
@@ -426,5 +428,12 @@ defmodule FP.Recursion do
   def parse(["-"|y], row_no, col_no, coordinates, :across), do: parse(y, row_no, col_no + 1, [{col_no,row_no}|coordinates], :across)
   def parse(["-"|y], row_no, col_no, coordinates, :down), do: parse(y, row_no, col_no + 1, [{row_no,col_no}|coordinates], :down)
   def parse(["+"|y], row_no, col_no, coordinates, direction), do: parse(y, row_no, col_no + 1, coordinates, direction)
+
+  def is_sequence?([]), do: false
+  def is_sequence?([_|y]) when y == [], do: false
+  def is_sequence?([x|y]), do: is_sequence?(x,y|>hd)
+  def is_sequence?({x1,y1},{x2,y2}) do
+    if (x2 - x1 == 1) or (y2 - y1 == 1), do: true, else: false
+  end
 
 end
