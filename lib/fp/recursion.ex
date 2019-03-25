@@ -408,16 +408,23 @@ defmodule FP.Recursion do
   def parse([x|y], :across) when is_bitstring(x) do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
-    |> _parse(1, [], :across)
-    |> Enum.filter(&(is_sequence?(&1)))
+    |> _parse(:across)
   end
 
   def parse([x|y], :down) when is_bitstring(x) do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
     |> List.zip |> Enum.map(&Tuple.to_list(&1))
-    |> _parse(1, [], :down)
-    |> Enum.filter(&(is_sequence?(&1)))
+    |> _parse(:down)
+  end
+
+  defp _parse(grid, direction) do
+    grid
+    |> _parse(1, [], direction)
+    |> tokenise([])
+    |> Enum.map(&(filter_sequences(&1)))
+    |> Enum.reject(&(&1 == []))
+    |> Enum.reduce([], fn x, acc -> acc ++ x end)
   end
 
   defp _parse([], _, grid, _), do: grid |> Enum.reverse
@@ -431,11 +438,30 @@ defmodule FP.Recursion do
   defp _parse(["-"|y], row_no, col_no, coordinates, :down), do: _parse(y, row_no, col_no + 1, [{row_no,col_no}|coordinates], :down)
   defp _parse(["+"|y], row_no, col_no, coordinates, direction), do: _parse(y, row_no, col_no + 1, coordinates, direction)
 
-  defp is_sequence?([]), do: false
-  defp is_sequence?([_|y]) when y == [], do: false
-  defp is_sequence?([x|y]), do: is_sequence?(x,y|>hd)
+  defp filter_sequences(seqs), do: seqs |> Enum.filter(&(length(&1) > 1))
+
   defp is_sequence?({x1,y1},{x2,y2}) do
     if (x2 - x1 == 1) or (y2 - y1 == 1), do: true, else: false
+  end
+
+  defp tokenise([], grid_sequences), do: grid_sequences |> Enum.reverse
+  defp tokenise([row|rows], grid_sequences) do
+    row_seq = if row == [], do: [[]], else: tokenise(row, [row |> hd], [])
+    tokenise(rows, [row_seq | grid_sequences])
+  end
+
+  # tokenise each row into cell sequences, some of the
+  # spurious single-cell sequences due to the other word orientation (across vs. down)
+  # can be filtered out subsequently, leaving out valid cell sequences for fitting later
+  defp tokenise([], _, row_sequences), do: row_sequences
+  defp tokenise([_|y], sequence, sequences) when y == [], do: [(sequence |> Enum.reverse) | sequences] |> Enum.reverse
+  defp tokenise([x|y], sequence, sequences) do
+    z = y |> hd
+    if is_sequence?(x,z) do
+      tokenise(y, [z|sequence], sequences)
+    else
+      tokenise(y, [z], [(sequence |> Enum.reverse) | sequences])
+    end
   end
 
 end

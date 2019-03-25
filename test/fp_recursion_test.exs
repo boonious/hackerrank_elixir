@@ -2,6 +2,7 @@ defmodule FPRecursionTest do
   use ExUnit.Case
 
   import ExUnit.CaptureIO
+  import FP.Recursion
 
   doctest FP.Recursion
 
@@ -229,19 +230,47 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       "+++++-++++",
       "+++++-++++"]
 
-      assert FP.Recursion.parse(crossword_grid, :down) 
+      assert parse(crossword_grid, :down)
       ==  [[{2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}], [{6, 4}, {6, 5}, {6, 6}, {6, 7}, {6, 8}, {6, 9}, {6, 10}]]
 
-      assert FP.Recursion.parse(crossword_grid, :across) 
+      assert parse(crossword_grid, :across)
       == [[{2, 4}, {3, 4}, {4, 4}, {5, 4}, {6, 4}], [{3, 8}, {4, 8}, {5, 8}, {6, 8}, {7, 8}, {8, 8}]]
 
-      assert FP.Recursion.parse(crossword_grid)
+      assert parse(crossword_grid)
       == [
         [{2, 4}, {3, 4}, {4, 4}, {5, 4}, {6, 4}],
         [{3, 8}, {4, 8}, {5, 8}, {6, 8}, {7, 8}, {8, 8}],
         [{2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}],
         [{6, 4}, {6, 5}, {6, 6}, {6, 7}, {6, 8}, {6, 9}, {6, 10}]
       ]
+
+      crossword_grid = ["+-++++++++",
+      "+-++++++++",
+      "+-------++",
+      "+-++++++++",
+      "+-++++++++",
+      "+------+++",
+      "+-+++-++++",
+      "+++++-++++",
+      "+++++-++++",
+      "++++++++++"]
+
+      assert parse(crossword_grid, :down)
+      == [[{2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}], [{6, 6}, {6, 7}, {6, 8}, {6, 9}]]
+
+      assert parse(crossword_grid, :across)
+      == [[{2, 3}, {3, 3}, {4, 3}, {5, 3}, {6, 3}, {7, 3}, {8, 3}], [{2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 6}, {7, 6}]]
+
+      assert parse(crossword_grid)
+      == [
+        [{2, 3}, {3, 3}, {4, 3}, {5, 3}, {6, 3}, {7, 3}, {8, 3}],
+        [{2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 6}, {7, 6}],
+        [{2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}],
+        [{6, 6}, {6, 7}, {6, 8}, {6, 9}]
+      ]
+    end
+
+    test "fit - Crosswoeds 101, fit words into grid given a list of sequential cell coordinates" do
 
     end
 
