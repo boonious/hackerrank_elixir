@@ -403,7 +403,7 @@ defmodule FP.Recursion do
   # parse list of "+", "-" string grid rows
   # into a raw coordinate system of fit-able cells ("-")
   @spec parse(list(binary)) :: list
-  def parse(grid), do: parse(grid, :across) ++ parse(grid, :down)
+  def parse(grid), do: %{across: parse(grid, :across)} |> Map.merge %{down: parse(grid, :down) }
 
   def parse([x|y], :across) when is_bitstring(x) do
     [x|y]
