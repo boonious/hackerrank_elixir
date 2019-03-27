@@ -399,6 +399,25 @@ defmodule FP.Recursion do
 
   https://www.hackerrank.com/challenges/crosswords-101/problem
   """
+  @type sequences :: [tuple]
+  @type solution :: [{char, tuple}]
+
+  @spec fit([sequences], [binary], []) :: [solution]
+  def fit(sequences, words, solution \\ [])
+  def fit([], _, solution), do: solution
+  def fit([x|sequences], words, solution) do
+    # find words that fit into the cells by length
+    fitting_words = _fit(x, words)
+
+    # format solution in as a series of {char, {x,y}}
+    # for cross checking and disambiguation
+    words_w_coords = Enum.map(fitting_words, &(Enum.zip(&1, x)))
+    fit(sequences, words, [words_w_coords|solution])
+  end
+
+  def _fit(coords, words) do
+    words |> Enum.filter(&(String.length(&1) == length(coords))) |> Enum.map(&(String.split(&1, "", trim: true)))
+  end
 
   # parse list of "+", "-" string grid rows
   # into a raw coordinate system of fit-able cells ("-")
