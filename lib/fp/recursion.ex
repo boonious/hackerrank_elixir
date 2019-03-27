@@ -420,18 +420,21 @@ defmodule FP.Recursion do
   def disambiguate([], disambiguated, _), do: disambiguated
   def disambiguate([x|y], d, cross_ref) when length(x) == 1, do: disambiguate(y, [x|d], cross_ref) # unique fit not requiring disambiguation
   def disambiguate([x|y], d, cross_ref) do
-    z = Enum.map(x, &(check(&1, cross_ref))) |> Enum.reject(&(is_nil(&1)))
-    disambiguate(y, [z|d], cross_ref)
+    z = Enum.map(x, &(check(&1, cross_ref))) 
+    |> Enum.max
+    |> elem(1)
+
+    disambiguate(y, [[z]|d], cross_ref)
   end
 
   # find the word that has char matches from words of the other orientation
-  defp check(words, cross_ref, word \\ nil)
-  defp check(_x, [], word), do: word
-  defp check(x, [y|cross_ref], _word) do
-    cross_char = MapSet.intersection(MapSet.new(x), MapSet.new(y))
+  defp check(word, cross_ref, match_count \\ 0)
+  defp check(word, [], count), do: {count, word}
+  defp check(word, [y|cross_ref], count) do
+    cross_char = MapSet.intersection(MapSet.new(word), MapSet.new(y))
     |> MapSet.to_list
 
-    if cross_char != [], do: check(x, [], x), else: check(x, cross_ref)
+    if cross_char != [], do: check(word, cross_ref, count + 1), else: check(word, cross_ref, count)
   end
 
   @spec fit([sequences], [binary], []) :: [solution]
