@@ -218,7 +218,33 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     end
 
     # https://www.hackerrank.com/challenges/crosswords-101/problem
-    test "parse - Crosswoeds 101, model/parse crosswords grid as list of position tuples series" do
+    test "cross_words - Crosswords 101, fit words into cell sequences in grid" do
+      grid = ["+-++++++++",
+      "+-++++++++",
+      "+-++++++++",
+      "+-----++++",
+      "+-+++-++++",
+      "+-+++-++++",
+      "+++++-++++",
+      "++------++",
+      "+++++-++++",
+      "+++++-++++"]
+      words = ["LONDON","DELHI","ICELAND","ANKARA"]
+      
+      assert cross_words(grid, words)
+      == ["+L++++++++",
+          "+O++++++++",
+          "+N++++++++",
+          "+DELHI++++",
+          "+O+++C++++",
+          "+N+++E++++",
+          "+++++L++++",
+          "++ANKARA++",
+          "+++++N++++",
+          "+++++D++++"]
+    end
+
+    test "parse - Crosswords 101, model/parse crosswords grid as list of position tuples series" do
       crossword_grid = ["+-++++++++",
       "+-++++++++",
       "+-++++++++",
@@ -352,7 +378,7 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       ]
     end
 
-    test "disambiguate - Crosswoeds 101, disambiguate a list of plausible fits, by cross checking words from the other orientation" do
+    test "disambiguate - Crosswords 101, disambiguate a list of plausible fits, by cross checking words from the other orientation" do
       possible_fits = %{
         down: [
           [
@@ -412,7 +438,7 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       ]
     end
 
-    test "render - Crosswoeds 101, render solution" do
+    test "render - Crosswords 101, render solution" do
       solution = [
         [[{"E", {2, 1}}, {"N", {2, 2}}, {"G", {2, 3}}, {"L", {2, 4}}, {"A", {2, 5}}, {"N", {2, 6}}, {"D", {2, 7}}]],
         [[{"A", {6, 6}}, {"G", {6, 7}}, {"R", {6, 8}}, {"A", {6, 9}}]],

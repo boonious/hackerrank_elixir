@@ -402,6 +402,13 @@ defmodule FP.Recursion do
   @type sequences :: [tuple]
   @type solution :: [{char, tuple}]
 
+  def cross_words(grid, words) do
+    sequences = parse(grid)
+    %{down: fit(sequences.down, words), across: fit(sequences.across, words)}
+    |> disambiguate
+    |> render
+  end
+
   # disambiguate plausible fits in a sequence by checking crossed char from the other words
   @spec disambiguate(%{across: [solution], down: [solution] }) :: [solution]
   def disambiguate(%{across: across, down: down} = _) do
@@ -447,7 +454,7 @@ defmodule FP.Recursion do
   # parse list of "+", "-" string grid rows
   # into a raw coordinate system of fit-able cells ("-")
   @spec parse(list(binary)) :: list
-  def parse(grid), do: %{across: parse(grid, :across)} |> Map.merge %{down: parse(grid, :down) }
+  def parse(grid), do: %{across: parse(grid, :across)} |> Map.merge(%{down: parse(grid, :down)})
 
   def parse([x|y], :across) when is_bitstring(x) do
     [x|y]
