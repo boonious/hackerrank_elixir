@@ -508,4 +508,15 @@ defmodule FP.Recursion do
     end
   end
 
+  def render(solution) do
+    coord_char_map = solution |> List.flatten |> Enum.into(%{}, fn {x, {y,z}} -> {{y,z}, x} end)
+    output = for y <- 1..10 do
+      for x <- 1..10 do
+       if coord_char_map[{x,y}], do: coord_char_map[{x,y}], else: "+"
+      end
+    end
+
+    output |> Enum.map(&(Enum.join(&1)))
+  end
+
 end
