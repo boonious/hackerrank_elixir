@@ -175,11 +175,12 @@ defmodule FP.Structures do
   """
   def deconstruct(matrix) do
     new_matrix = []
-    deconstruct(matrix, new_matrix)
+    dim = []
+    deconstruct(matrix, new_matrix, dim)
   end
 
-  def deconstruct([], new_matrix), do: new_matrix
-  def deconstruct([top|y], new_matrix) do
+  def deconstruct([], new_matrix, dim), do: {new_matrix, dim}
+  def deconstruct([top|y], new_matrix, dim) do
     {bottom, rest1} = List.pop_at(y, -1)
     [left | rest2] = if rest1 != [], do: rest1 |> List.zip, else: [{}|[]]
     {right, rest3} = if rest2 != [] , do: List.pop_at(rest2, -1), else: {{}, []}
@@ -189,9 +190,13 @@ defmodule FP.Structures do
 
     if rest3 != [] do
       rest = rest3 |> List.zip |> Enum.map(&Tuple.to_list(&1))
-      deconstruct(rest, [circular|new_matrix])
+      m = 2 + (rest |> length) # num of rows - top, bottom (2) + remaining inner rows
+      n = top |> length
+      deconstruct(rest, [circular|new_matrix], [{m,n}|dim])
     else
-      deconstruct([], [circular|new_matrix])
+      m = 2
+      n = top |> length
+      deconstruct([], [circular|new_matrix], [{m,n}|dim])
     end
   end
 
