@@ -9,7 +9,6 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/swap-nodes/problem
   """
-
   # define a binary tree node of value (v) with left (l), right (r) leaves
   def n(value), do: %{v: value, l: nil, r: nil}
 
@@ -166,5 +165,34 @@ defmodule FP.Structures do
     depth_series(k, nth+1, [(nth+1)*k|x], depth)
   end
   defp depth_series(_k, _nth, levels, depth), do: levels |> Enum.reject(&(&1 > depth - 1))
+
+
+  #==============================================================================================
+  @doc """
+  Matrix rotation
+
+  https://www.hackerrank.com/challenges/matrix-rotation/problem
+  """
+  def deconstruct(matrix) do
+    new_matrix = []
+    deconstruct(matrix, new_matrix)
+  end
+
+  def deconstruct([], new_matrix), do: new_matrix
+  def deconstruct([top|y], new_matrix) do
+    {bottom, rest1} = List.pop_at(y, -1)
+    [left | rest2] = if rest1 != [], do: rest1 |> List.zip, else: [{}|[]]
+    {right, rest3} = if rest2 != [] , do: List.pop_at(rest2, -1), else: {{}, []}
+
+    circular = [top| [(right|> Tuple.to_list)| [(bottom|> Enum.reverse)| (left|> Tuple.to_list|> Enum.reverse) ]]]
+    |> List.flatten
+
+    if rest3 != [] do
+      rest = rest3 |> List.zip |> Enum.map(&Tuple.to_list(&1))
+      deconstruct(rest, [circular|new_matrix])
+    else
+      deconstruct([], [circular|new_matrix])
+    end
+  end
 
 end
