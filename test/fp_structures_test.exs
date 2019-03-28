@@ -275,25 +275,35 @@ defmodule FPStructuresTest do
     # tests for matrix rotation challenge
     # https://www.hackerrank.com/challenges/matrix-rotation/problem
     test "deconstruct - Matrix rotation, 'unfold' matrix into a format appropriate for 1D manipulation" do
-      matrix = [
-        [1,2,3,4],
-        [5,6,7,8],
-        [9,10,11,12],
-        [13,14,15,16]
-      ]
+      matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
       assert deconstruct(matrix)
       == {[[6, 7, 11, 10], [1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5]], [{2, 2}, {4, 4}]}
 
-      matrix = [
-        [1,2,3,4],
-        [7,8,9,10],
-        [13,14,15,16],
-        [19,20,21,22],
-        [25,26,27,28]
-      ]
+      matrix = [[1,2,3,4],[7,8,9,10],[13,14,15,16],[19,20,21,22],[25,26,27,28]]
       assert deconstruct(matrix)
-      == {[[8, 9, 15, 21, 20, 14],[1, 2, 3, 4, 10, 16, 22, 28, 27, 26, 25, 19, 13, 7]], [{2, 2}, {5, 4}]}
+      == {[[8, 9, 15, 21, 20, 14],[1, 2, 3, 4, 10, 16, 22, 28, 27, 26, 25, 19, 13, 7]], [{3, 2}, {5, 4}]}
+      
+      matrix = [[1,1],[1,1]]
+      assert deconstruct(matrix)
+      == {[[1, 1, 1, 1]], [{2, 2}]}
     end
+
+    test "reconstruct - Matrix rotation, reconstruct rotated matrix data back into its original dimension" do
+      {matrix, dim} = {[[6, 7, 11, 10], [1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5]],[{2, 2}, {4, 4}]}
+      reconstructed = []
+
+      assert reconstruct(matrix, reconstructed, dim)
+      == [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+
+      {matrix, dim} = {[[8, 9, 15, 21, 20, 14],[1, 2, 3, 4, 10, 16, 22, 28, 27, 26, 25, 19, 13, 7]], [{3, 2}, {5, 4}]}
+      assert reconstruct(matrix, reconstructed, dim)
+      == [[1,2,3,4],[7,8,9,10],[13,14,15,16],[19,20,21,22],[25,26,27,28]]
+      
+      {matrix, dim} = {[[1, 1, 1, 1]], [{2, 2}]}
+      assert reconstruct(matrix, reconstructed, dim)
+      == [[1, 1], [1, 1]]
+    end
+
   end
 
 end

@@ -188,16 +188,33 @@ defmodule FP.Structures do
     circular = [top| [(right|> Tuple.to_list)| [(bottom|> Enum.reverse)| (left|> Tuple.to_list|> Enum.reverse) ]]]
     |> List.flatten
 
+    m = 2 + (left|> Tuple.to_list |> length)
+    n = top |> length
     if rest3 != [] do
       rest = rest3 |> List.zip |> Enum.map(&Tuple.to_list(&1))
-      m = 2 + (rest |> length) # num of rows - top, bottom (2) + remaining inner rows
-      n = top |> length
       deconstruct(rest, [circular|new_matrix], [{m,n}|dim])
     else
-      m = 2
-      n = top |> length
       deconstruct([], [circular|new_matrix], [{m,n}|dim])
     end
+  end
+
+  def reconstruct([], new_matrix, _), do: new_matrix
+  def reconstruct([r|matrix], new_matrix,[{m,n}|dim]) do
+    top = r |> Enum.take(n)
+    rest1 = r |> Enum.drop(n)
+
+    left_m = m - 2 # omitting top and bottom rows
+    left = rest1 |> Enum.take(0-left_m) |> Enum.reverse
+    rest2 = rest1 |> Enum.drop(0-left_m)
+
+    bottom = rest2 |> Enum.take(0-n) |> Enum.reverse
+    right = rest2 |> Enum.drop(0-n)
+
+    x = new_matrix |> List.zip |> Enum.map(&Tuple.to_list(&1))
+    y = ([left] ++ x ++ [right]) |> List.zip |> Enum.map(&Tuple.to_list(&1))
+    z = [top] ++ y ++ [bottom]
+
+    reconstruct(matrix, z, dim)
   end
 
 end
