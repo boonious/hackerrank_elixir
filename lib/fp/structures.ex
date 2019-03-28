@@ -94,6 +94,30 @@ defmodule FP.Structures do
     end 
   end
 
+  # recursively parse nodes data from top down, in a single pass
+  # to determine the total depth and the actual number of
+  # nodes per depth level
+  def tree_data(nodes_data) do
+    node_count = 1
+    depth = 1
+    info = [node_count]
+    tree_data(nodes_data, info, node_count, depth)
+  end
+
+  def tree_data([], info, _, depth), do: {depth, info |> tl}
+  def tree_data(nodes_data, info, count, depth) do
+    nodes = nodes_data |> Enum.take(count)
+    remaining_nodes = nodes_data |> Enum.drop(count)
+
+    # count nodes, omitting any terminated nodes
+    new_count = nodes
+    |> List.flatten
+    |> Enum.filter(&(&1!=-1))
+    |> length
+
+    tree_data(remaining_nodes, [new_count|info], new_count, depth + 1)
+  end
+
   # start building tree with a n[1] root, count of 1 at depth 1
   def build_tree(data) do
     root = n(1)

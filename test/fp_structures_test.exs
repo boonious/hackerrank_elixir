@@ -14,6 +14,15 @@ defmodule FPStructuresTest do
       assert n(1) |> add([2,3], depth) == %{v: 1, l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}}
     end
 
+    # supports new algorithm for constructing large (> 1000) binary tree
+    test "tree_data - parse nodes data to gauge total depth and number of nodes per depth level" do
+      nodes_data = [[2, 3], [-1, 4], [-1, 5], [-1, -1], [-1, -1]]
+      assert tree_data(nodes_data) == {4, [2, 2, 1]}
+
+      nodes_data = [[2, 3],[4, -1],[5, -1],[6, -1],[7, 8],[-1, -1],[-1, -1],[-1, -1]]
+      assert tree_data(nodes_data) == {5, [3, 2, 2, 1]}
+    end
+
     test "build_tree - binary tree building" do
       assert build_tree([[2, 3]]) ==  {2, %{l: %{l: nil, r: nil, v: 2}, r: %{l: nil, r: nil, v: 3}, v: 1}}
       assert build_tree([[2, 3], [-1, -1], [-1, -1]])
