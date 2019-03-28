@@ -20,7 +20,9 @@ defmodule FP.Structures do
     [_ | swap_data] = Enum.drop(x, n) |> List.flatten
 
     # build the binary tree
-    {depth, tree} = build_tree(nodes_data)
+    {depth, info} = tree_data(nodes_data)
+    children = []
+    tree = build_tree(nodes_data, children, info)
 
     output = []
     swap_nodes(tree, swap_data, depth, output)
@@ -118,90 +120,44 @@ defmodule FP.Structures do
     tree_data(remaining_nodes, [new_count|info], new_count, depth + 1)
   end
 
-  # start building tree with a n[1] root, count of 1 at depth 1
-  def build_tree(data) do
-    root = n(1)
-    node_count = 1
-    depth = 1
-
-    build_tree(data, root, node_count, depth)
-  end
-
-  def build_tree([], tree, _, depth), do: {depth, tree}
-  def build_tree(data, tree, count, depth) do
-    nodes = data |> Enum.take(count)
-    remaining_nodes = data |> Enum.drop(count)
-
-    # add nodes to tree
-    new_tree = build_tree(nodes, tree, depth)
-
-    # calculate the next batch of nodes in the next level
-    new_count = nodes
-    |> List.flatten
-    |> Enum.filter(&(&1!=-1))
-    |> length
-
-    # build the remaining tree nodes on the next depth
-    build_tree(remaining_nodes, new_tree, new_count, depth + 1)
-  end
-
-  # adding nodes to tree
-  def build_tree([], tree, _), do: tree
-  def build_tree([data|nodes], tree, depth), do: build_tree(nodes, tree |> add(data, depth), depth)
-
-  # adding left, right nodes alternately when leaf in the current depth is "nil" (empty)
-  def add(%{v: v, l: l, r: r} = _n, [lv,rv], _depth)
-      when is_nil(l) and
-      is_nil(r) and
-      v != -1 do 
-
-    %{v: v, l: n(lv), r: n(rv)}
-  end
-
-  # this recursively traverse tree, and find the next leaf node
-  # to add the new node pair to
-  def add(%{v: v, l: l, r: r} = _n, value, depth) do
-    cond do
-      nil_leaf?(l, depth) -> %{v: v, l: l |> add(value, depth - 1), r: r}
-      nil_leaf?(l, depth, :right) -> %{v: v, l: l |> add(value, depth - 1), r: r}
-      nil_leaf?(r, depth) -> %{v: v, l: l, r: r |> add(value, depth - 1)}
-      nil_leaf?(r, depth, :right) -> %{v: v, l: l, r: r |> add(value, depth - 1)}
-    end
-  end
-
-  defp nil_leaf?(leaf, depth, side \\ :left)
-  defp nil_leaf?( %{l: nil, r: nil, v: -1}, _, _), do: false
-  defp nil_leaf?(leaf, depth, side) when depth <= 2 do
-    p = List.duplicate(:l, depth - 1)
-    path = if side == :left, do: p, else: p |> List.replace_at(0, :r)
-    v_path =  path |> List.replace_at(-1, :v)
-
-    x = get_in(leaf, path) == nil
-    y = get_in(leaf, v_path) != -1
-    x and y
-  end
-
-  # For larger and deeper tree: recursively retrieve all innermost 
-  # leaf nodes to find the next valid leaf node
-  # for adding the next child node pair to
+  # new algorithm that builds tree from bottom up,
+  # using a priori (from 'tree_data')
+  # depth and num of nodes per level information
   #
-  # FIXME: this involves recursion into nested depth nodes, 
-  # as the calling "add" is already recursing, this is
-  # not performant for very deep large tree, 
-  # e.g the last 2 HackerRank test cases for tree with many nodes > 1000 nodes
-  #
-  # The algorithm to fix this, I'm currently thinking: pre-storing (single level)
-  # nodes in a stack while adding them, so that these can be matched for
-  # the next depth level node building. This eliminates the deep recursive function below.
-  defp nil_leaf?(node, depth, _side) do
-    leaves = leaf_nodes([node], depth) |> Enum.find(fn x -> x.l == nil and x.v != -1 end)
-    if (leaves != nil), do: true, else: false
+  # this is much simpler and time-performant,
+  # and passes the last two
+  # HackerRank test cases for tree with > 1000 nodes
+  # 
+  # the previous algorithm builds tree from top down
+  # and involves scanning the entire tree (from root down)
+  # to find leaf nodes, per node addition and
+  # therefore becomes incredibly unefficient for large trees
+  def build_tree(_, [[l,r]], []), do: %{v: 1, l: l, r: r}
+  def build_tree(data, children, [c|count]) do
+    nodes = data |> Enum.take(0 - c)
+    remaining_nodes = data |> Enum.drop(0 - c)
+
+    parent = build_nodes(nodes, [])
+    new_children = merge_tree(parent |> List.flatten, children, [])
+
+    build_tree(remaining_nodes, new_children, count)
   end
 
-  defp leaf_nodes(leaves, depth) when depth == 2, do: leaves
-  defp leaf_nodes(leaves, depth) do
-    x = leaves |> Enum.map( &(Map.values(&1) |> Enum.filter(fn x-> is_map(x) end)) ) |> List.flatten
-    leaf_nodes(x, depth - 1)
+  def build_nodes([], nodes), do: nodes |> Enum.reverse
+  def build_nodes([[l,r]|y], nodes) do
+    build_nodes(y, [[n(l), n(r)] | nodes])
+  end
+
+  def merge_tree([], _, tree), do: tree |> Enum.reverse |> Enum.chunk_every(2)
+  def merge_tree([x|nodes], children, tree) when is_list(nodes) do
+    {y, remaining_children} = merge_tree(x, children)
+    merge_tree(nodes, remaining_children, [y|tree])
+  end
+
+  def merge_tree(%{l: nil, r: nil, v: -1} = node, children), do: {node, children}
+  def merge_tree(%{l: nil, r: nil, v: v} = _, children) do
+    [l, r] = children |> hd
+    {%{l: l, r: r, v: v}, children |> tl}
   end
 
   # return levels in 1k,2k,3k.. for a given first swap 'k' level
