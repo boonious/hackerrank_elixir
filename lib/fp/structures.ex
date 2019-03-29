@@ -217,4 +217,13 @@ defmodule FP.Structures do
     reconstruct(matrix, z, dim)
   end
 
+  def shift(matrix, times) do
+    m = for row <- matrix do
+      x = row |> Enum.take(times)
+      y = row |> Enum.drop(times)
+      y ++ x
+    end
+    m
+  end
+
 end

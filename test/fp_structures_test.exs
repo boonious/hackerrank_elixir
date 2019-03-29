@@ -304,6 +304,13 @@ defmodule FPStructuresTest do
       == [[1, 1], [1, 1]]
     end
 
+    test "shift - Matrix rotation, shift deconstructed matrix to imitate rotation" do
+      {matrix, _dim} = {[[6, 7, 11, 10], [1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5]],[{2, 2}, {4, 4}]}
+
+      assert shift(matrix, 2)
+      == [[11, 10, 6, 7], [3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 1, 2]]
+    end
+
   end
 
 end
