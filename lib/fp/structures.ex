@@ -173,6 +173,13 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/matrix-rotation/problem
   """
+  def rotate(matrix, times) do
+    {deconstructed, dim} = deconstruct(matrix)
+
+    shift(deconstructed, times)
+    |> reconstruct([], dim)
+  end
+
   def deconstruct(matrix) do
     new_matrix = []
     dim = []
