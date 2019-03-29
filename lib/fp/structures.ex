@@ -226,8 +226,11 @@ defmodule FP.Structures do
 
   def shift(matrix, times) do
     m = for row <- matrix do
-      x = row |> Enum.take(times)
-      y = row |> Enum.drop(times)
+      row_size = length row
+      n = rem(times, row_size)
+
+      x = row |> Enum.take(n)
+      y = row |> Enum.drop(n)
       y ++ x
     end
     m
