@@ -236,4 +236,42 @@ defmodule FP.Structures do
     m
   end
 
+
+  #==============================================================================================
+  @doc """
+  Substring searching by KMP algorithm
+
+  https://www.hackerrank.com/challenges/kmp-fp/problem
+  """
+  # prelims: currently straight forward algorithm that
+  # doesn't solve all HackerRank test cases for humongous strings
+  # next: modify algorithm by implementing pre-search scan as per KMP algorithm
+  def kmp_string_search(string, pattern) when is_binary(string) and is_binary(pattern) do
+    s = string |> String.split("", trim: true)
+    p = pattern |> String.split("", trim: true)
+    string_search(s, p)
+  end
+
+  def string_search(string, pattern, match \\ false)
+  def string_search(_, _, true), do: "YES"
+  def string_search([], _, false), do: "NO"
+
+  def string_search(s, p, match) do
+    len = length(p)
+    r_s = s |> tl
+
+    cond do
+      false not in _string_search(s, p) -> string_search(s, p, true) # all chars matched
+      length(r_s) >= len -> string_search(r_s, p, match) # keep scanning
+      true -> string_search([], p, false) # reached end of string
+    end
+  end
+
+  defp _string_search(s, p, match \\ [])
+  defp _string_search(_, [],  match), do: match
+
+  defp _string_search([x|y], [i|j], match) do
+    if x == i, do: _string_search(y, j, [true|match]), else: _string_search(y, j, [false|match])
+  end
+
 end

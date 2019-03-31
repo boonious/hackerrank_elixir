@@ -326,4 +326,16 @@ defmodule FPStructuresTest do
     end
   end
 
+  describe "structures - misc" do
+    @describetag :misc
+
+    test "kmp_string_search - Substring search, basic algorithm " do
+      assert kmp_string_search("abcdef", "def") == "YES"
+      assert kmp_string_search("computer", "muter") == "NO"
+      assert kmp_string_search("stringmatchingmat", "ingmat") == "YES"
+      assert kmp_string_search("videobox", "videobox") == "YES"
+    end
+
+  end
+
 end
