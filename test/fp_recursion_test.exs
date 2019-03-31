@@ -502,6 +502,13 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
           "+++++D++++"]
     end
 
+    #https://www.hackerrank.com/challenges/filter-elements/problem
+    test "filter_elements - Filter elements by least number of occurences" do
+      assert filter_elements(2, [4,5,2,5,4,3,1,3,4]) == [4,5,3]
+      assert filter_elements(4, [4,5,2,5,4,3,1,3,4]) == [-1]
+      assert filter_elements(2, [5,4,3,2,1,1,2,3,4,5]) == [5,4,3,2,1]
+    end
+
   end
 
 end

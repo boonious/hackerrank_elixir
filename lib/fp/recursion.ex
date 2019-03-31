@@ -393,7 +393,7 @@ defmodule FP.Recursion do
   # otherwise sum < 0, return false indicating the power sequence isn't solution
   def check_power(_num, _sum, _pow, _max_num), do: false
 
-  #===========================================================================
+  #========================================================================================
   @doc """
   Crosswords-101
 
@@ -527,6 +527,28 @@ defmodule FP.Recursion do
     end
 
     output |> Enum.map(&(Enum.join(&1)))
+  end
+
+  #========================================================================================
+  @doc """
+  Filter elements
+
+  https://www.hackerrank.com/challenges/filter-elements/problem
+  """
+  def filter_elements(k, nums) do
+      dict = uniq_numbers(nums, [])
+
+      x = Enum.reject(dict, &(count(&1, nums, 0) < k))
+      if x == [], do: [-1], else: x
+  end
+
+  defp count(_n, [], freq), do: freq
+  defp count(n, [x|y], freq) when n == x, do: count(n, y, freq + 1)
+  defp count(n, [_x|y], freq), do: count(n, y, freq)
+
+  defp uniq_numbers([], numbers), do: numbers |> Enum.reverse
+  defp uniq_numbers([x|y], numbers) do
+      if Enum.member?(numbers, x), do: uniq_numbers(y, numbers), else: uniq_numbers(y, [x|numbers])
   end
 
 end
