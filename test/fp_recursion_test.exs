@@ -502,6 +502,12 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
           "+++++D++++"]
     end
 
+    #https://www.hackerrank.com/challenges/super-digit/problem
+    test "digit_sum - Super digit, recursively sums up digits of a number into a single digit" do
+      assert digit_sum(148148148) == 3
+      assert super_digit(148, 3) == 3
+    end
+
     #https://www.hackerrank.com/challenges/filter-elements/problem
     test "filter_elements - Filter elements by least number of occurences" do
       assert filter_elements(2, [4,5,2,5,4,3,1,3,4]) == [4,5,3]

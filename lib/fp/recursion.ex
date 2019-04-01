@@ -531,6 +531,36 @@ defmodule FP.Recursion do
 
   #========================================================================================
   @doc """
+  Super digit
+
+  https://www.hackerrank.com/challenges/super-digit/problem
+  """
+  # a scalable solution by duplicate the individual digit sums
+  # then sum them up for another round of digit sum process
+  # instead of concatenating huge numbers
+  def super_digit(n, k) when is_number(n) do
+    # break an extremely large number
+    y = n
+    |> Integer.to_string
+    |> String.split("", trim: true)
+    |> Enum.map(&String.to_integer(&1))
+    |> digit_sum
+
+    y
+    |> List.duplicate(k)
+    |> digit_sum
+  end
+
+  def digit_sum(n) when is_number(n) and n < 10, do: n
+  def digit_sum(n) when is_number(n) do
+    Integer.digits(n) |> digit_sum
+  end
+  def digit_sum(n) do
+    digit_sum(Enum.sum(n))
+  end
+
+  #========================================================================================
+  @doc """
   Filter elements
 
   https://www.hackerrank.com/challenges/filter-elements/problem
