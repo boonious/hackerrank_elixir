@@ -261,17 +261,18 @@ defmodule FP.Structures do
     r_s = s |> tl
 
     cond do
-      false not in _string_search(s, p) -> string_search(s, p, true) # all chars matched
+      _string_search(s, p) == true -> string_search(s, p, true) # all chars matched
       length(r_s) >= len -> string_search(r_s, p, match) # keep scanning
       true -> string_search([], p, false) # reached end of string
     end
   end
 
-  defp _string_search(s, p, match \\ [])
+  defp _string_search(s, p, match \\ nil)
+  defp _string_search(_, _,  false), do: false
   defp _string_search(_, [],  match), do: match
 
-  defp _string_search([x|y], [i|j], match) do
-    if x == i, do: _string_search(y, j, [true|match]), else: _string_search(y, j, [false|match])
+  defp _string_search([x|y], [i|j], _match) do
+    if x == i, do: _string_search(y, j, true), else: _string_search(y, j, false)
   end
 
 end
