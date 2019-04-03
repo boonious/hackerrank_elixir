@@ -249,32 +249,35 @@ defmodule FP.Structures do
   def kmp_string_search(string, pattern) when is_binary(string) and is_binary(pattern) do
     s = string |> String.split("", trim: true)
     p = pattern |> String.split("", trim: true)
-    string_search(s, p)
+    string_search(s, p, p)
   end
 
-  def string_search(string, pattern, match \\ false)
-  def string_search(_, _, true), do: "YES"
-  def string_search([], _, false), do: "NO"
+  def string_search(string, subpattern, pattern, match \\ false)
+  def string_search(_, _, _, true), do: "YES"
+  def string_search([], _, _, false), do: "NO"
 
-  def string_search(s, p, match) do
+  def string_search(s, sp, p, _match) do
     m = 0
     n = 0
-    p_table = {p, m, n} # partial match table
+    p_table = {sp, m, n} # partial match table
 
-    {m, n, matched?} = _string_search(s, p, p_table)
+    {m, n, matched?} = _string_search(s, sp, p_table)
 
     r_s = Enum.drop(s, m) # drop already scanned chars
-    p_s = Enum.drop(p, n) # also drop partially matched substring
+    r_p = Enum.drop(sp, n) # also drop partially matched substring
 
     if matched? do
-      string_search(s, p, true) # all chars matched
+      string_search(s, sp, p, true) # all chars matched
     else
-      string_search(r_s, p_s, false) # keep scanning
+      x = if m == 1 and n == 0, do: p, else: r_p # full scan after a partial scan failed
+      string_search(r_s, x, p, false) # keep scanning
     end
   end
 
   defp _string_search(string, pattern, p_table, matched? \\ nil)
   defp _string_search(_, _, {_, m, n}, false), do: {m, n, false}
+  defp _string_search([], [], {_, m, n}, matched?), do: {m, n, matched?}
+  defp _string_search([], _, {_, m, n}, _), do: {m, n, false}
   defp _string_search(_, [], {_, m, n}, matched?), do: {m, n, matched?}
 
   defp _string_search([x|y], [i|j], {p,m,n}, _matched?) do
@@ -286,10 +289,14 @@ defmodule FP.Structures do
         _string_search(y, j, {p,m+1, n}, true)          
       x == i and x == a ->
         _string_search(y, j, {p,m+1, n+1}, true)
+      x != i and x == a and m == 0 ->
+        _string_search(y, j, {p,m+1, n+1}, false)
+      x != i and x != a and m == 0 ->
+        _string_search(y, j, {p,m+1, n}, false)
       x != i and x == a ->
         _string_search(y, j, {p,m+1, n+1}, false)
       true ->
-        _string_search(y, j, {p,m+1, n}, false)
+        _string_search(y, j, {p,m, n}, false)
     end
   end
 

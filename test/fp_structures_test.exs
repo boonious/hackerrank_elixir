@@ -339,6 +339,11 @@ defmodule FPStructuresTest do
     test "kmp_string_search - Substring search, KMP algorithm " do
       assert kmp_string_search("abcdeedef", "def") == "YES"
       assert kmp_string_search("abceabcdabeabcdabcdabde", "abcdabd") == "YES"
+
+      assert kmp_string_search("aaaba", "aaaa") == "NO"
+      assert kmp_string_search("aaabaa", "aaaa") == "NO"
+      assert kmp_string_search("aaabaaa", "aaaa") == "NO"
+      assert kmp_string_search("aaabaaaa", "aaaa") == "YES"
     end
 
   end
