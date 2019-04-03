@@ -257,28 +257,27 @@ defmodule FP.Structures do
   def string_search([], _, false), do: "NO"
 
   def string_search(s, p, match) do
-    len = length(p)
     m = 0
     n = 0
     p_table = {p, m, n} # partial match table
 
-    {m, n, match?} = _string_search(s, p, p_table)
+    {m, n, matched?} = _string_search(s, p, p_table)
 
     r_s = Enum.drop(s, m) # drop already scanned chars
     p_s = Enum.drop(p, n) # also drop partially matched substring
 
-    cond do
-      match? -> string_search(s, p, true) # all chars matched
-      length(r_s) >= len -> string_search(r_s, p_s, match) # keep scanning
-      true -> string_search([], p, false) # reached end of string
+    if matched? do
+      string_search(s, p, true) # all chars matched
+    else
+      string_search(r_s, p_s, false) # keep scanning
     end
   end
 
-  defp _string_search(string, pattern, p_table, match? \\ nil)
+  defp _string_search(string, pattern, p_table, matched? \\ nil)
   defp _string_search(_, _, {_, m, n}, false), do: {m, n, false}
-  defp _string_search(_, [], {_, m, n}, match?), do: {m, n, match?}
+  defp _string_search(_, [], {_, m, n}, matched?), do: {m, n, matched?}
 
-  defp _string_search([x|y], [i|j], {p,m,n}, _match?) do
+  defp _string_search([x|y], [i|j], {p,m,n}, _matched?) do
     a = Enum.at(p,n)
     cond do
       x == i and m == 0 ->
