@@ -336,6 +336,11 @@ defmodule FPStructuresTest do
       assert kmp_string_search("videobox", "videobox") == "YES"
     end
 
+    test "kmp_string_search - Substring search, KMP algorithm " do
+      assert kmp_string_search("abcdeedef", "def") == "YES"
+      assert kmp_string_search("abceabcdabeabcdabcdabde", "abcdabd") == "YES"
+    end
+
   end
 
 end

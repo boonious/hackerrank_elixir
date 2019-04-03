@@ -259,24 +259,39 @@ defmodule FP.Structures do
   def string_search(s, p, match) do
     len = length(p)
     m = 0
-    p_table = {p, m} # partial match table
+    n = 0
+    p_table = {p, m, n} # partial match table
 
-    {m, match?} = _string_search(s, p, p_table)
+    {m, n, match?} = _string_search(s, p, p_table)
 
     r_s = Enum.drop(s, m) # drop already scanned chars
+    p_s = Enum.drop(p, n) # also drop partially matched substring
+
     cond do
       match? -> string_search(s, p, true) # all chars matched
-      length(r_s) >= len -> string_search(r_s, p, match) # keep scanning
+      length(r_s) >= len -> string_search(r_s, p_s, match) # keep scanning
       true -> string_search([], p, false) # reached end of string
     end
   end
 
   defp _string_search(string, pattern, p_table, match? \\ nil)
-  defp _string_search(_, _, {_, m}, false), do: {m, false}
-  defp _string_search(_, [], {_, m}, match?), do: {m, match?}
+  defp _string_search(_, _, {_, m, n}, false), do: {m, n, false}
+  defp _string_search(_, [], {_, m, n}, match?), do: {m, n, match?}
 
-  defp _string_search([x|y], [i|j], {p,m}, _match?) do
-    if x == i, do: _string_search(y, j, {p,m+1}, true), else: _string_search(y, j, {p,m+1}, false)
+  defp _string_search([x|y], [i|j], {p,m,n}, _match?) do
+    a = Enum.at(p,n)
+    cond do
+      x == i and m == 0 ->
+        _string_search(y, j, {p,m+1, n}, true)
+      x == i and x != a ->
+        _string_search(y, j, {p,m+1, n}, true)          
+      x == i and x == a ->
+        _string_search(y, j, {p,m+1, n+1}, true)
+      x != i and x == a ->
+        _string_search(y, j, {p,m+1, n+1}, false)
+      true ->
+        _string_search(y, j, {p,m+1, n}, false)
+    end
   end
 
 end
