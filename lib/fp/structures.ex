@@ -247,14 +247,17 @@ defmodule FP.Structures do
   # doesn't solve all HackerRank test cases for humongous strings
   # next: modify algorithm by implementing pre-search scan as per KMP algorithm
   def kmp_string_search(string, pattern) when is_binary(string) and is_binary(pattern) do
-    s = string |> String.split("", trim: true)
-    p = pattern |> String.split("", trim: true)
-    string_search(s, p, p)
+    string_search(string, pattern, pattern)
+  end
+
+  def kmp_string_search(string, pattern) when is_list(string) and is_list(pattern) do
+    string_search(string, pattern, pattern)
   end
 
   def string_search(string, subpattern, pattern, match \\ false)
   def string_search(_, _, _, true), do: "YES"
   def string_search([], _, _, false), do: "NO"
+  def string_search("", _, _, false), do: "NO"
 
   def string_search(s, sp, p, _match) do
     m = 0
@@ -263,25 +266,46 @@ defmodule FP.Structures do
 
     {m, n, matched?} = _string_search(s, sp, p_table)
 
-    r_s = Enum.drop(s, m) # drop already scanned chars
-    r_p = Enum.drop(sp, n) # also drop partially matched substring
+    case {matched?, is_list(s)} do
+      {true, _} ->
+        string_search(s, sp, p, true) # all chars matched
+      {false, false} ->
+        <<_::binary-size(m), r_s::binary>> = s
+        <<_::binary-size(n), r_p::binary>> = sp
 
-    if matched? do
-      string_search(s, sp, p, true) # all chars matched
-    else
-      x = if m == 1 and n == 0, do: p, else: r_p # full scan after a partial scan failed
-      string_search(r_s, x, p, false) # keep scanning
+        x = if m == 1 and n == 0, do: p, else: r_p # full scan after a partial scan failed
+        string_search(r_s, x, p, false) # keep scanning
+      {false, true} ->
+        r_s = Enum.drop(s, m) # drop already scanned chars
+        r_p = Enum.drop(sp, n) # also drop partially matched substring
+
+        x = if m == 1 and n == 0, do: p, else: r_p # full scan after a partial scan failed
+        string_search(r_s, x, p, false)
     end
   end
 
   defp _string_search(string, pattern, p_table, matched? \\ nil)
   defp _string_search(_, _, {_, m, n}, false), do: {m, n, false}
+
+  defp _string_search("", "", {_, m, n}, matched?), do: {m, n, matched?}
+  defp _string_search("", _, {_, m, n}, _), do: {m, n, false}
+  defp _string_search(_, "", {_, m, n}, matched?), do: {m, n, matched?}
+
   defp _string_search([], [], {_, m, n}, matched?), do: {m, n, matched?}
   defp _string_search([], _, {_, m, n}, _), do: {m, n, false}
   defp _string_search(_, [], {_, m, n}, matched?), do: {m, n, matched?}
 
+  defp _string_search(<<x::utf8,y::binary>>, <<i::utf8, j::binary>>, {p,m,n}, _matched?) do
+    a = :binary.at p, n
+    _string_search(a, {x,y}, {i,j}, {p,m,n})
+  end
+
   defp _string_search([x|y], [i|j], {p,m,n}, _matched?) do
     a = Enum.at(p,n)
+    _string_search(a, {x,y}, {i,j}, {p,m,n})
+  end
+
+  defp _string_search(a, {x,y}, {i,j}, {p,m,n}) do
     cond do
       x == i and m == 0 ->
         _string_search(y, j, {p,m+1, n}, true)
@@ -294,7 +318,9 @@ defmodule FP.Structures do
       x != i and x != a and m == 0 ->
         _string_search(y, j, {p,m+1, n}, false)
       x != i and x == a ->
-        _string_search(y, j, {p,m+1, n+1}, false)
+        _string_search(y, j, {p,m, n}, false)
+      x != i and x != a and n == 0 ->
+        _string_search(y, j, {p,m+1, n}, false)
       true ->
         _string_search(y, j, {p,m, n}, false)
     end

@@ -340,10 +340,29 @@ defmodule FPStructuresTest do
       assert kmp_string_search("abcdeedef", "def") == "YES"
       assert kmp_string_search("abceabcdabeabcdabcdabde", "abcdabd") == "YES"
 
-      assert kmp_string_search("aaaba", "aaaa") == "NO"
-      assert kmp_string_search("aaabaa", "aaaa") == "NO"
-      assert kmp_string_search("aaabaaa", "aaaa") == "NO"
-      assert kmp_string_search("aaabaaaa", "aaaa") == "YES"
+      {s,p} = {"abcdeedef", "def"}
+      assert kmp_string_search(s,p) == "YES"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "YES"
+
+      {s,p} = {"abceabcdabeabcdabcdabde", "abcdabd"}
+      assert kmp_string_search(s,p) == "YES"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "YES"
+
+      {s,p} = {"aaaba", "aaaa"}
+      assert kmp_string_search(s,p) == "NO"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "NO"
+
+      {s,p} = {"aaabaa", "aaaa"}
+      assert kmp_string_search(s,p) == "NO"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "NO"
+
+      {s,p} = {"aaabaaa", "aaaa"}
+      assert kmp_string_search(s,p) == "NO"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "NO"
+
+      {s,p} = {"aaabaaaa", "aaaa"}
+      assert kmp_string_search(s,p) == "YES"
+      assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "YES"
     end
 
   end
