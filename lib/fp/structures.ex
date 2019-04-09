@@ -342,6 +342,14 @@ defmodule FP.Structures do
   # the algorithm should be time-performant
   # cf. computing area for all feasible fence permutations (horizontally)
 
+  # find max rectangular at a given height of a fence with irregular heights
+  def max_rectangle(heights, height) do
+    heights
+    |> fence_spans(height)
+    |> max_span
+    |> Kernel.*(height)
+  end
+
   # find the max contiguous span from a binary list of fence spans
   def max_span(spans, current \\ 0, max \\ 0)
   def max_span([], current, max), do: if current > max, do: current, else: max
