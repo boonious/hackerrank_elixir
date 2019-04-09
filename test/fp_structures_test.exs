@@ -329,6 +329,7 @@ defmodule FPStructuresTest do
   describe "structures - misc" do
     @describetag :misc
 
+    #https://www.hackerrank.com/challenges/kmp-fp/problem
     test "kmp_string_search - Substring search, basic algorithm " do
       assert kmp_string_search("abcdef", "def") == "YES"
       assert kmp_string_search("computer", "muter") == "NO"
@@ -363,6 +364,18 @@ defmodule FPStructuresTest do
       {s,p} = {"aaabaaaa", "aaaa"}
       assert kmp_string_search(s,p) == "YES"
       assert kmp_string_search(s |> String.split("", trim: true), p |> String.split("", trim: true)) == "YES"
+    end
+
+    #https://www.hackerrank.com/challenges/john-and-fences/problem
+    test "fence_spans - John and fences, first find fence spans that achieve at least a given height" do
+      heights = [2,5,7,4,1,8]
+      spans = []
+
+      height = 2
+      assert fence_spans(heights, spans, height) == [1, 1, 1, 1, 0, 1] # '1's denotes corresponding fences
+
+      height = 5
+      assert fence_spans(heights, spans, height) == [0, 1, 1, 0, 0, 1]
     end
 
   end

@@ -326,4 +326,25 @@ defmodule FP.Structures do
     end
   end
 
+  #==============================================================================================
+  @doc """
+  John and fences
+
+  https://www.hackerrank.com/challenges/john-and-fences/problem
+  """
+  # Algorithm:
+  # find contiguous rectangles per height
+  # the area is proportional to the number of fences (spanning the area)
+  # max area (for a given height) = most number of spanning fences * height
+  #
+  # max rectangle for the entire fence = max of max areas of all unique heights
+  #
+  # the algorithm should be time-performant
+  # cf. computing area for all feasible fence permutations (horizontally)
+
+  # find contiguous fence spans that achieve at least a given height
+  def fence_spans([], spans, _height), do: spans |> Enum.reverse
+  def fence_spans([x|y], spans, height) when x >= height, do: fence_spans(y, [1|spans], height)
+  def fence_spans([x|y], spans, height) when x < height, do: fence_spans(y, [0|spans], height)
+
 end
