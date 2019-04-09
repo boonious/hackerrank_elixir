@@ -342,6 +342,18 @@ defmodule FP.Structures do
   # the algorithm should be time-performant
   # cf. computing area for all feasible fence permutations (horizontally)
 
+  # find the max contiguous span from a binary list of fence spans
+  def max_span([], current_span, max_span), do: if current_span > max_span, do: current_span, else: max_span
+  def max_span([x|y], current_span, max_span) do
+    cond do
+      x == 0 and current_span > max_span ->
+        max_span(y, 0, current_span)
+      x == 0 and current_span <= max_span ->
+        max_span(y, 0, max_span)
+      x == 1 -> max_span(y, current_span + 1, max_span)
+    end
+  end
+
   # find contiguous fence spans that achieve at least a given height
   def fence_spans([], spans, _height), do: spans |> Enum.reverse
   def fence_spans([x|y], spans, height) when x >= height, do: fence_spans(y, [1|spans], height)
