@@ -342,6 +342,14 @@ defmodule FP.Structures do
   # the algorithm should be time-performant
   # cf. computing area for all feasible fence permutations (horizontally)
 
+  @spec max_rectangle(list(integer)) :: integer
+  def max_rectangle(heights) do
+    # find the max of max rectangles for all heights
+    Enum.uniq(heights)
+    |> Enum.map(&(max_rectangle(heights, &1)))
+    |> Enum.max
+  end
+
   # find max rectangular at a given height of a fence with irregular heights
   def max_rectangle(heights, height) do
     heights

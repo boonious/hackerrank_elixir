@@ -401,6 +401,10 @@ defmodule FPStructuresTest do
       assert max_span(fence_spans) == 0
     end
 
+    test "max_rectangle  - John and fences, find the largest feasible rectangle from fences with irregular heights" do
+      assert max_rectangle([2,5,7,4,1,8]) == 12
+    end
+
   end
 
 end
