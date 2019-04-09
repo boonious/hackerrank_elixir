@@ -356,8 +356,9 @@ defmodule FP.Structures do
   end
 
   # find contiguous fence spans that achieve at least a given height
-  def fence_spans([], spans, _height), do: spans |> Enum.reverse
-  def fence_spans([x|y], spans, height) when x >= height, do: fence_spans(y, [1|spans], height)
-  def fence_spans([x|y], spans, height) when x < height, do: fence_spans(y, [0|spans], height)
+  def fence_spans(heights, height \\ 0, spans \\ [])
+  def fence_spans([], _, spans), do: spans |> Enum.reverse
+  def fence_spans([x|y], height, spans) when x >= height, do: fence_spans(y, height, [1|spans])
+  def fence_spans([x|y], height, spans) when x < height, do: fence_spans(y, height, [0|spans])
 
 end

@@ -369,13 +369,12 @@ defmodule FPStructuresTest do
     #https://www.hackerrank.com/challenges/john-and-fences/problem
     test "fence_spans - John and fences, first find fence spans that achieve at least a given height" do
       heights = [2,5,7,4,1,8]
-      spans = []
 
       height = 2
-      assert fence_spans(heights, spans, height) == [1, 1, 1, 1, 0, 1] # '1's denotes corresponding fences
+      assert fence_spans(heights, height) == [1, 1, 1, 1, 0, 1] # '1's denotes corresponding fences
 
       height = 5
-      assert fence_spans(heights, spans, height) == [0, 1, 1, 0, 0, 1]
+      assert fence_spans(heights, height) == [0, 1, 1, 0, 0, 1]
     end
 
     test "max_span - find the max contiguous span from a binary list of fence spans" do
