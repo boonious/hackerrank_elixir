@@ -380,19 +380,16 @@ defmodule FPStructuresTest do
 
     test "max_span - find the max contiguous span from a binary list of fence spans" do
       fence_spans = [1, 1, 1, 1, 0, 1]
-      current_span = 0
-      max_span = 0
-
-      assert max_span(fence_spans, current_span, max_span) == 4
+      assert max_span(fence_spans) == 4
 
       fence_spans = [0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1]
-      assert max_span(fence_spans, current_span, max_span) == 3
+      assert max_span(fence_spans) == 3
 
       fence_spans = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-      assert max_span(fence_spans, current_span, max_span) == 11
+      assert max_span(fence_spans) == 11
 
       fence_spans = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      assert max_span(fence_spans, current_span, max_span) == 0
+      assert max_span(fence_spans) == 0
     end
 
   end

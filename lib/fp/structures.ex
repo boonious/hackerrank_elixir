@@ -343,14 +343,15 @@ defmodule FP.Structures do
   # cf. computing area for all feasible fence permutations (horizontally)
 
   # find the max contiguous span from a binary list of fence spans
-  def max_span([], current_span, max_span), do: if current_span > max_span, do: current_span, else: max_span
-  def max_span([x|y], current_span, max_span) do
+  def max_span(spans, current \\ 0, max \\ 0)
+  def max_span([], current, max), do: if current > max, do: current, else: max
+  def max_span([x|y], current, max) do
     cond do
-      x == 0 and current_span > max_span ->
-        max_span(y, 0, current_span)
-      x == 0 and current_span <= max_span ->
-        max_span(y, 0, max_span)
-      x == 1 -> max_span(y, current_span + 1, max_span)
+      x == 0 and current > max ->
+        max_span(y, 0, current)
+      x == 0 and current <= max ->
+        max_span(y, 0, max)
+      x == 1 -> max_span(y, current + 1, max)
     end
   end
 
