@@ -377,4 +377,27 @@ defmodule FP.Structures do
   def fence_spans([x|y], height, spans) when x >= height, do: fence_spans(y, height, [1|spans])
   def fence_spans([x|y], height, spans) when x < height, do: fence_spans(y, height, [0|spans])
 
+  # time-performant / integrated function that combine fence_spans and max_span functions
+  # fast enough for 50,000 size fence
+  def max_rectangle1(heights, height \\ 0, current \\ 0, max \\ 0)
+  def max_rectangle1([], _height, current, max), do: if current > max, do: current, else: max
+
+  def max_rectangle1([x|y], height, current, max) when x >= height do
+    area = height + current
+
+    if area > max do
+      max_rectangle1(y, height, area, area)
+    else
+      max_rectangle1(y, height, area, max)
+    end
+  end
+
+  def max_rectangle1([x|y], height, current, max) when x < height do
+    if current > max do
+      max_rectangle1(y, height, 0, current)
+    else
+      max_rectangle1(y, height, 0, max)
+    end
+  end
+
 end
