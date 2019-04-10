@@ -417,33 +417,48 @@ defmodule FP.Structures do
   # the max areas for all heights, from which a max can be determined.
   # However this does so by divide-and-conquer algorithm that
   # progressively divides N into smaller chunks, so the scans are not
-  # always N in size and therefore more time-performant.
+  # always N in size and therefore much more time-performant.
   #
+  # this algorithm finds the max rectangle of
+  # the HackerRank 100,000 size test cases in seconds
 
   @spec max_rect_divide(list(integer), integer) :: integer
   def max_rect_divide(heights, n) do
     index = 1..n
     x = Enum.zip(heights, index) # create a tuple list containing index
 
-    indexes = []
-    max_rect_divide(x, 1, n, indexes) |> Enum.reverse
+    areas = []
+    max_rect_divide(x, 1, n, areas) |> Enum.max
   end
 
-  def max_rect_divide(heights, x1, x2, indexes) do
-    {_, min_index} =  Enum.min(heights)
+  # divide-conquer approach to compute all max areas
+  # TODO: find and return the current max area in situ 
+  # instead of accumulating all max areas 
+  # for the single "Enum.max" op above
+  def max_rect_divide(heights, x1, x2, areas) do
+    {height, min_index} = Enum.min(heights)
+
+    # calculate max area (for particular height) 
+    # using the previously
+    # developed max/fence span function (above)
+    # "heights" N size is progressively smaller
+    # because of divide-conquer algorithm
+    area = max_rect(heights, height)
 
     # subdivide N into two halves
     {left,right} = Enum.split_with(heights, fn {_, i} -> i <= min_index end)
 
-    i = if( min_index > x1) do
-      max_rect_divide(left |> Enum.drop(-1), x1, min_index - 1, indexes)
+    # recursively find max area on the left
+    area_left = if( min_index > x1) do
+      max_rect_divide(left |> Enum.drop(-1), x1, min_index - 1, areas)
     end
 
-    j = if (min_index < x2) do
-      max_rect_divide(right, min_index + 1, x2, indexes)
+    # recursively find max area on the right
+    area_right = if (min_index < x2) do
+      max_rect_divide(right, min_index + 1, x2, areas)
     end
 
-    [j | [i | [min_index|indexes]]] |> List.flatten |> Enum.reject(&is_nil/1)
+    [area_right | [area_left | [ area | areas]]] |> List.flatten |> Enum.reject(&is_nil/1)
   end
 
 end
