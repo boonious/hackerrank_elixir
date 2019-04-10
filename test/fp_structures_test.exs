@@ -367,14 +367,14 @@ defmodule FPStructuresTest do
     end
 
     #https://www.hackerrank.com/challenges/john-and-fences/problem
-    test "max_rectangle - John and fences, find max rectangular at a given height of a fence with irregular heights" do
+    test "max_rect - John and fences, find max rectangular at a given height of a fence with irregular heights" do
       heights = [2,5,7,4,1,8]
 
       height = 2
-      assert max_rectangle(heights, height) == 8
+      assert max_rect(heights, height) == 8
 
       height = 5
-      assert max_rectangle(heights, height) == 10
+      assert max_rect(heights, height) == 10
     end
 
     test "fence_spans - John and fences, first find fence spans that achieve at least a given height" do
@@ -401,9 +401,9 @@ defmodule FPStructuresTest do
       assert max_span(fence_spans) == 0
     end
 
-    test "max_rectangle  - John and fences, find the largest feasible rectangle from fences with irregular heights" do
-      assert max_rectangle([2,5,7,4,1,8]) == 12
-      assert max_rectangle1([2,5,7,4,1,8], 2) == 8
+    test "max_rect  - John and fences, find the largest feasible rectangle from fences with irregular heights" do
+      assert max_rect([2,5,7,4,1,8]) == 12
+      assert max_rect([2,1,7,4,5,8]) == 16
     end
 
   end

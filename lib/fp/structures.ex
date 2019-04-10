@@ -328,7 +328,7 @@ defmodule FP.Structures do
 
   #==============================================================================================
   @doc """
-  John and fences
+  John and fences 1
 
   https://www.hackerrank.com/challenges/john-and-fences/problem
   """
@@ -341,17 +341,24 @@ defmodule FP.Structures do
   #
   # the algorithm should be time-performant
   # cf. computing area for all feasible fence permutations (horizontally)
+  #
+  # Note: this algorithim scans the entire fence (N) per height
+  # and works for fence up to 50,000.
+  # For the larger size fences (100,000), it takes 14s.
+  # The latter HackerRank test cases requires a faster algorithm 
+  # - see below
 
-  @spec max_rectangle(list(integer)) :: integer
-  def max_rectangle(heights) do
+  @spec max_rect(list(integer)) :: integer
+  def max_rect(heights) do
     # find the max of max rectangles for all heights
     Enum.uniq(heights)
-    |> Enum.map(&(max_rectangle(heights, &1)))
+    #|> Enum.map(&(max_rect(heights, &1))) # for smaller fences
+    |> Enum.map(&(_max_rect(heights, &1)))
     |> Enum.max
   end
 
   # find max rectangular at a given height of a fence with irregular heights
-  def max_rectangle(heights, height) do
+  def max_rect(heights, height) do
     heights
     |> fence_spans(height)
     |> max_span
@@ -379,25 +386,37 @@ defmodule FP.Structures do
 
   # time-performant / integrated function that combine fence_spans and max_span functions
   # fast enough for 50,000 size fence
-  def max_rectangle1(heights, height \\ 0, current \\ 0, max \\ 0)
-  def max_rectangle1([], _height, current, max), do: if current > max, do: current, else: max
+  defp _max_rect(heights, height \\ 0, current \\ 0, max \\ 0)
+  defp _max_rect([], _height, current, max), do: if current > max, do: current, else: max
 
-  def max_rectangle1([x|y], height, current, max) when x >= height do
+  defp _max_rect([x|y], height, current, max) when x >= height do
     area = height + current
 
     if area > max do
-      max_rectangle1(y, height, area, area)
+      _max_rect(y, height, area, area)
     else
-      max_rectangle1(y, height, area, max)
+      _max_rect(y, height, area, max)
     end
   end
 
-  def max_rectangle1([x|y], height, current, max) when x < height do
+  defp _max_rect([x|y], height, current, max) when x < height do
     if current > max do
-      max_rectangle1(y, height, 0, current)
+      _max_rect(y, height, 0, current)
     else
-      max_rectangle1(y, height, 0, max)
+      _max_rect(y, height, 0, max)
     end
   end
 
+  #==============================================================================================
+  @doc """
+  John and fences 2
+
+  https://www.hackerrank.com/challenges/john-and-fences/problem
+  """
+  # Compared to the previous algorithm, this still scans and finds
+  # the max areas for all heights, from which a max can be determined.
+  # However this does so by divide-and-conquer alogorithm that
+  # progressively divides N into smaller chunks, so the scans are not
+  # always N in size and therefore more time-performant.
+  #
 end
