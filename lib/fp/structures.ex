@@ -415,8 +415,35 @@ defmodule FP.Structures do
   """
   # Compared to the previous algorithm, this still scans and finds
   # the max areas for all heights, from which a max can be determined.
-  # However this does so by divide-and-conquer alogorithm that
+  # However this does so by divide-and-conquer algorithm that
   # progressively divides N into smaller chunks, so the scans are not
   # always N in size and therefore more time-performant.
   #
+
+  @spec max_rect_divide(list(integer), integer) :: integer
+  def max_rect_divide(heights, n) do
+    index = 1..n
+    x = Enum.zip(heights, index) # create a tuple list containing index
+
+    indexes = []
+    max_rect_divide(x, 1, n, indexes) |> Enum.reverse
+  end
+
+  def max_rect_divide(heights, x1, x2, indexes) do
+    {_, min_index} =  Enum.min(heights)
+
+    # subdivide N into two halves
+    {left,right} = Enum.split_with(heights, fn {_, i} -> i <= min_index end)
+
+    i = if( min_index > x1) do
+      max_rect_divide(left |> Enum.drop(-1), x1, min_index - 1, indexes)
+    end
+
+    j = if (min_index < x2) do
+      max_rect_divide(right, min_index + 1, x2, indexes)
+    end
+
+    [j | [i | [min_index|indexes]]] |> List.flatten |> Enum.reject(&is_nil/1)
+  end
+
 end

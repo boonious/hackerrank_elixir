@@ -406,6 +406,10 @@ defmodule FPStructuresTest do
       assert max_rect([2,1,7,4,5,8]) == 16
     end
 
+    test "max_rect_divide  - John and fences, max feasible rectangle via divide-conquer approach" do
+      assert max_rect_divide([2,5,7,4,1,8], 6) == [5,1,4,2,3,6] # return indexes for now
+    end
+
   end
 
 end
