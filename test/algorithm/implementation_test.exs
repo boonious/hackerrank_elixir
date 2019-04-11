@@ -13,6 +13,14 @@ defmodule AlgoImpTest do
       assert repeated_string("a", 1000000000000) == 1000000000000
     end
 
+    # https://www.hackerrank.com/challenges/kangaroo/problem
+    test "f - Kangaroo" do
+      assert f([0, 3, 4, 2]) == true
+      assert f([0, 2, 5, 3]) == false
+      assert f([21, 6, 47, 3]) == false
+      assert f([43, 2, 70, 2]) == false
+    end
+
   end
 
 end
