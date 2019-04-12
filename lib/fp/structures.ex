@@ -386,7 +386,7 @@ defmodule FP.Structures do
 
   # time-performant / integrated function that combine fence_spans and max_span functions
   # fast enough for 50,000 size fence
-  defp _max_rect(heights, height \\ 0, current \\ 0, max \\ 0)
+  defp _max_rect(heights, height, current \\ 0, max \\ 0)
   defp _max_rect([], _height, current, max), do: if current > max, do: current, else: max
 
   defp _max_rect([x|y], height, current, max) when x >= height do
@@ -459,6 +459,22 @@ defmodule FP.Structures do
     end
 
     [area_right | [area_left | [ area | areas]]] |> List.flatten |> Enum.reject(&is_nil/1)
+  end
+
+  #==============================================================================================
+  @doc """
+  Order exercises (advanced)
+
+  https://www.hackerrank.com/challenges/order-exercises/problem
+  """
+  @spec ordered_subarray_sums(list(integer), integer) :: list(integer)
+  def ordered_subarray_sums(a, k) do
+    a
+    |> Enum.chunk_by(&(&1 > 0))
+    |> Enum.map(&Enum.sum(&1))
+    |> Enum.reject(&(&1 < 0))
+    |> Enum.sort(&(&1 >= &2))
+    |> Enum.take(k)
   end
 
 end

@@ -401,7 +401,7 @@ defmodule FPStructuresTest do
       assert max_span(fence_spans) == 0
     end
 
-    test "max_rect  - John and fences, find the largest feasible rectangle from fences with irregular heights" do
+    test "max_rect - John and fences, find the largest feasible rectangle from fences with irregular heights" do
       assert max_rect([2,5,7,4,1,8]) == 12
       assert max_rect([2,1,7,4,5,8]) == 16
     end
@@ -409,6 +409,12 @@ defmodule FPStructuresTest do
     test "max_rect_divide  - John and fences, max feasible rectangle via divide-conquer approach" do
       assert max_rect_divide([2,5,7,4,1,8], 6) == 12
       assert max_rect_divide([2,1,7,4,5,8], 6) == 16
+    end
+
+    #https://www.hackerrank.com/challenges/order-exercises/problem
+    test "ordered_subarray_sums - " do
+      assert ordered_subarray_sums([2,4,-10,2,-2], 3) == [6,2]
+      assert ordered_subarray_sums([-2,5,-1,-8], 2) == [5]
     end
 
   end
