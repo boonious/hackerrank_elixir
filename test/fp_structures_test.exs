@@ -412,9 +412,10 @@ defmodule FPStructuresTest do
     end
 
     #https://www.hackerrank.com/challenges/order-exercises/problem
-    test "ordered_subarray_sums - " do
-      assert ordered_subarray_sums([2,4,-10,2,-2], 3) == [6,2]
-      assert ordered_subarray_sums([-2,5,-1,-8], 2) == [5]
+    test "max_subarray_sums - order exercises, find multiple max subarray sums" do
+      assert max_subarray_sums([2,4,-10,2,-2], 3) == [6,2]
+      assert max_subarray_sums([-2,5,-1,-8], 2) == [5]
+      assert max_subarray_sums([-10,-2,-4,-100,400,-20,-2,-1,-5,-10], 4) == [400]
     end
 
   end

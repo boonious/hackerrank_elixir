@@ -463,12 +463,12 @@ defmodule FP.Structures do
 
   #==============================================================================================
   @doc """
-  Order exercises (advanced)
+  Order exercises (advanced) - find multiple maximum subarray sums given an array
 
   https://www.hackerrank.com/challenges/order-exercises/problem
   """
-  @spec ordered_subarray_sums(list(integer), integer) :: list(integer)
-  def ordered_subarray_sums(a, k) do
+  @spec max_subarray_sums(list(integer), integer) :: list(integer)
+  def max_subarray_sums(a, k) do
     a
     |> Enum.chunk_by(&(&1 > 0))
     |> Enum.map(&Enum.sum(&1))
