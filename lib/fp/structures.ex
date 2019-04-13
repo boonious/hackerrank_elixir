@@ -477,4 +477,18 @@ defmodule FP.Structures do
     |> Enum.take(k)
   end
 
+  # Kadane's algorithm for finding the largest possible max subarray sum - 0(N)
+  # with tail recursion
+  @spec kadane_max(list(integer), integer, integer) :: integer
+  def kadane_max(array, current_max \\ 0, max \\ 0)
+
+  def kadane_max([], _, max), do: max
+  def kadane_max([head|tail], current_max, max) do
+    x = current_max + head
+    y = if x > 0, do: x, else: 0
+    z = if current_max > max, do: current_max, else: max
+
+    kadane_max(tail, y, z)
+  end
+
 end
