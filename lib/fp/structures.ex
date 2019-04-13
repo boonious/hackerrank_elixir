@@ -478,17 +478,24 @@ defmodule FP.Structures do
   end
 
   # Kadane's algorithm for finding the largest possible max subarray sum - 0(N)
-  # with tail recursion
-  @spec kadane_max(list(integer), integer, integer) :: integer
-  def kadane_max(array, current_max \\ 0, max \\ 0)
+  # using tail recursion. The array input now zipped with indexes
+  # so that the index span of the subarray can be determined
+  @spec kadane_max(list(tuple), {integer,integer}, integer, integer, integer) :: integer
+  def kadane_max(array, span \\ {0,0}, start \\ -1, current_max \\ 0, max \\ 0)
 
-  def kadane_max([], _, max), do: max
-  def kadane_max([head|tail], current_max, max) do
-    x = current_max + head
-    y = if x > 0, do: x, else: 0
-    z = if current_max > max, do: current_max, else: max
+  def kadane_max([], span, _, _, max), do: {span, max}
+  def kadane_max([head|tail], {i,j}, start, current_max, max) do
+    {value, current_index} = head
+    x = current_max + value
+    
+    # 'start1' logs the start of a negative / minimum
+    # y is the updated current max
+    # z is the update max
+    # `span` corresponds to the indexes of max subarray
+    {start1, y} = if x > 0, do: {start, x}, else: {current_index, 0} 
+    {span, z} = if y > max, do: {{start+1, current_index}, y}, else: {{i,j}, max}
 
-    kadane_max(tail, y, z)
+    kadane_max(tail, span, start1, y, z)
   end
 
 end

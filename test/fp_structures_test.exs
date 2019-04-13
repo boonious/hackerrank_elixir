@@ -419,10 +419,24 @@ defmodule FPStructuresTest do
     end
 
     test "kadane_max - order exercises, find largest possible subarray max using Kadane's algorithm" do
-      assert kadane_max([2,4,-10,2,-2]) == 6
-      assert kadane_max([-2,1,-3,4,-1,2,1,-5,4]) == 6
-      assert kadane_max([-2,5,-1,-8]) == 5
-      assert kadane_max([-10,-2,-4,-100,400,-20,-2,-1,-5,-10]) == 400
+
+      # create a tuple sequence containing index
+      # return index span of the max subarray
+      a = [2,4,-10,2,-2] 
+      a_with_index = Enum.zip a, 0..length(a)-1
+      assert kadane_max(a_with_index) == {{0, 1}, 6}
+
+      a = [-2,1,-3,4,-1,2,1,-5,4]
+      a_with_index = Enum.zip a, 0..length(a)-1
+      assert kadane_max(a_with_index) == {{3, 6}, 6}
+      
+      a = [-2,5,-1,-8]
+      a_with_index = Enum.zip a, 0..length(a)-1
+      assert kadane_max(a_with_index) == {{1, 1}, 5}
+      
+      a = [-10,-2,-4,-100,400,-20,-2,-1,-5,-10]
+      a_with_index = Enum.zip a, 0..length(a)-1
+      assert kadane_max(a_with_index) == {{4, 4}, 400}
     end
 
   end
