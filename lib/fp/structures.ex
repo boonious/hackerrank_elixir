@@ -467,14 +467,30 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/order-exercises/problem
   """
-  @spec max_subarray_sums(list(integer), integer) :: list(integer)
-  def max_subarray_sums(a, k) do
-    a
-    |> Enum.chunk_by(&(&1 > 0))
-    |> Enum.map(&Enum.sum(&1))
-    |> Enum.reject(&(&1 < 0))
+  # Find multiple maximum subarray sums using Kadane and divide-conquer algorithm
+  @spec max_subarray_sums(list(integer), integer, integer) :: list(integer)
+  def max_subarray_sums(a, n, k) do
+    index = 0..n-1
+
+    Enum.zip(a, index) # create a tuple sequence containing index
+    |> max_subarray_sums([])
     |> Enum.sort(&(&1 >= &2))
     |> Enum.take(k)
+  end
+
+  def max_subarray_sums(a, maxes) do
+    {span, max} = kadane_max(a)
+
+    # obtain the remaining arrays via partitioning
+    # using the span information
+    {x,y} = span
+    {left,_} = Enum.split_with(a, fn {_, i} -> i < x end)
+    {_,right} = Enum.split_with(a, fn {_, i} -> i <= y end)
+
+    left_maxes = if left != [] and max != 0 , do: max_subarray_sums(left, maxes)
+    right_maxes = if right != [] and max != 0, do: max_subarray_sums(right, maxes)
+
+    [right_maxes|[left_maxes|[max|maxes]]] |> List.flatten |> Enum.reject(&(&1==0 or &1==nil))
   end
 
   # Kadane's algorithm for finding the largest possible max subarray sum - 0(N)
@@ -487,10 +503,10 @@ defmodule FP.Structures do
   def kadane_max([head|tail], {i,j}, start, current_max, max) do
     {value, current_index} = head
     x = current_max + value
-    
-    # 'start1' logs the start of a negative / minimum
+
+    # 'start1' logs the start of a negative / minima
     # y is the updated current max
-    # z is the update max
+    # z is the updated max
     # `span` corresponds to the indexes of max subarray
     {start1, y} = if x > 0, do: {start, x}, else: {current_index, 0} 
     {span, z} = if y > max, do: {{start+1, current_index}, y}, else: {{i,j}, max}
