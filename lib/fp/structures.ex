@@ -480,7 +480,22 @@ defmodule FP.Structures do
 
   def max_subarray_sums(a, maxes) do
     {span, max} = kadane_max(a)
+    
+    # obtain the remaining arrays via partitioning
+    # using the span information
+    {x,y} = span
+    {left,_} = Enum.split_with(a, fn {_, i} -> i < x end)
+    {_,right} = Enum.split_with(a, fn {_, i} -> i <= y end)
 
+    left_maxes = if left != [] and max != 0 , do: max_subarray_sums(left, maxes)
+    right_maxes = if right != [] and max != 0, do: max_subarray_sums(right, maxes)
+
+    [right_maxes|[left_maxes|[max|maxes]]] |> List.flatten |> Enum.reject(&(&1==0 or &1==nil))
+  end
+  
+  def max_subarray_sums(a, maxes) do
+    {span, max} = kadane_max(a)
+    
     # obtain the remaining arrays via partitioning
     # using the span information
     {x,y} = span
