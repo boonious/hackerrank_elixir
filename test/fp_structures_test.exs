@@ -458,6 +458,17 @@ defmodule FPStructuresTest do
       == %{0 => 1, 1 => 1, 2 => 3, 3 => 2, 4 => 1, 5 => 4, 6 => 3, 7 => 2, 8 => 5, 11 => 4, 12 => 9}
     end
 
+    test "tree query custom guards - range minimum query vs. range guards" do
+      assert in_range({0,5}, {0,1}) == false
+      assert in_range({0,5}, {0,5}) == true
+      assert in_range({0,2}, {4,5}) == false
+      assert in_range({0,1}, {0,1}) == true
+
+      assert not_in_range({0,2}, {3,5}) == true
+      assert not_in_range({3,5}, {0,1}) == true
+      assert not_in_range({0,3}, {3,5}) == false
+    end
+
   end
 
 end

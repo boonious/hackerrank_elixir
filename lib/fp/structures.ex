@@ -553,6 +553,17 @@ defmodule FP.Structures do
     Map.put(tree, i, min) |> Map.merge(x)
   end
 
+  # define custom guards for determining whether the
+  # current segment tree node is within range
+  # of the query or not
+  defguard in_range(range, query)
+           when elem(query, 0) <= elem(range, 0)
+           and elem(query, 1) >= elem(range, 1)
+
+  defguard not_in_range(range, query)
+           when elem(query, 0) > elem(range, 1)
+           or elem(query, 1) < elem(range, 0)
+
   # basic or straight forward range minimum query algorithm
   defp _min_query(a, queries, minimums)
   defp _min_query(_, [], minimums), do: minimums |> Enum.reverse
