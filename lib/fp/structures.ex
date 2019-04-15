@@ -529,6 +529,30 @@ defmodule FP.Structures do
     |> _min_query(queries, [])
   end
 
+  # construct a map-based segment tree for the array
+  @spec segment_tree(list, integer, map, integer) :: map
+  def segment_tree(a, n, tree \\ %{}, index \\ 0)
+  def segment_tree([], _, _, _), do: %{}
+  def segment_tree(a, n, tree, i) do
+    mid_point = round(n / 2)
+    min = Enum.min(a)
+
+    {l,r} = a |> Enum.split(mid_point)
+
+    x = if length(a) == 1 do
+       Map.put(tree, i, min)
+    else
+      # use the following formulas for child indices
+      # left child index = i * 2 + 1
+      # right child index = i * 2 + 1
+
+      y = segment_tree(l, mid_point, tree, i*2 + 1)
+      segment_tree(r, mid_point+1, tree, i*2 + 2) |> Map.merge(y)
+    end
+
+    Map.put(tree, i, min) |> Map.merge(x)
+  end
+
   # basic or straight forward range minimum query algorithm
   defp _min_query(a, queries, minimums)
   defp _min_query(_, [], minimums), do: minimums |> Enum.reverse
