@@ -3,7 +3,7 @@ defmodule Algo.DP do
   Elixir solutions for HackerRank algorithm challenges: dynamic programming.
   """
 
-  # reuse codes developed in functional programming: data structures challenges
+  # reuse max subarray codes developed in functional programming challenges
   import FP.Structures, only: [kadane_max: 1]
 
   #==========================================================================
@@ -16,7 +16,7 @@ defmodule Algo.DP do
     index = 0..n-1
     a_with_index = Enum.zip(a, index) # create a tuple sequence containing index
 
-    {{x,y}, max} = kadane_max(a_with_index)
+    {_span, max} = kadane_max(a_with_index)
 
     if max != 0 do
       non_negative_sequence = a |> Enum.reject(&(&1 < 0))

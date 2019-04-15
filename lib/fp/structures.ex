@@ -492,21 +492,6 @@ defmodule FP.Structures do
 
     [right_maxes|[left_maxes|[max|maxes]]] |> List.flatten |> Enum.reject(&(&1==0 or &1==nil))
   end
-  
-  def max_subarray_sums(a, maxes) do
-    {span, max} = kadane_max(a)
-    
-    # obtain the remaining arrays via partitioning
-    # using the span information
-    {x,y} = span
-    {left,_} = Enum.split_with(a, fn {_, i} -> i < x end)
-    {_,right} = Enum.split_with(a, fn {_, i} -> i <= y end)
-
-    left_maxes = if left != [] and max != 0 , do: max_subarray_sums(left, maxes)
-    right_maxes = if right != [] and max != 0, do: max_subarray_sums(right, maxes)
-
-    [right_maxes|[left_maxes|[max|maxes]]] |> List.flatten |> Enum.reject(&(&1==0 or &1==nil))
-  end
 
   # Kadane's algorithm for finding the largest possible max subarray sum - 0(N)
   # using tail recursion. The array input now zipped with indexes
@@ -527,6 +512,36 @@ defmodule FP.Structures do
     {span, z} = if y > max, do: {{start+1, current_index}, y}, else: {{i,j}, max}
 
     kadane_max(tail, span, start1, y, z)
+  end
+
+  #==============================================================================================
+  @doc """
+  Range minimum query - find multiple subarrays minimums
+
+  https://www.hackerrank.com/challenges/range-minimum-query/problem
+  """
+  @spec min_query(list(integer), list(tuple)) :: list
+  def min_query(a, queries) when is_list(a) do
+    n = length(a)
+    index = 0..n-1
+
+    Enum.zip(a, index) # a tuple sequence list with indices
+    |> _min_query(queries, [])
+  end
+
+  # basic or straight forward range minimum query algorithm
+  defp _min_query(a, queries, minimums)
+  defp _min_query(_, [], minimums), do: minimums |> Enum.reverse
+  defp _min_query(a, [x|y], minimums) do
+    min =  _min_query(a, x)
+    _min_query(a, y, [ min | minimums])
+  end
+
+  defp _min_query(a, {i1,i2}) when is_list(a) do
+    {_,right} = Enum.split_with(a, fn {_, i} -> i < i1 end)
+    {left,_} = Enum.split_with(right, fn {_, i} -> i <= i2 end)
+
+    left |> Enum.min |> elem(0)
   end
 
 end

@@ -439,6 +439,14 @@ defmodule FPStructuresTest do
       assert kadane_max(a_with_index) == {{4, 4}, 400}
     end
 
+    #https://www.hackerrank.com/challenges/range-minimum-query/problem
+    test "min_query - range minimum query, find multiple minimums of subarrays in given an array" do
+      a = [10,20,30,40,11,22,33,44,15,5]
+      queries = [{0,5},{1,2},{8,9},{0,9},{4,6}]
+      minimums = [10,20,5,5,11]
+
+      assert min_query(a, queries) == minimums
+    end
   end
 
 end
