@@ -444,8 +444,21 @@ defmodule FPStructuresTest do
       a = [10,20,30,40,11,22,33,44,15,5]
       queries = [{0,5},{1,2},{8,9},{0,9},{4,6}]
       minimums = [10,20,5,5,11]
-
       assert min_query(a, queries) == minimums
+
+      # below are tests for solutions based on segment tree
+      # that provides time-performant querying
+      # passed all HackerRank test cases for large arrays,
+      # e.g. 73808 queries over 100,000-size array
+      assert min_query_tree(a, length(a), queries) == minimums
+
+      a = [1,5,2,4,-20,-93,-100]
+      queries = [{3,6}, {2,5}]
+      assert min_query_tree(a, length(a), queries) == [-100,-93]
+
+      a = [-3,-52,46,3,0,-31,39,-26,78,8,-26,83,49,82,78,-7,51,-93,-33,-100,15,53,67,43,-13,-71,-13,-57,24]
+      queries = [{0,1},{8,14},{22,27},{0,29}]
+      assert min_query_tree(a, length(a), queries) == [-52,-26,-71,-100]
     end
 
     test "query_tree - range minimum query, segment tree querying" do

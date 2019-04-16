@@ -521,12 +521,21 @@ defmodule FP.Structures do
   https://www.hackerrank.com/challenges/range-minimum-query/problem
   """
   @spec min_query(list(integer), list(tuple)) :: list
-  def min_query(a, queries) when is_list(a) do
+  def min_query(a, queries) do
     n = length(a)
     index = 0..n-1
 
     Enum.zip(a, index) # a tuple sequence list with indices
     |> _min_query(queries, [])
+  end
+
+  def min_query_tree(a, n, queries) do
+    tree = segment_tree(a, n)
+
+    for q <- queries do
+      # n - 1 -> 0-based index
+      query_tree(tree, {0, n-1}, q)
+    end
   end
 
   # construct a map-based segment tree for the array
