@@ -453,9 +453,17 @@ defmodule FPStructuresTest do
       assert segment_tree(a, length(a))
       == %{0 => 1, 1 => 1, 2 => 7, 3 => 1, 4 => 5, 5 => 7, 6 => 11, 7 => 1, 8 => 3, 11 => 7, 12 => 9}
 
+      a = [1,3,5,7,-9]
+      assert segment_tree(a, length(a))
+      == %{0 => -9, 1 => 1, 2 => -9, 3 => 1, 4 => 5, 7 => 1, 8 => 3, 5 => 7, 6 => -9}
+
       a = [2,5,1,4,9,3]
       assert segment_tree(a, length(a))
       == %{0 => 1, 1 => 1, 2 => 3, 3 => 2, 4 => 1, 5 => 4, 6 => 3, 7 => 2, 8 => 5, 11 => 4, 12 => 9}
+
+      a = [1,3,5,-7,9,-11,-13]
+      assert segment_tree(a, length(a))
+      == %{0 => -13, 1 => -7, 2 => -13, 3 => 1, 4 => -7, 5 => -11, 6 => -13, 7 => 1, 8 => 3, 9 => 5, 10 => -7, 11 => 9, 12 => -11}
     end
 
     test "tree query custom guards - range minimum query vs. range guards" do

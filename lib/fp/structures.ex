@@ -532,22 +532,29 @@ defmodule FP.Structures do
   # construct a map-based segment tree for the array
   @spec segment_tree(list, integer, map, integer) :: map
   def segment_tree(a, n, tree \\ %{}, index \\ 0)
-  def segment_tree([], _, _, _), do: %{}
   def segment_tree(a, n, tree, i) do
     mid_point = round(n / 2)
+
     min = Enum.min(a)
 
     {l,r} = a |> Enum.split(mid_point)
+    l_n = mid_point
+    r_n = length(r)
 
-    x = if length(a) == 1 do
-       Map.put(tree, i, min)
-    else
-      # use the following formulas for child indices
-      # left child index = i * 2 + 1
-      # right child index = i * 2 + 1
-
-      y = segment_tree(l, mid_point, tree, i*2 + 1)
-      segment_tree(r, mid_point+1, tree, i*2 + 2) |> Map.merge(y)
+    # use the following formulas for child indices
+    # left child index = i * 2 + 1
+    # right child index = i * 2 + 2
+    x = cond do
+      length(a) == 1 ->
+        Map.put(tree, i, min)
+      l_n != 0 and r_n != 0 ->
+        l_map = segment_tree(l, l_n, tree, i*2 + 1)
+        r_map = segment_tree(r, r_n, tree, i*2 + 2)
+        Map.merge(l_map, r_map)
+      l_n != 0 ->
+        segment_tree(l, l_n, tree, i*2 + 1)
+      r_n != 0 ->
+        segment_tree(r, r_n, tree, i*2 + 2)
     end
 
     Map.put(tree, i, min) |> Map.merge(x)
