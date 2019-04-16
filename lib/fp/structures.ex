@@ -571,6 +571,18 @@ defmodule FP.Structures do
            when elem(query, 0) > elem(range, 1)
            or elem(query, 1) < elem(range, 0)
 
+  def query_tree(tree, range \\ {0,0}, query \\ {0,0}, index \\ 0)
+  def query_tree(tree, r, q, i) when in_range(r,q), do: tree[i]
+  def query_tree(_, r, q, _) when not_in_range(r,q), do: :max
+
+  def query_tree(tree, r, q, i) do
+    mid_point = (elem(r,0) + :math.floor((elem(r,1) - elem(r,0))/2)) |> round
+
+    x = query_tree(tree, {elem(r,0), mid_point}, q, i*2 + 1)
+    y = query_tree(tree, {mid_point+1, elem(r,1)}, q, i*2 + 2)
+    min(x, y)
+  end
+
   # basic or straight forward range minimum query algorithm
   defp _min_query(a, queries, minimums)
   defp _min_query(_, [], minimums), do: minimums |> Enum.reverse

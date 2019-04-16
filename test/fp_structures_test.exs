@@ -448,6 +448,16 @@ defmodule FPStructuresTest do
       assert min_query(a, queries) == minimums
     end
 
+    test "query_tree - range minimum query, segment tree querying" do
+      a = [-3,-52,46,3,0,-31,39,-26,78,8,-26,83,49,82,78,-7,51,-93,-33,-79,15,53,67,43,-13,-71,-13,-57,24]
+      n = length(a)
+
+      tree = segment_tree(a, n)
+      assert query_tree(tree, {0, n-1}, {0,1}) == -52
+      assert query_tree(tree, {0, n-1}, {8,14}) == -26
+      assert query_tree(tree, {0, n-1}, {22,27}) == -71
+    end
+
     test "segment_tree - range minimum query, build a segment tree" do
       a = [1,3,5,7,9,11]
       assert segment_tree(a, length(a))
