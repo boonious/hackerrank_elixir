@@ -1,7 +1,7 @@
 # HackerRank solutions [![Build Status](https://travis-ci.org/boonious/hackerrank_elixir.svg?branch=master)](https://travis-ci.org/boonious/hackerrank_elixir) 
 
 This repository contains some of my solutions in Elixir for various HackerRank challenges, 
-in particular for functional programming.
+in particular for functional programming, algorithms and data structures.
 
 ## Usage
 
