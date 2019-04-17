@@ -26,6 +26,17 @@ defmodule AlgoImpTest do
       assert divisible_sum_pairs([1,3,2,6,1,2],3) == 5
     end
 
+    # https://www.hackerrank.com/challenges/the-grid-search/problem
+    test "grid_search/4 - Grid search, find match for a string within a string array" do
+      g = ["7283455864","6731158619","8988242643","3830589324","2229505813","5633845374","6473530293","7053106601","0834282956","4607924137"]
+      p = "9505"
+
+      assert grid_search(g, p) == {true, {3, 5}}
+
+      p = "blah"
+      assert grid_search(g, p) == {false, nil}
+    end
+
   end
 
 end

@@ -67,4 +67,35 @@ defmodule Algo.Imp do
     divisible_sum_pairs(y, b |> Enum.drop(1), k, count + c)
   end
 
+  #==========================================================================
+  @doc """
+  The grid search - find 2D subarray within a grid array
+
+  https://www.hackerrank.com/challenges/the-grid-search/problem
+  """
+
+  # Algorithm: first scan the grid, identify a match for first line of pattern (2D array)
+  # return false (no match) if none found. Otherwise, scan the next
+  # few lines using offset and row num data determined from the first scan
+  # to identify a complete match for the remaining of 2D pattern array.
+  #
+  # Use binary string matching for performance.
+
+  # match a substring within an array of string, also
+  # return offset (substring index) and row number
+  @spec grid_search(list(binary), binary, integer, integer) :: tuple
+  def grid_search(grid, pattern, offset \\ 0, row \\ 1)
+  def grid_search(true, _, offset, row), do: {true, {offset, row}}
+  def grid_search([], _, _, _), do: {false, nil} # no match upon search exhaustion
+
+  def grid_search([g0 | g], p, o, r) do
+    match? = :binary.match(g0, p)
+
+    if match? == :nomatch do
+      grid_search(g, p, o, r + 1)
+    else
+      grid_search(true, p, elem(match?, 0), r)
+    end
+  end
+
 end
