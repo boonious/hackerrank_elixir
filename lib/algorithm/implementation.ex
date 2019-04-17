@@ -48,4 +48,23 @@ defmodule Algo.Imp do
     if y >= 0 and z == "0", do: true, else: false
   end
 
+  #==========================================================================
+  @doc """
+  Divisible sum pairs
+
+  https://www.hackerrank.com/challenges/divisible-sum-pairs/problem
+  """
+  def divisible_sum_pairs(a, k) do
+    divisible_sum_pairs(a, a |> tl, k, 0)
+  end
+
+  def divisible_sum_pairs([], _, _, count), do: count
+  def divisible_sum_pairs([x|y], b, k, count) do
+    sums = for a <- b do
+      a+x
+    end
+    c = sums |> Enum.filter(&(rem(&1, k) == 0)) |> length
+    divisible_sum_pairs(y, b |> Enum.drop(1), k, count + c)
+  end
+
 end

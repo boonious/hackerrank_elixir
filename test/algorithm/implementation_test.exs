@@ -21,6 +21,11 @@ defmodule AlgoImpTest do
       assert f([43, 2, 70, 2]) == false
     end
 
+    # https://www.hackerrank.com/challenges/divisible-sum-pairs/problem
+    test "divisible_sum_pairs" do
+      assert divisible_sum_pairs([1,3,2,6,1,2],3) == 5
+    end
+
   end
 
 end
