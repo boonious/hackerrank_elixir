@@ -37,16 +37,38 @@ defmodule AlgoImpTest do
       g = ["400453592126560","114213133098692","474386082879648","522356951189169","887109450487496","252802633388782","502771484966748","075975207693780","511799789562806","404007454272504","549043809916080","962410809534811","445893523733475","768705303214174","650629270887160"]
       p = ["99","99"]
       assert grid_search(g, p, 2) == false
+
+      g = [
+        "123456",
+        "561256",
+        "123634",
+        "788888"]
+      p = [
+        "12",
+        "36"]
+      assert grid_search(g, p, 2) == true
     end
 
     test "grid_search/4 - Grid search, find match for a string within a string array" do
       g = ["7283455864","6731158619","8988242643","3830589324","2229505813","5633845374","6473530293","7053106601","0834282956","4607924137"]
       p = "9505"
 
-      assert grid_search(g, p) == {true, {3, 5}}
+      assert grid_search(g, p) == [{3, 5}]
 
       p = "blah"
-      assert grid_search(g, p) == {false, nil}
+      assert grid_search(g, p) == []
+      
+      # identify all substring matches
+      p = "24"
+      assert grid_search(g, p) ==  [{5, 10}, {8, 4}, {4, 3}]
+      
+      g = [
+        "123456",
+        "561256",
+        "123634",
+        "788888"]
+      p = "12"
+      assert grid_search(g, p) == [{0, 3}, {2, 2}, {0, 1}]
     end
 
   end

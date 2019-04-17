@@ -85,33 +85,46 @@ defmodule Algo.Imp do
   @spec grid_search(list(binary), list(binary), integer) :: boolean
   def grid_search(g, p, str_len) when is_list(p) do
     p0 = p |> hd
+    candidates = grid_search(g, p0) # a list of start positions of potential matches
 
-    # results based on scan of p's first line
-    case grid_search(g, p0) do
-      {true, {offset, row}} ->
-        g_rest = g |> Enum.drop(row) #rest of the array after the row number
-        p_rest = p |> tl # rest of the pattern
+    # send to a recursive function to determine match for all candidates
+    if candidates == [], do: false, else:  _grid_search(candidates, g, p, str_len)
+  end
 
-        _grid_search_rest(g_rest, p_rest, offset, str_len)
-      {false, _} ->
-        false
+  # recursively check all candidates
+  defp _grid_search(candidates, grid, pattern, str_len, match \\ false)  
+  defp _grid_search(_, _, _, _, true), do: true  
+  defp _grid_search([], _, _, _, _), do: false # all candidates checked without a positive outcome
+
+  defp _grid_search([{offset, row} | c], g, p, n, m) do
+    g_rest = g |> Enum.drop(row)
+    p_rest = p |> tl
+
+    match? = _grid_search_rest(g_rest, p_rest, offset, n)
+
+    # if a match found, abandon search, return true immediately
+    if match? do
+      _grid_search(c, g, p, n, true)
+    else
+      # check the next candidates
+      _grid_search(c, g, p, n, m)
     end
   end
 
-  # match a substring within an array of string, also
+  # identify all matching substrings within an array of string, also
   # return offset (substring index) and row number
-  @spec grid_search(list(binary), binary, integer, integer) :: tuple
-  def grid_search(grid, pattern, offset \\ 0, row \\ 1)
-  def grid_search(true, _, offset, row), do: {true, {offset, row}}
-  def grid_search([], _, _, _), do: {false, nil} # no match upon search exhaustion
+  @spec grid_search(list(binary), binary, integer, list) :: tuple
+  def grid_search(grid, pattern, row \\ 1, candidates \\ [])
+  def grid_search([], _, _, candidates), do: candidates
 
-  def grid_search([g0 | g], p, o, r) do
+  def grid_search([g0 | g], p, r, c) do
     match? = :binary.match(g0, p)
 
     if match? == :nomatch do
-      grid_search(g, p, o, r + 1)
+      grid_search(g, p, r+1, c)
     else
-      grid_search(true, p, elem(match?, 0), r)
+      offset = elem(match?, 0)
+      grid_search(g, p, r+1, [{offset, r} | c])
     end
   end
 
