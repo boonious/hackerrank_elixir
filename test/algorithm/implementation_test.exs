@@ -27,6 +27,18 @@ defmodule AlgoImpTest do
     end
 
     # https://www.hackerrank.com/challenges/the-grid-search/problem
+    test "grid_search - Grid search, find a match for a 2D string array within a grid array" do
+      g = ["7283455864","6731158619","8988242643","3830589324","2229505813","5633845374","6473530293","7053106601","0834282956","4607924137"]
+      p = ["9505","3845","3530"]
+      str_len = p |> hd |> String.length
+
+      assert grid_search(g, p, str_len) == true
+
+      g = ["400453592126560","114213133098692","474386082879648","522356951189169","887109450487496","252802633388782","502771484966748","075975207693780","511799789562806","404007454272504","549043809916080","962410809534811","445893523733475","768705303214174","650629270887160"]
+      p = ["99","99"]
+      assert grid_search(g, p, 2) == false
+    end
+
     test "grid_search/4 - Grid search, find match for a string within a string array" do
       g = ["7283455864","6731158619","8988242643","3830589324","2229505813","5633845374","6473530293","7053106601","0834282956","4607924137"]
       p = "9505"

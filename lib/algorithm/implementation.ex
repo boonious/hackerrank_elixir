@@ -81,6 +81,23 @@ defmodule Algo.Imp do
   #
   # Use binary string matching for performance.
 
+  # main function
+  @spec grid_search(list(binary), list(binary), integer) :: boolean
+  def grid_search(g, p, str_len) when is_list(p) do
+    p0 = p |> hd
+
+    # results based on scan of p's first line
+    case grid_search(g, p0) do
+      {true, {offset, row}} ->
+        g_rest = g |> Enum.drop(row) #rest of the array after the row number
+        p_rest = p |> tl # rest of the pattern
+
+        _grid_search_rest(g_rest, p_rest, offset, str_len)
+      {false, _} ->
+        false
+    end
+  end
+
   # match a substring within an array of string, also
   # return offset (substring index) and row number
   @spec grid_search(list(binary), binary, integer, integer) :: tuple
@@ -95,6 +112,23 @@ defmodule Algo.Imp do
       grid_search(g, p, o, r + 1)
     else
       grid_search(true, p, elem(match?, 0), r)
+    end
+  end
+
+  # determine whether the rest of pattern matches the next few lines in grid
+  defp _grid_search_rest(grid, pattern, offset, len, matches \\ [])
+  defp _grid_search_rest(_, [], _, _, matches), do: not(Enum.member?(matches, false))
+
+  defp _grid_search_rest([g0|g], [p0|p], offset, len, matches) do
+    match? = :binary.match(g0,p0)
+
+    cond do
+      match? == :nomatch ->
+        _grid_search_rest(g, p, offset, len, [false|matches])
+      {offset, len} == match? ->
+        _grid_search_rest(g, p, offset, len, [true|matches])
+      true ->
+        _grid_search_rest(g, p, offset, len, [false|matches])
     end
   end
 
