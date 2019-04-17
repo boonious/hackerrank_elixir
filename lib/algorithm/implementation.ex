@@ -118,13 +118,14 @@ defmodule Algo.Imp do
   def grid_search([], _, _, candidates), do: candidates
 
   def grid_search([g0 | g], p, r, c) do
-    match? = :binary.match(g0, p)
+    regex = Regex.compile!("(#{p})")
+    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten
 
-    if match? == :nomatch do
+    if match? == [] do
       grid_search(g, p, r+1, c)
     else
-      offset = elem(match?, 0)
-      grid_search(g, p, r+1, [{offset, r} | c])
+      x = Enum.map(match?, fn {offset,_} -> {offset,r} end)
+      grid_search(g, p, r+1, c ++ x)
     end
   end
 

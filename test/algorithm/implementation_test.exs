@@ -38,8 +38,10 @@ defmodule AlgoImpTest do
       p = ["99","99"]
       assert grid_search(g, p, 2) == false
 
+      # grid containing multiple possible matches
+      # on the same and other rows
       g = [
-        "123456",
+        "123412",
         "561256",
         "123634",
         "788888"]
@@ -60,15 +62,15 @@ defmodule AlgoImpTest do
       
       # identify all substring matches
       p = "24"
-      assert grid_search(g, p) ==  [{5, 10}, {8, 4}, {4, 3}]
+      assert grid_search(g, p) ==  [{4, 3}, {8, 4}, {5, 10}]
       
       g = [
-        "123456",
+        "123412",
         "561256",
         "123634",
         "788888"]
       p = "12"
-      assert grid_search(g, p) == [{0, 3}, {2, 2}, {0, 1}]
+      assert grid_search(g, p) == [{0, 1}, {4, 1}, {2, 2}, {0, 3}]
     end
 
   end
