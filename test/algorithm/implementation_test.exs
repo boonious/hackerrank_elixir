@@ -41,12 +41,12 @@ defmodule AlgoImpTest do
       # grid containing multiple possible matches
       # on the same and other rows
       g = [
-        "123412",
-        "561256",
-        "123634",
-        "788888"]
+        "1113411",
+        "511156",
+        "113634",
+        "788888"] # overlapping patterns
       p = [
-        "12",
+        "11",
         "36"]
       assert grid_search(g, p, 2) == true
 
@@ -75,12 +75,12 @@ defmodule AlgoImpTest do
       assert grid_search(g, p) ==  [{4, 3}, {8, 4}, {5, 10}]
       
       g = [
-        "123412",
-        "561256",
-        "123634",
-        "788888"]
-      p = "12"
-      assert grid_search(g, p) == [{0, 1}, {4, 1}, {2, 2}, {0, 3}]
+        "1113411",
+        "511156",
+        "113634",
+        "788888"] # overlapping patterns
+      p = "11"
+      assert grid_search(g, p) == [{0, 1}, {1, 1}, {5, 1}, {1, 2}, {2, 2}, {0, 3}]
     end
 
   end

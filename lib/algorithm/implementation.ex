@@ -118,7 +118,7 @@ defmodule Algo.Imp do
   def grid_search([], _, _, candidates), do: candidates
 
   def grid_search([g0 | g], p, r, c) do
-    regex = Regex.compile!("(#{p})")
+    regex = Regex.compile!("(?=(#{p}))")
     match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten
 
     if match? == [] do
@@ -140,12 +140,13 @@ defmodule Algo.Imp do
   end
 
   defp _grid_search_rest([g0|g], [p0|p], offset, len, matches) do
-    match? = :binary.match(g0,p0)
+    regex = Regex.compile!("(?=(#{p0}))")
+    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten
 
     cond do
-      match? == :nomatch ->
+      match? == [] ->
         _grid_search_rest(g, p, offset, len, [false|matches])
-      {offset, len} == match? ->
+      Enum.member? match?, {offset, len} ->
         _grid_search_rest(g, p, offset, len, [true|matches])
       true ->
         _grid_search_rest(g, p, offset, len, [false|matches])
