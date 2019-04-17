@@ -133,6 +133,12 @@ defmodule Algo.Imp do
   defp _grid_search_rest(grid, pattern, offset, len, matches \\ [])
   defp _grid_search_rest(_, [], _, _, matches), do: not(Enum.member?(matches, false))
 
+  # grid ends (reached bottom) before a match can be checked thoroughly
+  # return false
+  defp _grid_search_rest([], _, offset, len, matches) do
+    _grid_search_rest([], [], offset , len, [false|matches])
+  end
+
   defp _grid_search_rest([g0|g], [p0|p], offset, len, matches) do
     match? = :binary.match(g0,p0)
 

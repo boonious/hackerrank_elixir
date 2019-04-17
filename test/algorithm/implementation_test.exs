@@ -49,6 +49,16 @@ defmodule AlgoImpTest do
         "12",
         "36"]
       assert grid_search(g, p, 2) == true
+
+      g = [
+        "123412",
+        "561256",
+        "123634",
+        "781288"] # candidate starts near bottom of grid
+      p = [
+        "12",
+        "XX"]
+      assert grid_search(g, p, 2) == false
     end
 
     test "grid_search/4 - Grid search, find match for a string within a string array" do
