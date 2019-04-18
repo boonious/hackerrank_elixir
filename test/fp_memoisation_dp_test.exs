@@ -3,10 +3,10 @@ defmodule FPMemoiDPTest do
   import FP.MemoiDP
 
   doctest FP.MemoiDP
-  
+
   describe "memoisation dp" do
     @describetag :memoi_dp
-    
+
     #  https://www.hackerrank.com/challenges/pentagonal-numbers/problem
     test "p - Pentagonal numbers, compute number of dots for recursive overlapping pentagons" do
       assert p(1) == 1
@@ -14,6 +14,19 @@ defmodule FPMemoiDPTest do
       assert p(3) == 12
       assert p(4) == 22
       assert p(5) == 35
+    end
+
+    test "p_cache - Pentagonal numbers, memoisation technique for computing sizes of recursive overlapping pentagons" do
+      {p, cache} = p_cache(3)
+      assert p == 12
+      assert cache == %{1=>1, 2=>5, 3=>12}
+
+      # compute a p value and return a new cache containing p(n-1) values
+      assert p_cache(5) == {35, %{1 => 1, 2 => 5, 3 => 12, 4 => 22, 5 => 35}}
+
+      # compute a series of p values
+      # - cache being generated and looked up within the function
+      assert p([1,2,3,4,5]) == [1, 5, 12, 22, 35]
     end
 
   end
