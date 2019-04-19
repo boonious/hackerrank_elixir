@@ -3,6 +3,7 @@ defmodule FPRecursionTest do
 
   import ExUnit.CaptureIO
   import FP.Recursion
+  import FP.Recursion.Advanced
 
   doctest FP.Recursion
 
@@ -46,9 +47,88 @@ defmodule FPRecursionTest do
       assert FP.Recursion.pascal_tri(n) === [[1], [1,1], [1,2,1], [1,3,3,1]]
     end
 
+    #https://www.hackerrank.com/challenges/string-o-permute/problem
+    test "permute_string - String-o-permute" do
+      assert FP.Recursion.permute_string("abcdpqrs") == "badcqpsr"
+      assert FP.Recursion.permute_string("az") == "za"
+    end
+
+    #https://www.hackerrank.com/challenges/string-mingling/problem
+    test "mingle_string - String mingling" do
+      assert FP.Recursion.mingle_string(["abcde", "pqrst"]) == "apbqcrdset"
+      assert FP.Recursion.mingle_string(["hacker", "ranker"]) == "hraacnkkeerr"
+    end
+
+    #https://www.hackerrank.com/challenges/string-compression/problem
+    test "compress_string - String compression" do
+      assert FP.Recursion.compress_string("aaabaaaaccaaaaba") == "a3ba4c2a4ba"
+    end
+
+    #https://www.hackerrank.com/challenges/prefix-compression/problem
+    test "prefix_compress - Prefix compression" do
+      assert FP.Recursion.prefix_compress(["abcdefpr","abcpqr"]) == [{3,"abc"},{5,"defpr"},{3,"pqr"}]
+      assert FP.Recursion.prefix_compress(["kitkat","kit"]) == [{3,"kit"},{3,"kat"},{0,""}]
+      assert FP.Recursion.prefix_compress(["puppy","puppy"]) == [{5,"puppy"},{0,""},{0,""}]
+    end
+
+    #https://www.hackerrank.com/challenges/string-reductions/problem
+    test "string_reduce - String reduction" do
+      assert FP.Recursion.string_reduce("accabb") == "acb"
+      assert FP.Recursion.string_reduce("abc") == "abc"
+      assert FP.Recursion.string_reduce("pprrqq") == "prq"
+    end
+
+    #https://www.hackerrank.com/challenges/functional-programming-the-sums-of-powers/problem
+    test "sum_of_powers - The sums of power" do
+      #assert FP.Recursion.sum_of_powers([10,2]) == 1
+      assert FP.Recursion.sum_of_powers([100,2]) == 3
+      #assert FP.Recursion.sum_of_powers([100,3]) == 1
+    end
+
+    #https://www.hackerrank.com/challenges/filter-elements/problem
+    test "filter_elements - Filter elements by least number of occurences" do
+      assert filter_elements(2, [4,5,2,5,4,3,1,3,4]) == [4,5,3]
+      assert filter_elements(4, [4,5,2,5,4,3,1,3,4]) == [-1]
+      assert filter_elements(2, [5,4,3,2,1,1,2,3,4,5]) == [5,4,3,2,1]
+    end
+
+  end
+
+  describe "recursion - advanced" do
+    @describetag :recursion_advanced
+
+    #https://www.hackerrank.com/challenges/convex-hull-fp/problem
+    test "graham_scan - algorithm for finding points on convex hull" do
+      points = [{1,1},{2,5},{3,3},{5,3},{3,2},{2,2}]
+      assert graham_scan(points) == [{1, 1}, {5, 3}, {2, 5}, {1, 1}]
+
+      points = [{2,6},{4,6},{3,5},{0.1,4},{2.1,4},{4.1,4},{6.1,4},{1.3,3},{3.3,3},{5.3,3},{0,2},{2.1,2},{4.1,2},{6.1,2},{3,1},{2,0},{4,0}]
+      assert graham_scan(points) == [{2,0},{4,0},{6.1,2},{6.1,4},{4,6},{2,6},{0.1,4},{0,2},{2,0}]
+
+      points = [{113,201},{911,749},{839,217},{293,144},{290,848},{350,150},{143,995},{311,262},{923,748},{599,691},{128,790},{611,723},{881,577},{446,988},{209,589},{977,285},{512,813},{875,788},{566,674},{788,872},{320,738},{743,446},{227,271},{617,470},{761,859},{860,918},{866,868},{746,640},{167,39},{824,768},{593,184},{248,831},{197,232},{224,13},{677,131},{554,31},{35,572},{485,367},{422,828},{689,657},{314,954},{863,753},{806,315},{953,551},{992,351},{212,436},{917,26},{719,948},{707,606},{947,203},{119,798},{791,919},{260,394},{950,991},{59,164},{5,341},{92,191},{338,504},{383,695},{476,888},{602,133},{68,80},{818,277},{713,617},{827,971},{533,671},{455,300},{29,682},{605,71},{8,555},{32,449},{545,843},{215,526},{857,237},{926,634},{539,889},{335,656},{443,431},{269,402},{770,190},{680,978},{494,344},{242,763},{317,560},{803,73},{20,604},{785,154},{380,96},{536,669},{395,251},{236,977},{437,818},{389,412},{356,435},{23,500},{725,597},{587,481},{368,630},{776,791},{560,249}]
+      assert graham_scan(points) == [{224, 13},{917, 26},{977, 285},{992, 351},{950, 991},{143, 995},{29, 682},{8, 555},{5, 341},{68, 80},{224, 13}]
+    end
+
+    test "convex_hull_perimeter - Convex hull" do
+      points = [{1,1},{2,5},{3,3},{5,3},{3,2},{2,2}]
+      assert convex_hull_perimeter(points) == 12.2
+
+      points = [{3,2},{2,5},{4,5}]
+      assert convex_hull_perimeter(points) == 8.3
+
+      points = [{113,201},{911,749},{839,217},{293,144},{290,848},{350,150},{143,995},{311,262},{923,748},{599,691},{128,790},{611,723},{881,577},{446,988},{209,589},{977,285},{512,813},{875,788},{566,674},{788,872},{320,738},{743,446},{227,271},{617,470},{761,859},{860,918},{866,868},{746,640},{167,39},{824,768},{593,184},{248,831},{197,232},{224,13},{677,131},{554,31},{35,572},{485,367},{422,828},{689,657},{314,954},{863,753},{806,315},{953,551},{992,351},{212,436},{917,26},{719,948},{707,606},{947,203},{119,798},{791,919},{260,394},{950,991},{59,164},{5,341},{92,191},{338,504},{383,695},{476,888},{602,133},{68,80},{818,277},{713,617},{827,971},{533,671},{455,300},{29,682},{605,71},{8,555},{32,449},{545,843},{215,526},{857,237},{926,634},{539,889},{335,656},{443,431},{269,402},{770,190},{680,978},{494,344},{242,763},{317,560},{803,73},{20,604},{785,154},{380,96},{536,669},{395,251},{236,977},{437,818},{389,412},{356,435},{23,500},{725,597},{587,481},{368,630},{776,791},{560,249}]
+      assert convex_hull_perimeter(points) == 3589.2
+    end
+
+    #https://www.hackerrank.com/challenges/super-digit/problem
+    test "digit_sum - Super digit, recursively sums up digits of a number into a single digit" do
+      assert digit_sum(148148148) == 3
+      assert super_digit(148, 3) == 3
+    end
+
     #https://www.hackerrank.com/challenges/functions-and-fractals-sierpinski-triangles/problem
     test "draw_triangles - Functions and fractals: Sierpinski triangle" do
-      fractal = FP.Recursion.draw_triangles(2)
+      fractal = draw_triangles(2)
       assert capture_io(fn ->
         fractal |> Enum.each(&IO.puts(&1 <> "\n"))
       end)
@@ -88,21 +168,9 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
 "
     end
 
-    #https://www.hackerrank.com/challenges/string-o-permute/problem
-    test "permute_string - String-o-permute" do
-      assert FP.Recursion.permute_string("abcdpqrs") == "badcqpsr"
-      assert FP.Recursion.permute_string("az") == "za"
-    end
-
-    #https://www.hackerrank.com/challenges/string-mingling/problem
-    test "mingle_string - String mingling" do
-      assert FP.Recursion.mingle_string(["abcde", "pqrst"]) == "apbqcrdset"
-      assert FP.Recursion.mingle_string(["hacker", "ranker"]) == "hraacnkkeerr"
-    end
-
     #https://www.hackerrank.com/challenges/fractal-trees/problem
     test "draw_trees - Functions and fractals, recursive trees" do
-      assert FP.Recursion.draw_trees(5)
+      assert draw_trees(5)
       == ["____________________________________________________________________________________________________",
          "__________________1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1___________________",
          "___________________1___1___1___1___1___1___1___1___1___1___1___1___1___1___1___1____________________",
@@ -166,55 +234,6 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
          "_________________________________________________1__________________________________________________",
          "_________________________________________________1__________________________________________________",
          "_________________________________________________1__________________________________________________"]
-    end
-
-    #https://www.hackerrank.com/challenges/string-compression/problem
-    test "compress_string - String compression" do
-      assert FP.Recursion.compress_string("aaabaaaaccaaaaba") == "a3ba4c2a4ba"
-    end
-
-    #https://www.hackerrank.com/challenges/convex-hull-fp/problem
-    test "graham_scan - algorithm for finding points on convex hull" do
-      points = [{1,1},{2,5},{3,3},{5,3},{3,2},{2,2}]
-      assert FP.Recursion.graham_scan(points) == [{1, 1}, {5, 3}, {2, 5}, {1, 1}]
-
-      points = [{2,6},{4,6},{3,5},{0.1,4},{2.1,4},{4.1,4},{6.1,4},{1.3,3},{3.3,3},{5.3,3},{0,2},{2.1,2},{4.1,2},{6.1,2},{3,1},{2,0},{4,0}]
-      assert FP.Recursion.graham_scan(points) == [{2,0},{4,0},{6.1,2},{6.1,4},{4,6},{2,6},{0.1,4},{0,2},{2,0}]
-
-      points = [{113,201},{911,749},{839,217},{293,144},{290,848},{350,150},{143,995},{311,262},{923,748},{599,691},{128,790},{611,723},{881,577},{446,988},{209,589},{977,285},{512,813},{875,788},{566,674},{788,872},{320,738},{743,446},{227,271},{617,470},{761,859},{860,918},{866,868},{746,640},{167,39},{824,768},{593,184},{248,831},{197,232},{224,13},{677,131},{554,31},{35,572},{485,367},{422,828},{689,657},{314,954},{863,753},{806,315},{953,551},{992,351},{212,436},{917,26},{719,948},{707,606},{947,203},{119,798},{791,919},{260,394},{950,991},{59,164},{5,341},{92,191},{338,504},{383,695},{476,888},{602,133},{68,80},{818,277},{713,617},{827,971},{533,671},{455,300},{29,682},{605,71},{8,555},{32,449},{545,843},{215,526},{857,237},{926,634},{539,889},{335,656},{443,431},{269,402},{770,190},{680,978},{494,344},{242,763},{317,560},{803,73},{20,604},{785,154},{380,96},{536,669},{395,251},{236,977},{437,818},{389,412},{356,435},{23,500},{725,597},{587,481},{368,630},{776,791},{560,249}]
-      assert FP.Recursion.graham_scan(points) == [{224, 13},{917, 26},{977, 285},{992, 351},{950, 991},{143, 995},{29, 682},{8, 555},{5, 341},{68, 80},{224, 13}]
-    end
-
-    test "convex_hull_perimeter - Convex hull" do
-      points = [{1,1},{2,5},{3,3},{5,3},{3,2},{2,2}]
-      assert FP.Recursion.convex_hull_perimeter(points) == 12.2
-
-      points = [{3,2},{2,5},{4,5}]
-      assert FP.Recursion.convex_hull_perimeter(points) == 8.3
-
-      points = [{113,201},{911,749},{839,217},{293,144},{290,848},{350,150},{143,995},{311,262},{923,748},{599,691},{128,790},{611,723},{881,577},{446,988},{209,589},{977,285},{512,813},{875,788},{566,674},{788,872},{320,738},{743,446},{227,271},{617,470},{761,859},{860,918},{866,868},{746,640},{167,39},{824,768},{593,184},{248,831},{197,232},{224,13},{677,131},{554,31},{35,572},{485,367},{422,828},{689,657},{314,954},{863,753},{806,315},{953,551},{992,351},{212,436},{917,26},{719,948},{707,606},{947,203},{119,798},{791,919},{260,394},{950,991},{59,164},{5,341},{92,191},{338,504},{383,695},{476,888},{602,133},{68,80},{818,277},{713,617},{827,971},{533,671},{455,300},{29,682},{605,71},{8,555},{32,449},{545,843},{215,526},{857,237},{926,634},{539,889},{335,656},{443,431},{269,402},{770,190},{680,978},{494,344},{242,763},{317,560},{803,73},{20,604},{785,154},{380,96},{536,669},{395,251},{236,977},{437,818},{389,412},{356,435},{23,500},{725,597},{587,481},{368,630},{776,791},{560,249}]
-      assert FP.Recursion.convex_hull_perimeter(points) == 3589.2
-    end
-
-    #https://www.hackerrank.com/challenges/prefix-compression/problem
-    test "prefix_compress - Prefix compression" do
-      assert FP.Recursion.prefix_compress(["abcdefpr","abcpqr"]) == [{3,"abc"},{5,"defpr"},{3,"pqr"}]
-      assert FP.Recursion.prefix_compress(["kitkat","kit"]) == [{3,"kit"},{3,"kat"},{0,""}]
-      assert FP.Recursion.prefix_compress(["puppy","puppy"]) == [{5,"puppy"},{0,""},{0,""}]
-    end
-
-    #https://www.hackerrank.com/challenges/string-reductions/problem
-    test "string_reduce - String reduction" do
-      assert FP.Recursion.string_reduce("accabb") == "acb"
-      assert FP.Recursion.string_reduce("abc") == "abc"
-      assert FP.Recursion.string_reduce("pprrqq") == "prq"
-    end
-
-    #https://www.hackerrank.com/challenges/functional-programming-the-sums-of-powers/problem
-    test "sum_of_powers - The sums of power" do
-      #assert FP.Recursion.sum_of_powers([10,2]) == 1
-      assert FP.Recursion.sum_of_powers([100,2]) == 3
-      #assert FP.Recursion.sum_of_powers([100,3]) == 1
     end
 
     # https://www.hackerrank.com/challenges/crosswords-101/problem
@@ -500,19 +519,6 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
           "++ANKARA++",
           "+++++N++++",
           "+++++D++++"]
-    end
-
-    #https://www.hackerrank.com/challenges/super-digit/problem
-    test "digit_sum - Super digit, recursively sums up digits of a number into a single digit" do
-      assert digit_sum(148148148) == 3
-      assert super_digit(148, 3) == 3
-    end
-
-    #https://www.hackerrank.com/challenges/filter-elements/problem
-    test "filter_elements - Filter elements by least number of occurences" do
-      assert filter_elements(2, [4,5,2,5,4,3,1,3,4]) == [4,5,3]
-      assert filter_elements(4, [4,5,2,5,4,3,1,3,4]) == [-1]
-      assert filter_elements(2, [5,4,3,2,1,1,2,3,4,5]) == [5,4,3,2,1]
     end
 
   end
