@@ -19,6 +19,7 @@ defmodule Algo.Constructive do
 
   # use recursive bubble sort to sort queue hypothesis into an order queue
   # num of total swaps = num of bribes involved
+  @doc false
   def minimum_bribes(queue, sorted, swaps, bribes) do
     pos = 1
     {sorted1, swaps1, bribes1} = bubble_sorted(queue, sorted, pos, swaps, bribes)

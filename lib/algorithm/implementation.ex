@@ -9,6 +9,7 @@ defmodule Algo.Imp do
 
   https://www.hackerrank.com/challenges/repeated-string/problem
   """
+  @spec repeated_string(binary, integer) :: integer
   def repeated_string(str, length) do
     len = String.length str
     times_repeated = div(length, len)
@@ -23,7 +24,10 @@ defmodule Algo.Imp do
 
   #==========================================================================
   @doc """
-  Kangaroo, determine jump distance to be equal eventually from different starting points
+  Kangaroo 
+  
+  Determine if jump distance to be equal eventually from different starting points
+  and hop velocity.
 
   https://www.hackerrank.com/challenges/repeated-string/problem
   """
@@ -54,10 +58,12 @@ defmodule Algo.Imp do
 
   https://www.hackerrank.com/challenges/divisible-sum-pairs/problem
   """
+  @spec divisible_sum_pairs(list(integer), integer) :: integer
   def divisible_sum_pairs(a, k) do
     divisible_sum_pairs(a, a |> tl, k, 0)
   end
 
+  @doc false
   def divisible_sum_pairs([], _, _, count), do: count
   def divisible_sum_pairs([x|y], b, k, count) do
     sums = for a <- b do
@@ -113,6 +119,7 @@ defmodule Algo.Imp do
 
   # identify all matching substrings within an array of string, also
   # return offset (substring index) and row number
+  @doc false
   @spec grid_search(list(binary), binary, integer, list) :: tuple
   def grid_search(grid, pattern, row \\ 1, candidates \\ [])
   def grid_search([], _, _, candidates), do: candidates

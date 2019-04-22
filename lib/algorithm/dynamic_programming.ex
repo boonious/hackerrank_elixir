@@ -8,11 +8,12 @@ defmodule Algo.DP do
 
   #==========================================================================
   @doc """
-  The Maximum Subarray
+  The Maximum Subarray sums
 
   https://www.hackerrank.com/challenges/maxsubarray/problem
   """
-  def max_subarray(a,n) do
+  @spec max_subarray_sums(list(integer), integer) :: list(integer)
+  def max_subarray_sums(a,n) do
     index = 0..n-1
     a_with_index = Enum.zip(a, index) # create a tuple sequence containing index
 
