@@ -26,6 +26,7 @@ defmodule FP.AdHoc do
 
   @doc """
   Remove duplicates (char)
+
   https://www.hackerrank.com/challenges/remove-duplicates/problem
   """
   @spec dedup(binary) :: binary
@@ -49,6 +50,7 @@ defmodule FP.AdHoc do
 
   @doc """
   Rotate string
+
   https://www.hackerrank.com/challenges/rotate-string/problem
   """
   @spec rotate(binary) :: list(binary)
@@ -57,6 +59,7 @@ defmodule FP.AdHoc do
     rotate(chars, length(chars))
   end
 
+  @doc false
   def rotate(chars, iterations, results \\ [])
   def rotate(_chars, 0, results), do: results
   def rotate([x|y], iterations, results) do
@@ -65,9 +68,9 @@ defmodule FP.AdHoc do
 
   @doc """
   Huge GCD
-  https://www.hackerrank.com/challenges/huge-gcd-fp/problem
 
   Compute GCD for huge numbers via prime number decomposition.
+  https://www.hackerrank.com/challenges/huge-gcd-fp/problem
   """
   @spec gcd(list) :: integer
   def gcd([a, b]) do
@@ -81,6 +84,7 @@ defmodule FP.AdHoc do
 
   # according to the easier method
   # https://www.youtube.com/watch?v=AHOvHb3Ej_I
+  @doc false
   def prime_factorise(num, primes \\ @primes, factors \\ [])
   def prime_factorise(1, _primes, []), do: 1
   def prime_factorise(1, _primes, factors), do: factors

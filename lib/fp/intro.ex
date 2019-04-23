@@ -4,7 +4,8 @@ defmodule FP.Intro do
   """
 
   @doc """
-  Reverse a list (without using Enum.reverse)
+  Reverse a list - without using Enum.reverse
+
   https://www.hackerrank.com/challenges/fp-reverse-a-list/problem
   """
   @spec reverse(list, list) :: list(integer)
@@ -17,6 +18,7 @@ defmodule FP.Intro do
 
   @doc """
   Evaluating e^x
+
   https://www.hackerrank.com/challenges/eval-ex/problem
   """
   @spec exp(float, integer, list) :: float 
@@ -31,9 +33,11 @@ defmodule FP.Intro do
   defp factorial(n) when n > 0, do: Enum.reduce(1..n, 1, &*/2)
 
   @doc """
-  Area and volume of a curve by definite integrals
+  Area of a curve by definite integrals
+
   https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
   """
+  @spec area(list(integer), list(integer), integer, integer, float) :: float
   def area(c, p, l, r, dx) do
     y = fn x -> f(c, p, x) end
     n = ((r - l) / dx) |> trunc # total number of sub ntervals
@@ -46,8 +50,14 @@ defmodule FP.Intro do
     |> Float.round(1)
   end
 
+  @doc """
+  Volume of a curve by definite integrals
+
+  https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem
+  """
   # according to the volume formula in
   # https://www.wyzant.com/resources/lessons/math/calculus/integration/finding_volume
+  @spec volume(list(integer), list(integer), integer, integer, float) :: float
   def volume(c, p, l, r, dx) do
     y = fn x -> :math.pow(f(c, p, x), 2) end
     n = ((r - l) / dx) |> trunc # total number of sub ntervals
@@ -69,6 +79,7 @@ defmodule FP.Intro do
 
   @doc """
   Function or not - validating values x, y or x and f(x).
+
   Given a list of x, y values, this function determines
   (true, false) whether the values could be input/output
   for a valid function.
@@ -84,6 +95,7 @@ defmodule FP.Intro do
 
   @doc """
   Compute the Perimeter of a Polygon.
+
   https://www.hackerrank.com/challenges/lambda-march-compute-the-perimeter-of-a-polygon/problem
 
   """
@@ -103,6 +115,7 @@ defmodule FP.Intro do
 
   @doc """
   Compute the area of a Polygon.
+
   https://www.hackerrank.com/challenges/lambda-march-compute-the-area-of-a-polygon/problem
   """
   @spec area_polygon(list(tuple)) :: float

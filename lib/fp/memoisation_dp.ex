@@ -4,13 +4,7 @@ defmodule FP.MemoiDP do
   memoisation, dynamic programming
   """
 
-  @doc """
-  Pentagonal numbers - compute number of dots for recursive and 
-  overlapping pentagons of n size.
-
-  https://www.hackerrank.com/challenges/pentagonal-numbers/problem
-  """
-
+  #  https://www.hackerrank.com/challenges/pentagonal-numbers/problem
   # Looking at the figure on HackerRank, the number can be modelled 
   # with this equation: P(n) = P(n-1) + (1 + (n-1) * 3)
   #
@@ -18,9 +12,17 @@ defmodule FP.MemoiDP do
   # (1 + (n-1) * 3) -> value of the 3 non overlapping sides
 
   # first, try basic non-memoisation version
+  @doc false
   @spec p(integer) :: integer
   def p(1), do: 1
   def p(n) when is_integer(n), do: p(n-1) + (1 + (n-1) * 3)
+
+  @doc """
+  Pentagonal numbers - compute number of dots for recursive and 
+  overlapping pentagons of n size.
+
+  https://www.hackerrank.com/challenges/pentagonal-numbers/problem
+  """
 
   # memoisation using cache for test cases 
   # with humongous number of pentogans, and of large sizes
@@ -43,6 +45,7 @@ defmodule FP.MemoiDP do
       p(n_rest, c, [p_value|results])
   end
 
+  @doc false
   def p_cache(n, cache \\ %{1 => 1})
   def p_cache(1, cache), do: {1, cache}
 
