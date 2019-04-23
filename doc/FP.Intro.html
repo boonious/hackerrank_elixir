@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.19.3">
+    <title>FP.Intro — hackerrank v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-399e30b9b028e3059575.css" />
+    <script src="dist/sidebar_items-4861d7f10c.js"></script>
+    <script async src="dist/html-399e30b9b028e3059575.js"></script>
+    
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
+    <div class="main">
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
+</button>
+<button class="sidebar-button night-mode-toggle">
+  <span class="icon-theme" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Theme</span>
+</button>
+<section class="sidebar">
+
+  <a href="readme.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+hackerrank      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </a>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
+  </form>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">hackerrank v0.1.0</small>
+FP.Intro              </h1>
+
+
+        <section id="moduledoc">
+<p>Elixir solutions for HackerRank functional programming challenges.</p>
+        </section>
+
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Summary
+          </h1>
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#area/5">area(c, p, l, r, dx)</a>
+  </div>
+    <div class="summary-synopsis"><p>Area of a curve by definite integrals</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#area_polygon/1">area_polygon(coordinates)</a>
+  </div>
+    <div class="summary-synopsis"><p>Compute the area of a Polygon</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#exp/3">exp(x, no_of_terms, results \\ 1)</a>
+  </div>
+    <div class="summary-synopsis"><p>Evaluating e^x</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#function?/1">function?(xy)</a>
+  </div>
+    <div class="summary-synopsis"><p>Function or not - validating values x, y or x and f(x)</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#perimeter/1">perimeter(coordinates)</a>
+  </div>
+    <div class="summary-synopsis"><p>Compute the Perimeter of a Polygon</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#reverse/2">reverse(numbers, results)</a>
+  </div>
+    <div class="summary-synopsis"><p>Reverse a list - without using Enum.reverse</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#volume/5">volume(c, p, l, r, dx)</a>
+  </div>
+    <div class="summary-synopsis"><p>Volume of a curve by definite integrals</p>
+</div>
+</div>
+  </div>
+        </section>
+
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Functions          </h1>
+          <div class="functions-list">
+<section class="detail" id="area/5">
+    <div class="detail-header">
+    <a href="#area/5" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">area(c, p, l, r, dx)</span>
+        
+      <div class="specs">
+          <pre>area([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()], [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()], <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Area of a curve by definite integrals</p>
+<p>https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem</p>
+  </section>
+</section>
+<section class="detail" id="area_polygon/1">
+    <div class="detail-header">
+    <a href="#area_polygon/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">area_polygon(coordinates)</span>
+        
+      <div class="specs">
+          <pre>area_polygon([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()]) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Compute the area of a Polygon.</p>
+<p>https://www.hackerrank.com/challenges/lambda-march-compute-the-area-of-a-polygon/problem</p>
+  </section>
+</section>
+<section class="detail" id="exp/3">
+  
+    <span id="exp/2"></span>
+  <div class="detail-header">
+    <a href="#exp/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">exp(x, no_of_terms, results \\ 1)</span>
+        
+      <div class="specs">
+          <pre>exp(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Evaluating e^x</p>
+<p>https://www.hackerrank.com/challenges/eval-ex/problem</p>
+  </section>
+</section>
+<section class="detail" id="function?/1">
+    <div class="detail-header">
+    <a href="#function?/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">function?(xy)</span>
+        
+      <div class="specs">
+          <pre>function?([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()]) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Function or not - validating values x, y or x and f(x).</p>
+<p>Given a list of x, y values, this function determines
+(true, false) whether the values could be input/output
+for a valid function.
+https://www.hackerrank.com/challenges/functions-or-not/problem</p>
+  </section>
+</section>
+<section class="detail" id="perimeter/1">
+    <div class="detail-header">
+    <a href="#perimeter/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">perimeter(coordinates)</span>
+        
+      <div class="specs">
+          <pre>perimeter([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()]) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Compute the Perimeter of a Polygon.</p>
+<p>https://www.hackerrank.com/challenges/lambda-march-compute-the-perimeter-of-a-polygon/problem</p>
+  </section>
+</section>
+<section class="detail" id="reverse/2">
+    <div class="detail-header">
+    <a href="#reverse/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">reverse(numbers, results)</span>
+        
+      <div class="specs">
+          <pre>reverse(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) :: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()]</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Reverse a list - without using Enum.reverse</p>
+<p>https://www.hackerrank.com/challenges/fp-reverse-a-list/problem</p>
+  </section>
+</section>
+<section class="detail" id="volume/5">
+    <div class="detail-header">
+    <a href="#volume/5" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">volume(c, p, l, r, dx)</span>
+        
+      <div class="specs">
+          <pre>volume([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()], [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()], <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+<p>Volume of a curve by definite integrals</p>
+<p>https://www.hackerrank.com/challenges/area-under-curves-and-volume-of-revolving-a-curv/problem</p>
+  </section>
+</section>
+          </div>
+        </section>
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.19.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  
+  </body>
+</html>
+

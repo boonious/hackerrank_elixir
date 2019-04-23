@@ -18,7 +18,7 @@ defmodule FP.MemoiDP do
   def p(n) when is_integer(n), do: p(n-1) + (1 + (n-1) * 3)
 
   @doc """
-  Pentagonal numbers - compute number of dots for recursive and 
+  Pentagonal numbers - compute number of dots for recursive and
   overlapping pentagons of n size.
 
   https://www.hackerrank.com/challenges/pentagonal-numbers/problem

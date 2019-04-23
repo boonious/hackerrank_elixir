@@ -4,11 +4,16 @@ This repository contains some of my solutions in Elixir for various HackerRank c
 in particular for functional programming, algorithms and data structures. The solutions are completedly
 test-driven.
 
-## Usage
+## Scope
+Read the [documentation](doc/index.html).
 
-To ses how the solutions work, check out their corresponding test cases that
-include data input and output as suggested by HackerRank. Running `mix test`
-would execute the solution against all the test cases.
+## Usage
+The solutions are meant to be used as a reference only for your own studies and practices.
+Please try your approach first, before comparing it with the one here.
+
+To see what solutions are available and how they work, read the [API documentation](doc/api-reference.html) and
+the corresponding test cases that include data input and output where suggested by
+HackerRank. Running `mix test` would execute the solution against all the test cases.
 
 You can also try out the solutions (functions)
 using [interactive Elixir](https://elixir-lang.org/getting-started/introduction.html#interactive-mode)
@@ -20,7 +25,7 @@ using [interactive Elixir](https://elixir-lang.org/getting-started/introduction.
     ..
 
     # trying out Sierpinski fractal triangle
-    iex> FP.Recursion.draw_triangles 3
+    iex> FP.Recursion.Advanced.draw_triangles 3
     ["_______________________________1_______________________________",
     "______________________________111______________________________",
     "_____________________________11111_____________________________",

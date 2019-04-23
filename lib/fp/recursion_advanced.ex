@@ -5,6 +5,7 @@ defmodule FP.Recursion.Advanced do
 
   @doc """
   Functions and fractals: Sierpinski triangle
+
   https://www.hackerrank.com/challenges/functions-and-fractals-sierpinski-triangles/proble
   """
   @spec draw_triangles(integer) :: list
@@ -64,6 +65,7 @@ defmodule FP.Recursion.Advanced do
   #==============================================================
   @doc """
   Functions and Fractals - Recursive Trees
+
   https://www.hackerrank.com/challenges/fractal-trees/problem
   """
   @spec draw_trees(integer) :: list
@@ -137,6 +139,7 @@ defmodule FP.Recursion.Advanced do
   #==============================================================
   @doc """
   Convex hull
+
   https://www.hackerrank.com/challenges/convex-hull-fp/problem
 
   Find the perimeter of a convex hull from a series of coordinates,
@@ -146,6 +149,15 @@ defmodule FP.Recursion.Advanced do
   @spec convex_hull_perimeter(list(tuple)) :: number
   def convex_hull_perimeter(points), do: graham_scan(points) |> perimeter
 
+  #==============================================================
+  @doc """
+  Graham Scan - find points of a convex hull from a series of coordinates
+
+  See https://en.wikipedia.org/wiki/Graham_scan
+
+  For https://www.hackerrank.com/challenges/convex-hull-fp/problem
+  """
+  @spec graham_scan(list(tuple)) :: list(tuple)
   def graham_scan(points) do
     # find the lowest y
     {_, y0} = points |> Enum.min_by(fn {_x, y} -> y end)
@@ -164,6 +176,7 @@ defmodule FP.Recursion.Advanced do
     [p0 | convex_hull] |> Enum.reverse
   end
 
+  @doc false
   def graham_scan([], convex_hull), do: convex_hull
   def graham_scan([i|j], convex_hull) do
     [p1, p0] = convex_hull |> Enum.take(2)
@@ -189,9 +202,11 @@ defmodule FP.Recursion.Advanced do
 
   # cross vector product to determine whether 3 points does a left turn
   # see:   https://en.wikipedia.org/wiki/Graham_scan
+  @doc false
   def counter_clockwise?({x0,y0},{x1,y1},{x2,y2}), do: (x1-x0)*(y2-y0)-(y1-y0)*(x2-x0)
 
   # select further collinear point
+  @doc false
   def which_further?({x0,y0},{x1,y1},{x2,y2}) do
     d1 = _perimeter({x0,y0}, {x1,y1})
     d2 = _perimeter({x0,y0}, {x2,y2})
@@ -202,6 +217,7 @@ defmodule FP.Recursion.Advanced do
 
   # recursively compute perimeter, when "coordinates"
   # referred from previous polygon perimeter challenge
+  @doc false
   def perimeter(coordinates), do: _perimeter(coordinates)
 
   defp _perimeter(coordinates, distance \\ 0.0)
@@ -223,6 +239,7 @@ defmodule FP.Recursion.Advanced do
   @type sequences :: [tuple]
   @type solution :: [{char, tuple}]
 
+  @spec cross_words(list, list) :: list
   def cross_words(grid, words) do
     sequences = parse(grid)
     %{down: fit(sequences.down, words), across: fit(sequences.across, words)}
@@ -231,6 +248,7 @@ defmodule FP.Recursion.Advanced do
   end
 
   # disambiguate plausible fits in a sequence by checking crossed char from the other words
+  @doc false
   @spec disambiguate(%{across: [solution], down: [solution] }) :: [solution]
   def disambiguate(%{across: across, down: down} = _) do
     x = disambiguate(down, [], across |> Enum.reduce([], fn x, acc -> acc ++ x end))
@@ -238,6 +256,7 @@ defmodule FP.Recursion.Advanced do
     x ++ y
   end
 
+  @doc false
   def disambiguate([], disambiguated, _), do: disambiguated
   def disambiguate([x|y], d, cross_ref) when length(x) == 1, do: disambiguate(y, [x|d], cross_ref) # unique fit not requiring disambiguation
   def disambiguate([x|y], d, cross_ref) do
@@ -258,6 +277,7 @@ defmodule FP.Recursion.Advanced do
     if cross_char != [], do: check(word, cross_ref, count + 1), else: check(word, cross_ref, count)
   end
 
+  @doc false
   @spec fit([sequences], [binary], []) :: [solution]
   def fit(sequences, words, solution \\ [])
   def fit([], _, solution), do: solution
@@ -277,9 +297,11 @@ defmodule FP.Recursion.Advanced do
 
   # parse list of "+", "-" string grid rows
   # into a raw coordinate system of fit-able cells ("-")
+  @doc false
   @spec parse(list(binary)) :: list
   def parse(grid), do: %{across: parse(grid, :across)} |> Map.merge(%{down: parse(grid, :down)})
 
+  @doc false
   def parse([x|y], :across) when is_bitstring(x) do
     [x|y]
     |> Enum.map(&String.split(&1,"", trim: true))
@@ -339,6 +361,7 @@ defmodule FP.Recursion.Advanced do
     end
   end
 
+  @doc false
   def render(solution) do
     coord_char_map = solution |> List.flatten |> Enum.into(%{}, fn {x, {y,z}} -> {{y,z}, x} end)
     output = for y <- 1..10 do
@@ -359,6 +382,7 @@ defmodule FP.Recursion.Advanced do
   # a scalable solution by duplicate the individual digit sums
   # then sum them up for another round of digit sum process
   # instead of concatenating huge numbers
+  @spec super_digit(integer, integer) :: integer
   def super_digit(n, k) when is_number(n) do
     # break an extremely large number
     y = n
@@ -372,10 +396,12 @@ defmodule FP.Recursion.Advanced do
     |> digit_sum
   end
 
+  @doc false
   def digit_sum(n) when is_number(n) and n < 10, do: n
   def digit_sum(n) when is_number(n) do
     Integer.digits(n) |> digit_sum
   end
+
   def digit_sum(n) do
     digit_sum(Enum.sum(n))
   end

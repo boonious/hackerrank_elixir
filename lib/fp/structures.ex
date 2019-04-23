@@ -3,15 +3,17 @@ defmodule FP.Structures do
   Elixir solutions for HackerRank functional programming challenges: functional structures.
   """
 
+  @doc false
+  # define a binary tree node of value (v) with left (l), right (r) leaves
+  def n(value), do: %{v: value, l: nil, r: nil}
+
   #==========================================================================
   @doc """
   Binary tree: swap and traverse nodes
 
   https://www.hackerrank.com/challenges/swap-nodes/problem
   """
-  # define a binary tree node of value (v) with left (l), right (r) leaves
-  def n(value), do: %{v: value, l: nil, r: nil}
-
+  @spec swap_nodes(list) :: list
   def swap_nodes(data) do
     [[n] | x ] = data
 
@@ -27,6 +29,7 @@ defmodule FP.Structures do
     swap_nodes(tree, swap_data, depth, output)
   end
 
+  @doc false
   def swap_nodes(_, [], _, output), do: output |> Enum.reverse
   def swap_nodes(tree, swap_data, depth, output) when is_list(swap_data) do
     level = hd swap_data
@@ -38,6 +41,7 @@ defmodule FP.Structures do
     swap_nodes(x, swap_data |> tl, depth, [y|output])
   end
 
+  @doc false
   def swap(tree, current_depth, depth, _k) when current_depth == depth, do: tree
   def swap(%{l: nil, r: nil, v: -1}, _, _, _), do: %{l: nil, r: nil, v: -1}
   def swap(%{v: v, l: l, r: r} = _tree, current_depth, depth, k) do
@@ -52,6 +56,8 @@ defmodule FP.Structures do
 
   # implement the algorithm below for Elixir
   # https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion
+  @doc false
+  @spec inorder_traverse(map) :: list
   def inorder_traverse(tree) do
     {stack, output} = {[], []}
 
@@ -98,6 +104,8 @@ defmodule FP.Structures do
   # recursively parse nodes data from top down, in a single pass
   # to determine the total depth and the actual number of
   # nodes per depth level
+  @doc false
+  @spec tree_data(list) :: {integer, list[integer]}
   def tree_data(nodes_data) do
     node_count = 1
     depth = 1
@@ -105,6 +113,7 @@ defmodule FP.Structures do
     tree_data(nodes_data, info, node_count, depth)
   end
 
+  @doc false
   def tree_data([], info, _, depth), do: {depth, info |> tl}
   def tree_data(nodes_data, info, count, depth) do
     nodes = nodes_data |> Enum.take(count)
@@ -131,6 +140,7 @@ defmodule FP.Structures do
   # and involves scanning the entire tree (from root down)
   # to find leaf nodes, per node addition and
   # therefore becomes incredibly unefficient for large trees
+  @doc false
   def build_tree(_, [[l,r]], []), do: %{v: 1, l: l, r: r}
   def build_tree(data, children, [c|count]) do
     nodes = data |> Enum.take(0 - c)
@@ -142,17 +152,20 @@ defmodule FP.Structures do
     build_tree(remaining_nodes, new_children, count)
   end
 
+  @doc false
   def build_nodes([], nodes), do: nodes |> Enum.reverse
   def build_nodes([[l,r]|y], nodes) do
     build_nodes(y, [[n(l), n(r)] | nodes])
   end
 
+  @doc false
   def merge_tree([], _, tree), do: tree |> Enum.reverse |> Enum.chunk_every(2)
   def merge_tree([x|nodes], children, tree) when is_list(nodes) do
     {y, remaining_children} = merge_tree(x, children)
     merge_tree(nodes, remaining_children, [y|tree])
   end
 
+  @doc false
   def merge_tree(%{l: nil, r: nil, v: -1} = node, children), do: {node, children}
   def merge_tree(%{l: nil, r: nil, v: v} = _, children) do
     [l, r] = children |> hd
@@ -173,6 +186,7 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/matrix-rotation/problem
   """
+  @spec rotate(list, integer) :: list
   def rotate(matrix, times) do
     {deconstructed, dim} = deconstruct(matrix)
 
@@ -180,12 +194,14 @@ defmodule FP.Structures do
     |> reconstruct([], dim)
   end
 
+  @doc false
   def deconstruct(matrix) do
     new_matrix = []
     dim = []
     deconstruct(matrix, new_matrix, dim)
   end
 
+  @doc false
   def deconstruct([], new_matrix, dim), do: {new_matrix, dim}
   def deconstruct([top|y], new_matrix, dim) do
     {bottom, rest1} = List.pop_at(y, -1)
@@ -205,6 +221,7 @@ defmodule FP.Structures do
     end
   end
 
+  @doc false
   def reconstruct([], new_matrix, _), do: new_matrix
   def reconstruct([r|matrix], new_matrix,[{m,n}|dim]) do
     top = r |> Enum.take(n)
@@ -224,6 +241,7 @@ defmodule FP.Structures do
     reconstruct(matrix, z, dim)
   end
 
+  @doc false
   def shift(matrix, times) do
     m = for row <- matrix do
       row_size = length row
@@ -243,17 +261,17 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/kmp-fp/problem
   """
-  # prelims: currently straight forward algorithm that
-  # doesn't solve all HackerRank test cases for humongous strings
-  # next: modify algorithm by implementing pre-search scan as per KMP algorithm
+  @spec kmp_string_search(binary, binary) :: binary
   def kmp_string_search(string, pattern) when is_binary(string) and is_binary(pattern) do
     string_search(string, pattern, pattern)
   end
 
+  @spec kmp_string_search(list, list) :: binary
   def kmp_string_search(string, pattern) when is_list(string) and is_list(pattern) do
     string_search(string, pattern, pattern)
   end
 
+  @doc false
   def string_search(string, subpattern, pattern, match \\ false)
   def string_search(_, _, _, true), do: "YES"
   def string_search([], _, _, false), do: "NO"
@@ -358,6 +376,7 @@ defmodule FP.Structures do
   end
 
   # find max rectangular at a given height of a fence with irregular heights
+  @doc false
   def max_rect(heights, height) do
     heights
     |> fence_spans(height)
@@ -366,6 +385,7 @@ defmodule FP.Structures do
   end
 
   # find the max contiguous span from a binary list of fence spans
+  @doc false
   def max_span(spans, current \\ 0, max \\ 0)
   def max_span([], current, max), do: if current > max, do: current, else: max
   def max_span([x|y], current, max) do
@@ -379,6 +399,7 @@ defmodule FP.Structures do
   end
 
   # find contiguous fence spans that achieve at least a given height
+  @doc false
   def fence_spans(heights, height \\ 0, spans \\ [])
   def fence_spans([], _, spans), do: spans |> Enum.reverse
   def fence_spans([x|y], height, spans) when x >= height, do: fence_spans(y, height, [1|spans])
@@ -409,7 +430,7 @@ defmodule FP.Structures do
 
   #==============================================================================================
   @doc """
-  John and fences 2
+  John and fences 2 - more time-performant
 
   https://www.hackerrank.com/challenges/john-and-fences/problem
   """
@@ -435,6 +456,7 @@ defmodule FP.Structures do
   # TODO: find and return the current max area in situ 
   # instead of accumulating all max areas 
   # for the single "Enum.max" op above
+  @doc false
   def max_rect_divide(heights, x1, x2, areas) do
     {height, min_index} = Enum.min(heights)
 
@@ -478,6 +500,7 @@ defmodule FP.Structures do
     |> Enum.take(k)
   end
 
+  @doc false
   def max_subarray_sums(a, maxes) do
     {span, max} = kadane_max(a)
     
@@ -496,7 +519,8 @@ defmodule FP.Structures do
   # Kadane's algorithm for finding the largest possible max subarray sum - 0(N)
   # using tail recursion. The array input now zipped with indexes
   # so that the index span of the subarray can be determined
-  @spec kadane_max(list(tuple), {integer,integer}, integer, integer, integer) :: integer
+  @doc false
+  @spec kadane_max(list(tuple), {integer,integer}, integer, integer, integer) :: {tuple, integer}
   def kadane_max(array, span \\ {0,0}, start \\ -1, current_max \\ 0, max \\ 0)
 
   def kadane_max([], span, _, _, max), do: {span, max}
@@ -520,15 +544,7 @@ defmodule FP.Structures do
 
   https://www.hackerrank.com/challenges/range-minimum-query/problem
   """
-  @spec min_query(list(integer), list(tuple)) :: list
-  def min_query(a, queries) do
-    n = length(a)
-    index = 0..n-1
-
-    Enum.zip(a, index) # a tuple sequence list with indices
-    |> _min_query(queries, [])
-  end
-
+  @spec min_query_tree(list(integer), integer, list(tuple)) :: list
   def min_query_tree(a, n, queries) do
     tree = segment_tree(a, n)
 
@@ -539,6 +555,7 @@ defmodule FP.Structures do
   end
 
   # construct a map-based segment tree for the array
+  @doc false
   @spec segment_tree(list, integer, map, integer) :: map
   def segment_tree(a, n, tree \\ %{}, index \\ 0)
   def segment_tree(a, n, tree, i) do
@@ -572,14 +589,17 @@ defmodule FP.Structures do
   # define custom guards for determining whether the
   # current segment tree node is within range
   # of the query or not
+  @doc false
   defguard in_range(range, query)
            when elem(query, 0) <= elem(range, 0)
            and elem(query, 1) >= elem(range, 1)
 
+  @doc false
   defguard not_in_range(range, query)
            when elem(query, 0) > elem(range, 1)
            or elem(query, 1) < elem(range, 0)
-
+    
+  @doc false
   def query_tree(tree, range \\ {0,0}, query \\ {0,0}, index \\ 0)
   def query_tree(tree, r, q, i) when in_range(r,q), do: tree[i]
   def query_tree(_, r, q, _) when not_in_range(r,q), do: :max
@@ -590,6 +610,18 @@ defmodule FP.Structures do
     x = query_tree(tree, {elem(r,0), mid_point}, q, i*2 + 1)
     y = query_tree(tree, {mid_point+1, elem(r,1)}, q, i*2 + 2)
     min(x, y)
+  end
+
+  # below is a basic or straight forward range minimum query algorithm
+  # that won't pass all test cases
+  @doc false
+  @spec min_query(list(integer), list(tuple)) :: list
+  def min_query(a, queries) do
+    n = length(a)
+    index = 0..n-1
+
+    Enum.zip(a, index) # a tuple sequence list with indices
+    |> _min_query(queries, [])
   end
 
   # basic or straight forward range minimum query algorithm

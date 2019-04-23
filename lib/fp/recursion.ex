@@ -5,6 +5,7 @@ defmodule FP.Recursion do
 
   @doc """
   Computing the greatest common divisor (GCD) with Euclidean Algorithm 
+
   https://www.hackerrank.com/challenges/functional-programming-warmups-in-recursion---gcd/problem
   """
   @spec gcd(list(integer)) :: integer
@@ -16,11 +17,13 @@ defmodule FP.Recursion do
     gcd(x, y, q, r)
   end
 
+  @doc false
   def gcd(x, _y, _q, 0), do: x
   def gcd(x, _y, _q, r), do: gcd(r, x, div(x, r), rem(x, r))
 
   @doc """
   Fibonocci numbers
+
   https://www.hackerrank.com/challenges/functional-programming-warmups-in-recursion---fibonacci-numbers/problem
   """
   @spec fibonacci(integer) :: integer
@@ -32,6 +35,7 @@ defmodule FP.Recursion do
 
   @doc """
   Pascal's triangle
+
   https://www.hackerrank.com/challenges/pascals-triangle/problem
   """
   def pascal_tri(k, m \\ 1, tri_data \\ [])
@@ -42,6 +46,7 @@ defmodule FP.Recursion do
   end
   def pascal_tri(_k, _m, _rows), do: nil
 
+  @doc false
   def pascal_tri_row(n \\ 0, r \\ 0, values \\ [])
   def pascal_tri_row(n, r, values) when r == n + 1, do: values
   def pascal_tri_row(n, r, values) do
@@ -54,6 +59,7 @@ defmodule FP.Recursion do
 
   @doc """
   String-o-Permute
+
   https://www.hackerrank.com/challenges/string-o-permute/problem
   """
   def permute_string(string) when is_bitstring(string) do
@@ -69,6 +75,7 @@ defmodule FP.Recursion do
 
   @doc """
   String mingling
+
   https://www.hackerrank.com/challenges/string-mingling/problem
   """
   def mingle_string([a,b]) do
@@ -78,6 +85,7 @@ defmodule FP.Recursion do
     mingle_string(string_list1, string_list2)
   end
 
+  @doc false
   def mingle_string(string1, string2, new_string \\ "")
   def mingle_string([],[], new_string), do: new_string
   def mingle_string([c|d],[e|f], new_string), do: mingle_string(d,f,new_string <> c <> e)
@@ -85,6 +93,7 @@ defmodule FP.Recursion do
   #==============================================================
   @doc """
   String compression
+
   https://www.hackerrank.com/challenges/string-compression/problem
   """
   def compress_string(str) when is_binary(str) do
@@ -93,6 +102,7 @@ defmodule FP.Recursion do
     |> compress_string
   end
 
+  @doc false
   def compress_string(chars, results \\ "", count \\ 1)
   def compress_string([], results, _count), do: results
   def compress_string([x|y], results, count) do
@@ -122,6 +132,7 @@ defmodule FP.Recursion do
     [prefix, {String.length(substring1),substring1}, {String.length(substring2), substring2}]
   end
 
+  @doc false
   def prefix_compress([], prefix, count), do: {count, prefix}
   def prefix_compress([{a,b}|c], prefix, count) do
     if a == b, do: prefix_compress(c, prefix <> a, count + 1), else: prefix_compress([], prefix, count)
@@ -139,6 +150,7 @@ defmodule FP.Recursion do
     |> string_reduce([])
   end
 
+  @doc false
   def string_reduce([], output), do: Enum.reverse(output) |> Enum.join("")
   def string_reduce([a|b], output) do
     if Enum.member?(output, a), do: string_reduce(b,output), else: string_reduce(b, [a|output])
@@ -162,6 +174,7 @@ defmodule FP.Recursion do
     |> length
   end
 
+  @doc false
   # return true if series reduced to 0, i.e. a solution found
   def check_power(_num, sum, _pow, _max_num) when sum == 0, do: true
 
