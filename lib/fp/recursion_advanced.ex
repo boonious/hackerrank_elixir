@@ -413,7 +413,7 @@ defmodule FP.Recursion.Advanced do
 
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
-  def super_queen_power_zone(n, {i,j}) do
+  def super_queen_power_zone({i,j}, n) do
     {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
 
     for x <- 0..n-1, y <- 0..n-1 do
