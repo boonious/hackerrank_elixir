@@ -406,4 +406,31 @@ defmodule FP.Recursion.Advanced do
     digit_sum(Enum.sum(n))
   end
 
+
+  #========================================================================================
+  @doc """
+  Super queens on a chessboard
+
+  https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
+  """
+  def super_queen_power_zone(n, {i,j}) do
+    {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
+
+    for x <- 0..n-1, y <- 0..n-1 do
+      power = cond do
+        x == i or y == j -> 1 # row, column zones
+        y == (x+c1) or y == (-x+c2) -> 1 # diagonal zones
+        plus_minus_n?(i,x,2) and plus_minus_n?(j,y,1) -> 1 # l-shape, horizontal
+        plus_minus_n?(i,x,1) and plus_minus_n?(j,y,2) -> 1 # l-shape, vertical
+        true -> 0
+      end
+
+      { {x,y}, power }
+    end
+  end
+
+  defp plus_minus_n?(x0, x1, n) do
+    ((x0 - x1) |> abs) == n
+  end
+
 end
