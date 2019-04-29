@@ -413,6 +413,25 @@ defmodule FP.Recursion.Advanced do
 
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
+  # From the sample test case, the candidate placements are pairs in mirroring positions that
+  # are not in the same or diagonal lines (need to check l-shape later). This makes sense as
+  # such placement maximise non-conflicting area for more potential super-queen placement.
+  #
+  # Begin tackling the challenge by identifying such candidate placement pairs
+  def super_queen(n) do
+    pairs = for x <- 0..n-1, y <- 0..n-1, x < (n-1-x) do
+      {x1, y1} = {n-1-x, n-1-y}
+
+      cond do
+        (y1 - y) == 0 or (x1 - x) == 0 -> nil # on the same lines
+        (y1-y)/(x1-x) == 1 or (y1-y)/(x1-x) == -1 -> nil # on diagonal lines
+        true -> [{x,y},{x1, y1}]
+      end
+    end
+
+    pairs |> Enum.filter(&(&1 != nil))
+  end
+
   def super_queen_power_zone({i,j}, n) do
     {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
 
