@@ -418,7 +418,14 @@ defmodule FP.Recursion.Advanced do
   # such placement maximise non-conflicting area for more potential super-queen placement.
   #
   # Begin tackling the challenge by identifying such candidate placement pairs
+  # algorithm:
   def super_queen(n) do
+    super_queen_pairs(n)
+  end
+
+  # find opposing quuen pairs that are furthest part, mirroring,
+  # not in the conflict with each others (on the same or diagonal lines)
+  def super_queen_pairs(n) do
     pairs = for x <- 0..n-1, y <- 0..n-1, x < (n-1-x) do
       {x1, y1} = {n-1-x, n-1-y}
 
@@ -429,7 +436,8 @@ defmodule FP.Recursion.Advanced do
       end
     end
 
-    pairs |> Enum.filter(&(&1 != nil))
+    pairs 
+    |> Enum.filter(&(&1 != nil))
   end
 
   def super_queen_power_zone({i,j}, n) do
