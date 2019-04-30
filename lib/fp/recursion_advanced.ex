@@ -440,6 +440,26 @@ defmodule FP.Recursion.Advanced do
     |> Enum.filter(&(&1 != nil))
   end
 
+  def super_queen_power_zone(q1, q2, n) do
+    # p -> power positions, np -> non power / available positions
+    {p1, np1} = super_queen_power_zone(q1, n)
+    {p2, np2} = super_queen_power_zone(q2, n)
+
+    p_set = MapSet.union(MapSet.new(p1), MapSet.new(p2))
+    np_set = MapSet.union(MapSet.new(np1), MapSet.new(np2))
+    |> MapSet.difference(p_set)
+
+    p = p_set
+    |> MapSet.to_list
+    |> Enum.sort
+
+    np = np_set
+    |> MapSet.to_list
+    |> Enum.sort
+
+    {p, np}
+  end
+
   def super_queen_power_zone({i,j}, n) do
     {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
 
