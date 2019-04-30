@@ -435,17 +435,24 @@ defmodule FP.Recursion.Advanced do
   def super_queen_power_zone({i,j}, n) do
     {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
 
-    for x <- 0..n-1, y <- 0..n-1 do
+    p_zone = for x <- 0..n-1, y <- 0..n-1 do
       power = cond do
         x == i or y == j -> 1 # row, column zones
         y == (x+c1) or y == (-x+c2) -> 1 # diagonal zones
         plus_minus_n?(i,x,2) and plus_minus_n?(j,y,1) -> 1 # l-shape, horizontal
         plus_minus_n?(i,x,1) and plus_minus_n?(j,y,2) -> 1 # l-shape, vertical
-        true -> 0
+        true -> 0 # non-power, available slot
       end
 
       { {x,y}, power }
     end
+
+    # group into power, non-power zones
+    {p, np} = p_zone
+    |> Enum.split_with( fn{_pos, power} -> power == 1 end )
+
+    # return only the coordinates in 2 ("power", "non-power/available") lists
+    {p |> Enum.map(&elem(&1, 0)), np |> Enum.map(&elem(&1, 0))}
   end
 
   defp plus_minus_n?(x0, x1, n) do
