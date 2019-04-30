@@ -527,6 +527,15 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert super_queen_pairs(10) == x
     end
 
+    test "fit_queen_pairs - Super queens on a chess board, attempt to fit queen pairs into available slots with tail recursion" do
+      size = 10
+      pairs = super_queen_pairs(size)
+      starting_pair = [{0,2},{9,7}]
+
+      assert fit_queen_pairs(starting_pair, pairs |> List.delete(starting_pair), size)
+      == [{0,2},{1,5},{2,8},{3,0},{4,3},{5,6},{6,9},{7,1},{8,4},{9,7}]
+    end
+
     test "super_queen_power_zone/2 - Super queens on a chess board, find zone of power in a n-size grid for a queen at i,j position" do
       power_pos = [{0,0},{0,3},{0,6},{1,1},{1,2},{1,3},{1,4},{1,5},{2,1},{2,2},{2,3},{2,4},{2,5},{3,0},{3,1},{3,2},{3,3},{3,4},{3,5},{3,6},{4,1},{4,2},{4,3},{4,4},{4,5},{5,1},{5,2},{5,3},{5,4},{5,5},{6,0},{6,3},{6,6}]
       available_pos = [{0,1},{0,2},{0,4},{0,5},{1,0},{1,6},{2,0},{2,6},{4,0},{4,6},{5,0},{5,6},{6,1},{6,2},{6,4},{6,5}]

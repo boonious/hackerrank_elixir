@@ -414,8 +414,12 @@ defmodule FP.Recursion.Advanced do
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
   # From the sample test case, the candidate placements are pairs in mirroring positions that
-  # are not in the same or diagonal lines (need to check l-shape later). This makes sense as
-  # such placement maximise non-conflicting area for more potential super-queen placement.
+  # are not in the same or diagonal lines (need to check l-shape later). 
+  #
+  # This makes sense as such placement maximise non-conflicting area for
+  # more potential super-queen placement. It also more time-performant as
+  # number of nodes to be evaluated are minimised and reduced at a faster rate
+  # when considered in pairs.
   #
   # Begin tackling the challenge by identifying such candidate placement pairs
   # algorithm:
@@ -423,7 +427,7 @@ defmodule FP.Recursion.Advanced do
     super_queen_pairs(n)
   end
 
-  # find opposing quuen pairs that are furthest part, mirroring,
+  # find opposing queen pairs that are furthest part, mirroring,
   # not in the conflict with each others (on the same or diagonal lines)
   def super_queen_pairs(n) do
     pairs = for x <- 0..n-1, y <- 0..n-1, x < (n-1-x) do
@@ -438,6 +442,28 @@ defmodule FP.Recursion.Advanced do
 
     pairs 
     |> Enum.filter(&(&1 != nil))
+  end
+
+  # recursively fit queen pairs into available slots, given a starting pair
+  def fit_queen_pairs([q1,q2], pairs, n, p_pos \\ [], np_pos \\ [], placement \\ []) do
+    {p_pair, np_pair} = super_queen_power_zone(q1, q2, n)
+
+    p_set = MapSet.union(MapSet.new(p_pair), MapSet.new(p_pos))
+    np_set = MapSet.union(MapSet.new(np_pair), MapSet.new(np_pos))
+    |> MapSet.difference(p_set)
+
+    p = p_set
+    |> MapSet.to_list
+
+    np = np_set
+    |> MapSet.to_list
+
+    pairs_remain = pairs |> Enum.filter(fn [q1, q2] -> (q1 in np) and (q2 in np) end)
+    if pairs_remain == [] do
+      [q2|[q1|placement]] |> Enum.sort
+    else
+      fit_queen_pairs(pairs_remain |> hd, pairs_remain |> tl, n, p, np, [q2|[q1|placement]] )
+    end
   end
 
   def super_queen_power_zone(q1, q2, n) do
