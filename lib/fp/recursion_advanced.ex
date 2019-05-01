@@ -458,12 +458,29 @@ defmodule FP.Recursion.Advanced do
     np = np_set
     |> MapSet.to_list
 
+    # Instead of placing the next one in the leftmost slot (head of pairs_remain),
+    # find all slots on the next line, and select the slot with max number of placements
     pairs_remain = pairs |> Enum.filter(fn [q1, q2] -> (q1 in np) and (q2 in np) end)
+    next_pairs = next_pairs(pairs_remain) # find all available slots on the next line
+
     if pairs_remain == [] do
       [q2|[q1|placement]] |> Enum.sort
     else
-      fit_queen_pairs(pairs_remain |> hd, pairs_remain |> tl, n, p, np, [q2|[q1|placement]] )
+      # compute placements via all avaialable slots on the next line
+      # and select the one with most number of placements
+      next_pairs 
+      |> Enum.map( &fit_queen_pairs(&1, pairs_remain|> List.delete(&1), n, p, np, [q2|[q1|placement]]) )
+      |> Enum.max_by( fn x -> length(x) end )
     end
+  end
+
+  # return one of more slots on the next line
+  defp next_pairs([]), do: []
+  defp next_pairs([pair|pairs]) do
+    [{_, next_y}, _] = pair
+
+    more = pairs |> Enum.filter(fn [{_, y}, _] -> y == next_y end)
+    if more == [], do: [pair], else: [pair|more]
   end
 
   def super_queen_power_zone(q1, q2, n) do

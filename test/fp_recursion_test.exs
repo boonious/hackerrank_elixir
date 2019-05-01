@@ -530,10 +530,14 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     test "fit_queen_pairs - Super queens on a chess board, attempt to fit queen pairs into available slots with tail recursion" do
       size = 10
       pairs = super_queen_pairs(size)
-      starting_pair = [{2,0},{7,9}]
 
+      starting_pair = [{2,0},{7,9}]
       assert fit_queen_pairs(starting_pair, pairs |> List.delete(starting_pair), size)
       == [{0,3},{1,7},{2,0},{3,4},{4,8},{5,1},{6,5},{7,9},{8,2},{9,6}]
+
+      starting_pair = [{7,0},{2,9}]
+      assert fit_queen_pairs(starting_pair, pairs |> List.delete(starting_pair), size)
+      == [{0,6},{1,2},{2,9},{3,5},{4,1},{5,8},{6,4},{7,0},{8,7},{9,3}]
     end
 
     test "super_queen_power_zone/2 - Super queens on a chess board, find zone of power in a n-size grid for a queen at i,j position" do
