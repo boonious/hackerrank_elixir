@@ -421,10 +421,18 @@ defmodule FP.Recursion.Advanced do
   # number of nodes to be evaluated are minimised and reduced at a faster rate
   # when considered in pairs.
   #
-  # Begin tackling the challenge by identifying such candidate placement pairs
-  # algorithm:
+  # Algorithm: evaluate each queen pair as a starting pair, recursively compute the next
+  # available slots from which a next pair can be deduced and placed.
+  # 
+  # Note: the algorithm currently only work for the first 2 HackerRank test cases
+  # and does not work with odd-size grid yet (pair fitting)
   def super_queen(n) do
-    super_queen_pairs(n)
+    pairs = super_queen_pairs(n)
+
+    super_queen(pairs, pairs, n)
+    |> Enum.filter( fn x -> length(x) >= n end )
+    |> Enum.uniq
+    |> length
   end
 
   # find opposing queen pairs that are furthest part, mirroring,
@@ -442,6 +450,13 @@ defmodule FP.Recursion.Advanced do
 
     pairs
     |> Enum.filter(&(&1 != nil))
+  end
+
+  def super_queen(test_pairs, pairs, grid_size, placements \\ [])
+  def super_queen([], _, _, placements), do: placements
+  def super_queen([i|j], pairs, n, placements) do
+    placement = fit_queen_pairs(i, pairs |> List.delete(i), n)
+    super_queen(j, pairs, n, [placement|placements])
   end
 
   # recursively fit queen pairs into available slots, given a starting pair

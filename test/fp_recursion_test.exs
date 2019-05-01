@@ -522,6 +522,11 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     end
 
     #https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
+    test "super_queen - Super queens on a chess board, identify n unique super queen placements (combination) on n-size grid" do
+      assert super_queen(10) == 4 # 4 possible combinations containing 10 queens placement on a 10x10 grid
+      assert super_queen(8) == 0
+    end
+
     test "super_queen_pairs - Super queens on a chess board, identify placement candidates (queen pairs) for further evaluation" do
       x = [[{1,0},{8,9}],[{2,0},{7,9}],[{3,0},{6,9}],[{4,0},{5,9}],[{0,1},{9,8}],[{2,1},{7,8}],[{3,1},{6,8}],[{4,1},{5,8}],[{0,2},{9,7}],[{1,2},{8,7}],[{3,2},{6,7}],[{4,2},{5,7}],[{0,3},{9,6}],[{1,3},{8,6}],[{2,3},{7,6}],[{4,3},{5,6}],[{0,4},{9,5}],[{1,4},{8,5}],[{2,4},{7,5}],[{3,4},{6,5}],[{0,5},{9,4}],[{1,5},{8,4}],[{2,5},{7,4}],[{3,5},{6,4}],[{0,6},{9,3}],[{1,6},{8,3}],[{2,6},{7,3}],[{4,6},{5,3}],[{0,7},{9,2}],[{1,7},{8,2}],[{3,7},{6,2}],[{4,7},{5,2}],[{0,8},{9,1}],[{2,8},{7,1}],[{3,8},{6,1}],[{4,8},{5,1}],[{1,9},{8,0}],[{2,9},{7,0}],[{3,9},{6,0}],[{4,9},{5,0}]]
       assert super_queen_pairs(10) == x
