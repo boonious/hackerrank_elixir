@@ -430,7 +430,7 @@ defmodule FP.Recursion.Advanced do
   # find opposing queen pairs that are furthest part, mirroring,
   # not in the conflict with each others (on the same or diagonal lines)
   def super_queen_pairs(n) do
-    pairs = for x <- 0..n-1, y <- 0..n-1, x < (n-1-x) do
+    pairs = for y <- 0..n-1, x <- 0..n-1, x < (n-1-x) do
       {x1, y1} = {n-1-x, n-1-y}
 
       cond do
@@ -440,7 +440,7 @@ defmodule FP.Recursion.Advanced do
       end
     end
 
-    pairs 
+    pairs
     |> Enum.filter(&(&1 != nil))
   end
 
