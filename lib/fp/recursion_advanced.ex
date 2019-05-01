@@ -413,109 +413,13 @@ defmodule FP.Recursion.Advanced do
 
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
-  # From the sample test case, the candidate placements are pairs in mirroring positions that
-  # are not in the same or diagonal lines (need to check l-shape later). 
-  #
-  # This makes sense as such placement maximise non-conflicting area for
-  # more potential super-queen placement. It also more time-performant as
-  # number of nodes to be evaluated are minimised and reduced at a faster rate
-  # when considered in pairs.
-  #
-  # Algorithm: evaluate each queen pair as a starting pair, recursively compute the next
+  # Abandonded algorithm as the logic broke down for large grid size: 
+  # evaluate each mirroring queen pair as a starting pair, recursively compute the next
   # available slots from which a next pair can be deduced and placed.
   # 
-  # Note: the algorithm currently only work for the first 2 HackerRank test cases
-  # and does not work with odd-size grid yet (pair fitting)
-  def super_queen(n) do
-    pairs = super_queen_pairs(n)
-
-    super_queen(pairs, pairs, n)
-    |> Enum.filter( fn x -> length(x) >= n end )
-    |> Enum.uniq
-    |> length
-  end
-
-  # find opposing queen pairs that are furthest part, mirroring,
-  # not in the conflict with each others (on the same or diagonal lines)
-  def super_queen_pairs(n) do
-    pairs = for y <- 0..n-1, x <- 0..n-1, x < (n-1-x) do
-      {x1, y1} = {n-1-x, n-1-y}
-
-      cond do
-        (y1 - y) == 0 or (x1 - x) == 0 -> nil # on the same lines
-        (y1-y)/(x1-x) == 1 or (y1-y)/(x1-x) == -1 -> nil # on diagonal lines
-        true -> [{x,y},{x1, y1}]
-      end
-    end
-
-    pairs
-    |> Enum.filter(&(&1 != nil))
-  end
-
-  def super_queen(test_pairs, pairs, grid_size, placements \\ [])
-  def super_queen([], _, _, placements), do: placements
-  def super_queen([i|j], pairs, n, placements) do
-    placement = fit_queen_pairs(i, pairs |> List.delete(i), n)
-    super_queen(j, pairs, n, [placement|placements])
-  end
-
-  # recursively fit queen pairs into available slots, given a starting pair
-  def fit_queen_pairs([q1,q2], pairs, n, p_pos \\ [], np_pos \\ [], placement \\ []) do
-    {p_pair, np_pair} = super_queen_power_zone(q1, q2, n)
-
-    p_set = MapSet.union(MapSet.new(p_pair), MapSet.new(p_pos))
-    np_set = MapSet.union(MapSet.new(np_pair), MapSet.new(np_pos))
-    |> MapSet.difference(p_set)
-
-    p = p_set
-    |> MapSet.to_list
-
-    np = np_set
-    |> MapSet.to_list
-
-    # Instead of placing the next one in the leftmost slot (head of pairs_remain),
-    # find all slots on the next line, and select the slot with max number of placements
-    pairs_remain = pairs |> Enum.filter(fn [q1, q2] -> (q1 in np) and (q2 in np) end)
-    next_pairs = next_pairs(pairs_remain) # find all available slots on the next line
-
-    if pairs_remain == [] do
-      [q2|[q1|placement]] |> Enum.sort
-    else
-      # compute placements via all avaialable slots on the next line
-      # and select the one with most number of placements
-      next_pairs 
-      |> Enum.map( &fit_queen_pairs(&1, pairs_remain|> List.delete(&1), n, p, np, [q2|[q1|placement]]) )
-      |> Enum.max_by( fn x -> length(x) end )
-    end
-  end
-
-  # return one of more slots on the next line
-  defp next_pairs([]), do: []
-  defp next_pairs([pair|pairs]) do
-    [{_, next_y}, _] = pair
-
-    more = pairs |> Enum.filter(fn [{_, y}, _] -> y == next_y end)
-    if more == [], do: [pair], else: [pair|more]
-  end
-
-  def super_queen_power_zone(q1, q2, n) do
-    # p -> power positions, np -> non power / available positions
-    {p1, np1} = super_queen_power_zone(q1, n)
-    {p2, np2} = super_queen_power_zone(q2, n)
-
-    p_set = MapSet.union(MapSet.new(p1), MapSet.new(p2))
-    np_set = MapSet.union(MapSet.new(np1), MapSet.new(np2))
-    |> MapSet.difference(p_set)
-
-    p = p_set
-    |> MapSet.to_list
-    |> Enum.sort
-
-    np = np_set
-    |> MapSet.to_list
-    |> Enum.sort
-
-    {p, np}
+  # Currently working on a more straight forward algorithm recursively place a single queen
+  # 
+  def super_queen(_n) do
   end
 
   def super_queen_power_zone({i,j}, n) do

@@ -522,29 +522,6 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     end
 
     #https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
-    test "super_queen - Super queens on a chess board, identify n unique super queen placements (combination) on n-size grid" do
-      assert super_queen(10) == 4 # 4 possible combinations containing 10 queens placement on a 10x10 grid
-      assert super_queen(8) == 0
-    end
-
-    test "super_queen_pairs - Super queens on a chess board, identify placement candidates (queen pairs) for further evaluation" do
-      x = [[{1,0},{8,9}],[{2,0},{7,9}],[{3,0},{6,9}],[{4,0},{5,9}],[{0,1},{9,8}],[{2,1},{7,8}],[{3,1},{6,8}],[{4,1},{5,8}],[{0,2},{9,7}],[{1,2},{8,7}],[{3,2},{6,7}],[{4,2},{5,7}],[{0,3},{9,6}],[{1,3},{8,6}],[{2,3},{7,6}],[{4,3},{5,6}],[{0,4},{9,5}],[{1,4},{8,5}],[{2,4},{7,5}],[{3,4},{6,5}],[{0,5},{9,4}],[{1,5},{8,4}],[{2,5},{7,4}],[{3,5},{6,4}],[{0,6},{9,3}],[{1,6},{8,3}],[{2,6},{7,3}],[{4,6},{5,3}],[{0,7},{9,2}],[{1,7},{8,2}],[{3,7},{6,2}],[{4,7},{5,2}],[{0,8},{9,1}],[{2,8},{7,1}],[{3,8},{6,1}],[{4,8},{5,1}],[{1,9},{8,0}],[{2,9},{7,0}],[{3,9},{6,0}],[{4,9},{5,0}]]
-      assert super_queen_pairs(10) == x
-    end
-
-    test "fit_queen_pairs - Super queens on a chess board, attempt to fit queen pairs into available slots with tail recursion" do
-      size = 10
-      pairs = super_queen_pairs(size)
-
-      starting_pair = [{2,0},{7,9}]
-      assert fit_queen_pairs(starting_pair, pairs |> List.delete(starting_pair), size)
-      == [{0,3},{1,7},{2,0},{3,4},{4,8},{5,1},{6,5},{7,9},{8,2},{9,6}]
-
-      starting_pair = [{7,0},{2,9}]
-      assert fit_queen_pairs(starting_pair, pairs |> List.delete(starting_pair), size)
-      == [{0,6},{1,2},{2,9},{3,5},{4,1},{5,8},{6,4},{7,0},{8,7},{9,3}]
-    end
-
     test "super_queen_power_zone/2 - Super queens on a chess board, find zone of power in a n-size grid for a queen at i,j position" do
       power_pos = [{0,0},{0,3},{0,6},{1,1},{1,2},{1,3},{1,4},{1,5},{2,1},{2,2},{2,3},{2,4},{2,5},{3,0},{3,1},{3,2},{3,3},{3,4},{3,5},{3,6},{4,1},{4,2},{4,3},{4,4},{4,5},{5,1},{5,2},{5,3},{5,4},{5,5},{6,0},{6,3},{6,6}]
       available_pos = [{0,1},{0,2},{0,4},{0,5},{1,0},{1,6},{2,0},{2,6},{4,0},{4,6},{5,0},{5,6},{6,1},{6,2},{6,4},{6,5}]
@@ -553,14 +530,6 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       power_pos = [{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{1,0},{1,1},{1,2},{2,0},{2,1},{2,2},{3,0},{3,3},{4,0},{4,4},{5,0},{5,5},{6,0},{6,6}]
       available_pos = [{1,3},{1,4},{1,5},{1,6},{2,3},{2,4},{2,5},{2,6},{3,1},{3,2},{3,4},{3,5},{3,6},{4,1},{4,2},{4,3},{4,5},{4,6},{5,1},{5,2},{5,3},{5,4},{5,6},{6,1},{6,2},{6,3},{6,4},{6,5}]
       assert super_queen_power_zone({0,0}, 7) == {power_pos, available_pos}
-    end
-
-    test "super_queen_power_zone/3 - Super queens on a chess board, compute power zone of 2 queens placement" do
-      {q1, q2, n} = {{0,1}, {9,8}, 10}
-      power_pos = [{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{0,7},{0,8},{0,9},{1,0},{1,1},{1,2},{1,3},{1,8},{2,0},{2,1},{2,2},{2,3},{2,8},{3,1},{3,2},{3,4},{3,8},{4,1},{4,3},{4,5},{4,8},{5,1},{5,4},{5,6},{5,8},{6,1},{6,5},{6,7},{6,8},{7,1},{7,6},{7,7},{7,8},{7,9},{8,1},{8,6},{8,7},{8,8},{8,9},{9,0},{9,1},{9,2},{9,3},{9,4},{9,5},{9,6},{9,7},{9,8},{9,9}]
-      available_pos = [{1,4},{1,5},{1,6},{1,7},{1,9},{2,4},{2,5},{2,6},{2,7},{2,9},{3,0},{3,3},{3,5},{3,6},{3,7},{3,9},{4,0},{4,2},{4,4},{4,6},{4,7},{4,9},{5,0},{5,2},{5,3},{5,5},{5,7},{5,9},{6,0},{6,2},{6,3},{6,4},{6,6},{6,9},{7,0},{7,2},{7,3},{7,4},{7,5},{8,0},{8,2},{8,3},{8,4},{8,5}]
-
-      assert super_queen_power_zone(q1, q2, n) == {power_pos, available_pos}
     end
 
   end
