@@ -522,6 +522,19 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     end
 
     #https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
+    test "fit_queen_pairs - Super queens on a chess board, recursively fit queens into available slots from a starting position" do
+      n = 10
+      slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}
+
+      starting_pos = {2,0}
+      assert fit_queens(starting_pos, n, slots |> List.delete(starting_pos))
+      == [{0,3},{1,7},{2,0},{3,4},{4,8},{5,1},{6,5},{7,9},{8,2},{9,6}]
+
+      starting_pos = {7,0}
+      assert fit_queens(starting_pos, n, slots |> List.delete(starting_pos))
+      == [{0,6},{1,2},{2,9},{3,5},{4,1},{5,8},{6,4},{7,0},{8,7},{9,3}]
+    end
+
     test "super_queen_power_zone/2 - Super queens on a chess board, find zone of power in a n-size grid for a queen at i,j position" do
       power_pos = [{0,0},{0,3},{0,6},{1,1},{1,2},{1,3},{1,4},{1,5},{2,1},{2,2},{2,3},{2,4},{2,5},{3,0},{3,1},{3,2},{3,3},{3,4},{3,5},{3,6},{4,1},{4,2},{4,3},{4,4},{4,5},{5,1},{5,2},{5,3},{5,4},{5,5},{6,0},{6,3},{6,6}]
       available_pos = [{0,1},{0,2},{0,4},{0,5},{1,0},{1,6},{2,0},{2,6},{4,0},{4,6},{5,0},{5,6},{6,1},{6,2},{6,4},{6,5}]

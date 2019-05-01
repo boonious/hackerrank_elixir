@@ -422,6 +422,37 @@ defmodule FP.Recursion.Advanced do
   def super_queen(_n) do
   end
 
+  # recursively fit queen pieces from a given queen position
+  # p_pos -> power zone of an existing queen placement
+  # np_pos -> non power, available slots
+  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], placement \\ []) do
+    {p0, np0} = super_queen_power_zone(queen, n)
+
+    # re-compute power and available (non power) slots via MapSet
+    p_set = MapSet.union(MapSet.new(p0), MapSet.new(p_pos))
+    np_set = MapSet.union(MapSet.new(np0), MapSet.new(np_pos))
+    |> MapSet.difference(p_set)
+
+    # convert and sort to List
+    p = p_set |> MapSet.to_list
+    np = np_set
+    |> MapSet.to_list
+    |> Enum.sort
+    |> Enum.sort_by(&(elem(&1,1)))
+
+    # find slots on the next line and compute placements recursively,
+    # select the slot with max number of placements
+    next_slots = next_slots(np)
+    if np == [] do
+      [queen|placement] |> Enum.sort
+    else
+      # compute placements for next slots
+      next_slots
+      |> Enum.map( &fit_queens(&1, n, np, p, [queen|placement]) )
+      |> Enum.max_by( fn x -> length(x) end ) # select the next slot with max placements
+    end
+  end
+
   def super_queen_power_zone({i,j}, n) do
     {c1, c2} = {j-i, j+i} # y-intercepts, diagonal lines crosss at x = 0
 
@@ -448,5 +479,14 @@ defmodule FP.Recursion.Advanced do
   defp plus_minus_n?(x0, x1, n) do
     ((x0 - x1) |> abs) == n
   end
+  # return one of more slots on the next line
+  defp next_slots([]), do: []
+  defp next_slots([slot|slots]) do
+    {_, next_y} = slot
+
+    more = slots |> Enum.filter(fn {_, y} -> y == next_y end)
+    if more == [], do: [slot], else: [slot|more]
+  end
+
 
 end
