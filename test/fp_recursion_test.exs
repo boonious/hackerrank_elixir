@@ -522,6 +522,11 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
     end
 
     #https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
+    test "super_queen - Super queens on a chess board, identify n unique super queen placements (combination) on n-size grid" do
+      assert super_queen(10) == 4 # 4 possible combinations containing 10 queens placement on a 10x10 grid
+      assert super_queen(8) == 0
+    end
+
     test "fit_queen_pairs - Super queens on a chess board, recursively fit queens into available slots from a starting position" do
       n = 10
       slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}

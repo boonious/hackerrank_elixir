@@ -419,7 +419,20 @@ defmodule FP.Recursion.Advanced do
   # 
   # Currently working on a more straight forward algorithm recursively place a single queen
   # 
-  def super_queen(_n) do
+  def super_queen(n) do
+    slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}
+
+    super_queen(slots, n)
+    |> Enum.filter( fn x -> length(x) == n end )
+    |> Enum.uniq
+    |> length
+  end
+
+  def super_queen(slots, grid_size, placements \\ [])
+  def super_queen([], _, placements), do: placements
+  def super_queen([i|j], n, placements) do
+    placement = fit_queens(i, n, j)
+    super_queen(j, n, [placement|placements])
   end
 
   # recursively fit queen pieces from a given queen position
