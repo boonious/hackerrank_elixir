@@ -413,17 +413,25 @@ defmodule FP.Recursion.Advanced do
 
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
-  # Abandonded algorithm as the logic broke down for large grid size: 
+  # Abandonded this algorithm, the logic broke down for large grid size:
   # evaluate each mirroring queen pair as a starting pair, recursively compute the next
   # available slots from which a next pair can be deduced and placed.
   # 
-  # Currently working on a more straight forward algorithm recursively place a single queen
-  # 
+  # Algorithm: recursively place a single queen, re-compute available 
+  # slots and repeat. 
+  #
+  # Currently the algorithm works and correctly
+  # identifies the 4, 44 unique replacements combos for n=10, 11 
+  # respectively. However, it is slow for n > 11, timed out on
+  # HackerRank.
+  #
+  # TODO: memoisation of queen power zone to speed things up.
+  #
   def super_queen(n) do
     slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}
 
     super_queen(slots, n)
-    |> Enum.filter( fn x -> length(x) == n end )
+    |> Enum.filter( fn x -> length(x) != 0 end )
     |> Enum.uniq
     |> length
   end
@@ -432,7 +440,7 @@ defmodule FP.Recursion.Advanced do
   def super_queen([], _, placements), do: placements
   def super_queen([i|j], n, placements) do
     placement = fit_queens(i, n, j)
-    super_queen(j, n, [placement|placements])
+    super_queen(j, n, placement++placements)
   end
 
   # recursively fit queen pieces from a given queen position
@@ -454,15 +462,16 @@ defmodule FP.Recursion.Advanced do
     |> Enum.sort_by(&(elem(&1,1)))
 
     # find slots on the next line and compute placements recursively,
-    # select the slot with max number of placements
+    # select the slots with the required number of placements
     next_slots = next_slots(np)
+
     if np == [] do
       [queen|placement] |> Enum.sort
     else
       # compute placements for next slots
       next_slots
-      |> Enum.map( &fit_queens(&1, n, np, p, [queen|placement]) )
-      |> Enum.max_by( fn x -> length(x) end ) # select the next slot with max placements
+      |> Enum.map( &fit_queens(&1, n, np, p, [queen|placement]) |> List.flatten)
+      |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of placements
     end
   end
 
