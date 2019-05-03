@@ -428,26 +428,31 @@ defmodule FP.Recursion.Advanced do
   # TODO: memoisation of queen power zone to speed things up.
   #
   def super_queen(n) do
-    slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}
+    # memoisation: pre-compute queen power zones for looking up
+    lookup = for y <- 0..n-1, x <- 0..n-1, into: %{} do 
+      {{x, y}, super_queen_power_zone({x,y}, n)}
+    end
 
-    super_queen(slots, n)
+    slots = Map.keys(lookup)
+    super_queen(slots, n, lookup)
     |> Enum.filter( fn x -> length(x) != 0 end )
     |> Enum.uniq
     |> length
   end
 
-  def super_queen(slots, grid_size, placements \\ [])
-  def super_queen([], _, placements), do: placements
-  def super_queen([i|j], n, placements) do
-    placement = fit_queens(i, n, j)
-    super_queen(j, n, placement++placements)
+  def super_queen(slots, grid_size, lookup, placements \\ [])
+  def super_queen([], _, _, placements), do: placements
+  def super_queen([i|j], n, lookup, placements) do
+    power_pos = []
+    placement = fit_queens(i, n, j, power_pos, lookup)
+    super_queen(j, n, lookup, placement++placements)
   end
 
   # recursively fit queen pieces from a given queen position
   # p_pos -> power zone of an existing queen placement
   # np_pos -> non power, available slots
-  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], placement \\ []) do
-    {p0, np0} = super_queen_power_zone(queen, n)
+  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, placement \\ []) do
+    {p0, np0} = if lookup == %{}, do: super_queen_power_zone(queen, n), else: lookup[queen]
 
     # re-compute power and available (non power) slots via MapSet
     p_set = MapSet.union(MapSet.new(p0), MapSet.new(p_pos))
@@ -470,7 +475,7 @@ defmodule FP.Recursion.Advanced do
     else
       # compute placements for next slots
       next_slots
-      |> Enum.map( &fit_queens(&1, n, np, p, [queen|placement]) |> List.flatten)
+      |> Enum.map( &fit_queens(&1, n, np, p, lookup,[queen|placement]) |> List.flatten)
       |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of placements
     end
   end
