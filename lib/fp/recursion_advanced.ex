@@ -429,17 +429,20 @@ defmodule FP.Recursion.Advanced do
   # such as rotation and reflection to reduce computation
   # https://en.wikipedia.org/wiki/Eight_queens_puzzle#Solutions
   #
-  def super_queen(n) do
+  def super_queen(n, display \\ false) do
     # memoisation: pre-compute queen power zones for looking up
     lookup = for y <- 0..n-1, x <- 0..n-1, into: %{} do 
       {{x, y}, super_queen_power_zone({x,y}, n)}
     end
 
-    slots = Map.keys(lookup)
-    super_queen(slots, n, lookup)
+    slots = Map.keys(lookup) |> Enum.filter(fn {_x,y} -> y == 0 end)
+
+    solutions = super_queen(slots, n, lookup)
     |> Enum.filter( fn x -> length(x) != 0 end )
     |> Enum.uniq
-    |> length
+
+    # either display or count the number of unique solutions
+    if display, do: solutions |> plot(n), else: solutions |> length
   end
 
   def super_queen(slots, grid_size, lookup, solutions \\ [])
@@ -508,6 +511,7 @@ defmodule FP.Recursion.Advanced do
   defp plus_minus_n?(x0, x1, n) do
     ((x0 - x1) |> abs) == n
   end
+
   # return one of more slots on the next line
   defp next_slots([]), do: []
   defp next_slots([slot|slots]) do
@@ -517,5 +521,27 @@ defmodule FP.Recursion.Advanced do
     if more == [], do: [slot], else: [slot|more]
   end
 
+  # plot solutions
+  def plot([], _), do: :ok
+  def plot([i|j], n) do
+    x = for y <- 0..n-1 do
+      _plot(i, y, n)
+    end
+
+    IO.puts ""
+    IO.puts x |> Enum.reverse |> Enum.join("\n")
+    IO.puts ""
+    IO.inspect i |> Enum.sort
+
+    plot(j, n)
+  end
+
+  def _plot(queens, y, n) do
+    x = for x <- 0..n-1 do
+      node = {x,y}
+      if node in queens, do: "q", else: "-"
+    end
+    x |> Enum.join(" ")
+  end
 
 end
