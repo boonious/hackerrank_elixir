@@ -413,7 +413,7 @@ defmodule FP.Recursion.Advanced do
 
   https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
   """
-  # Abandonded this algorithm, the logic broke down for large grid size:
+  # (Abandonded algorithim) logic broke down for large grid size:
   # evaluate each mirroring queen pair as a starting pair, recursively compute the next
   # available slots from which a next pair can be deduced and placed.
   # 
@@ -421,11 +421,13 @@ defmodule FP.Recursion.Advanced do
   # slots and repeat. 
   #
   # Currently the algorithm works and correctly
-  # identifies the 4, 44 unique replacements combos for n=10, 11 
+  # identifies the 4, 44 unique solutions combos for n=10, 11
   # respectively. However, it is slow for n > 11, timed out on
   # HackerRank.
   #
-  # TODO: memoisation of queen power zone to speed things up.
+  # TODO: implement fundamental + variants solutions, based on symmetry
+  # such as rotation and reflection to reduce computation
+  # https://en.wikipedia.org/wiki/Eight_queens_puzzle#Solutions
   #
   def super_queen(n) do
     # memoisation: pre-compute queen power zones for looking up
@@ -440,18 +442,18 @@ defmodule FP.Recursion.Advanced do
     |> length
   end
 
-  def super_queen(slots, grid_size, lookup, placements \\ [])
-  def super_queen([], _, _, placements), do: placements
-  def super_queen([i|j], n, lookup, placements) do
+  def super_queen(slots, grid_size, lookup, solutions \\ [])
+  def super_queen([], _, _, solutions), do: solutions
+  def super_queen([i|j], n, lookup, solutions) do
     power_pos = []
-    placement = fit_queens(i, n, j, power_pos, lookup)
-    super_queen(j, n, lookup, placement++placements)
+    solution = fit_queens(i, n, j, power_pos, lookup)
+    super_queen(j, n, lookup, solution++solutions)
   end
 
   # recursively fit queen pieces from a given queen position
-  # p_pos -> power zone of an existing queen placement
+  # p_pos -> power zone of an existing queen solution
   # np_pos -> non power, available slots
-  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, placement \\ []) do
+  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, solution \\ []) do
     {p0, np0} = if lookup == %{}, do: super_queen_power_zone(queen, n), else: lookup[queen]
 
     # re-compute power and available (non power) slots via MapSet
@@ -466,17 +468,17 @@ defmodule FP.Recursion.Advanced do
     |> Enum.sort
     |> Enum.sort_by(&(elem(&1,1)))
 
-    # find slots on the next line and compute placements recursively,
-    # select the slots with the required number of placements
+    # find slots on the next line and compute solutions recursively,
+    # select the slots with the required number of solutions
     next_slots = next_slots(np)
 
     if np == [] do
-      [queen|placement] |> Enum.sort
+      [queen|solution] |> Enum.sort
     else
-      # compute placements for next slots
+      # compute solutions for next slots
       next_slots
-      |> Enum.map( &fit_queens(&1, n, np, p, lookup,[queen|placement]) |> List.flatten)
-      |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of placements
+      |> Enum.map( &fit_queens(&1, n, np, p, lookup, [queen|solution]) |> List.flatten)
+      |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of solutions
     end
   end
 
