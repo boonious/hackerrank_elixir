@@ -435,7 +435,7 @@ defmodule FP.Recursion.Advanced do
       {{x, y}, super_queen_power_zone({x,y}, n)}
     end
 
-    slots = Map.keys(lookup) |> Enum.filter(fn {_x,y} -> y == 0 end)
+    slots = Map.keys(lookup) |> Enum.filter(fn {_x,y} -> y == 0 end) |> Enum.sort
 
     solutions = super_queen(slots, n, lookup)
     |> Enum.filter( fn x -> length(x) != 0 end )
@@ -480,8 +480,13 @@ defmodule FP.Recursion.Advanced do
     else
       # compute solutions for next slots
       next_slots
-      |> Enum.map( &fit_queens(&1, n, np, p, lookup, [queen|solution]) |> List.flatten)
+      |> Enum.map( &fit_queens(&1, n, np, p, lookup, [queen|solution]) )
+      |> List.flatten
+      |> Enum.chunk_by( &( elem(&1,0) == 0) ) 
+      |> Enum.chunk_every(2) 
+      |> Enum.map(fn z -> hd(z) ++ List.last(z)end)
       |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of solutions
+
     end
   end
 
