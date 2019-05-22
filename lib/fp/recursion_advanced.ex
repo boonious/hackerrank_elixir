@@ -449,31 +449,25 @@ defmodule FP.Recursion.Advanced do
   def super_queen([], _, _, solutions), do: solutions
   def super_queen([i|j], n, lookup, solutions) do
     power_pos = []
-    solution = fit_queens(i, n, j, power_pos, lookup)
-    super_queen(j, n, lookup, solution++solutions)
+    slots = lookup |> Map.keys
+
+    solution = fit_queens(i, n, slots, power_pos, lookup)
+    super_queen(j, n, lookup, solution ++ solutions)
   end
 
   # recursively fit queen pieces from a given queen position
   # p_pos -> power zone of an existing queen solution
   # np_pos -> non power, available slots
   def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, solution \\ []) do
-    {p0, np0} = if lookup == %{}, do: super_queen_power_zone(queen, n), else: lookup[queen]
+    {p0, _} = if lookup == %{}, do: super_queen_power_zone(queen, n), else: lookup[queen]
 
-    # re-compute power and available (non power) slots via MapSet
-    p_set = MapSet.union(MapSet.new(p0), MapSet.new(p_pos))
-    np_set = MapSet.union(MapSet.new(np0), MapSet.new(np_pos))
-    |> MapSet.difference(p_set)
-
-    # convert and sort to List
-    p = p_set |> MapSet.to_list
-    np = np_set
-    |> MapSet.to_list
-    |> Enum.sort
-    |> Enum.sort_by(&(elem(&1,1)))
+    # re-compute power and available (non power) slots
+    p = p0 ++ p_pos
+    np = np_pos -- p
 
     # find slots on the next line and compute solutions recursively,
     # select the slots with the required number of solutions
-    next_slots = next_slots(np)
+    next_slots = next_slots(np, queen)
 
     if np == [] do
       [queen|solution] |> Enum.sort
@@ -518,12 +512,14 @@ defmodule FP.Recursion.Advanced do
   end
 
   # return one of more slots on the next line
-  defp next_slots([]), do: []
-  defp next_slots([slot|slots]) do
-    {_, next_y} = slot
+  defp next_slots([], _), do: []
+  defp next_slots(np, queen) do
+    {_, current_y} = queen
+    next_y = current_y + 1
 
-    more = slots |> Enum.filter(fn {_, y} -> y == next_y end)
-    if more == [], do: [slot], else: [slot|more]
+    np 
+    |> Enum.filter(fn {_, y} -> y == next_y end)
+    |> Enum.sort
   end
 
   # plot solutions

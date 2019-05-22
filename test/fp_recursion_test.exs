@@ -523,8 +523,10 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
 
     #https://www.hackerrank.com/challenges/super-queens-on-a-chessboard/problem
     test "super_queen - Super queens on a chess board, identify n unique super queen placements (combination) on n-size grid" do
-      assert super_queen(10) == 4 # 4 possible combinations containing 10 queens placement on a 10x10 grid
       assert super_queen(8) == 0
+      assert super_queen(10) == 4 # 4 possible combinations containing 10 super queens placement on a 10x10 grid
+      assert super_queen(11) == 44 # 44 possible 11-queens placements on a 11x11 grid
+      assert super_queen(12) == 156 # 156 possible 12-queens placements on a 12x12 grid
     end
 
     test "fit_queen_pairs - Super queens on a chess board, recursively fit queens into available slots from a starting position" do
