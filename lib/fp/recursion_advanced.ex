@@ -421,12 +421,11 @@ defmodule FP.Recursion.Advanced do
   # slots and repeat. 
   #
   # Currently the algorithm works and correctly
-  # identifies the 4, 44 unique solutions combos for n=10, 11
-  # respectively. However, it is slow for n > 11, timed out on
-  # HackerRank.
+  # identifies the unique solutions for n=10, 11, 12, 13
+  # For n = 14, the algorithm did identify the 5180 solutions,
+  # however it takes 30s and timed out on HackerRank
   #
-  # TODO: implement fundamental + variants solutions, based on symmetry
-  # such as rotation and reflection to reduce computation
+  # TODO: experiment with the algorithms on
   # https://en.wikipedia.org/wiki/Eight_queens_puzzle#Solutions
   #
   def super_queen(n, display \\ false) do
@@ -436,29 +435,31 @@ defmodule FP.Recursion.Advanced do
     end
 
     slots = Map.keys(lookup) |> Enum.filter(fn {_x,y} -> y == 0 end) |> Enum.sort
-
     solutions = super_queen(slots, n, lookup)
-    |> Enum.filter( fn x -> length(x) != 0 end )
-    |> Enum.uniq
 
     # either display or count the number of unique solutions
-    if display, do: solutions |> plot(n), else: solutions |> length
+    if display, do: solutions |> plot(n), else: ((solutions |> String.split("|")) -- [""]) |> length
   end
 
-  def super_queen(slots, grid_size, lookup, solutions \\ [])
+  def super_queen(seeds, grid_size, lookup, solutions \\ "")
   def super_queen([], _, _, solutions), do: solutions
   def super_queen([i|j], n, lookup, solutions) do
     power_pos = []
     slots = lookup |> Map.keys
 
     solution = fit_queens(i, n, slots, power_pos, lookup)
-    super_queen(j, n, lookup, solution ++ solutions)
+
+    z = (solution ++ (solutions |> String.split("|")) -- [""])
+    |> Enum.uniq 
+    |> Enum.join("|")
+
+    super_queen(j, n, lookup, z)
   end
 
   # recursively fit queen pieces from a given queen position
   # p_pos -> power zone of an existing queen solution
   # np_pos -> non power, available slots
-  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, solution \\ []) do
+  def fit_queens(queen, n, np_pos \\ [],  p_pos \\ [], lookup \\ %{}, solution \\ "") do
     {p0, _} = if lookup == %{}, do: super_queen_power_zone(queen, n), else: lookup[queen]
 
     # re-compute power and available (non power) slots
@@ -469,17 +470,16 @@ defmodule FP.Recursion.Advanced do
     # select the slots with the required number of solutions
     next_slots = next_slots(np, queen)
 
-    if np == [] do
-      [queen|solution] |> Enum.sort
-    else
-      # compute solutions for next slots
-      next_slots
-      |> Enum.map( &fit_queens(&1, n, np, p, lookup, [queen|solution]) )
-      |> List.flatten
-      |> Enum.chunk_by( &( elem(&1,0) == 0) ) 
-      |> Enum.chunk_every(2) 
-      |> Enum.map(fn z -> hd(z) ++ List.last(z)end)
-      |> Enum.filter( fn x -> length(x) == n end ) # select slots with require number of solutions
+    {x, _} = queen
+    x_padded = "#{x}" |> String.pad_leading(2, "0")
+    cond do
+      np == [] -> "#{x_padded} #{solution}" |> String.trim
+      true ->
+        # compute solutions for next slots
+        next_slots
+        |> Enum.map( &fit_queens(&1, n, np, p, lookup, "#{x_padded} #{solution}") )
+        |> List.flatten
+        |> Enum.filter( fn x -> byte_size(x) == 2*n + (n - 1) end ) # select slots with require number of solutions
 
     end
   end

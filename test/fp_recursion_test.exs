@@ -529,17 +529,17 @@ _1111111111111___1111111111111___1111111111111___1111111111111_\n
       assert super_queen(12) == 156 # 156 possible 12-queens placements on a 12x12 grid
     end
 
-    test "fit_queen_pairs - Super queens on a chess board, recursively fit queens into available slots from a starting position" do
+    test "fit_queen - Super queens on a chess board, recursively fit queens into available slots from a starting position" do
       n = 10
       slots = for y <- 0..n-1, x <- 0..n-1, do: {x, y}
 
       starting_pos = {2,0}
-      assert fit_queens(starting_pos, n, slots |> List.delete(starting_pos))
-      == [[{0,3},{1,7},{2,0},{3,4},{4,8},{5,1},{6,5},{7,9},{8,2},{9,6}]]
+      assert fit_queens(starting_pos, n, slots)
+      == ["07 04 01 09 06 03 00 08 05 02"]
 
       starting_pos = {7,0}
-      assert fit_queens(starting_pos, n, slots |> List.delete(starting_pos))
-      == [[{0,6},{1,2},{2,9},{3,5},{4,1},{5,8},{6,4},{7,0},{8,7},{9,3}]]
+      assert fit_queens(starting_pos, n, slots)
+      == ["02 05 08 00 03 06 09 01 04 07"]
     end
 
     test "super_queen_power_zone/2 - Super queens on a chess board, find zone of power in a n-size grid for a queen at i,j position" do
