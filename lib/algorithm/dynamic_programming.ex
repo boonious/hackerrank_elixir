@@ -29,4 +29,31 @@ defmodule Algo.DP do
 
   end
 
+  #==========================================================================
+  @doc """
+  String reduction by dynamic programming
+
+  https://www.hackerrank.com/challenges/string-reduction/problem
+  """
+
+  # Dynamic programming algorithm based on even/odd properties of chars (a, b, c)
+  # - string always reduced to 1 or 2 unique char(s)
+  # - all same properties (odd or even) => 2
+  # - different properties (some odd, some even) => 1
+  #
+  @spec string_reduce(binary) :: integer
+  def string_reduce(str) do
+    char_list = String.split str, "", trim: true
+
+    if Enum.uniq(char_list) |> length == 1 do
+      length(char_list)
+    else
+      a = Enum.count(char_list, &(&1=="a")) |> rem(2)
+      b = Enum.count(char_list, &(&1=="b")) |> rem(2)
+      c = Enum.count(char_list, &(&1=="c")) |> rem(2)
+
+      if a == b and b == c, do: 2, else: 1
+    end
+  end
+
 end

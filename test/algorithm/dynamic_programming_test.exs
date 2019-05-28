@@ -12,4 +12,10 @@ defmodule AlgoDPTest do
     assert max_subarray_sums([1,-1,-1,-1,-1,5],6) == [5,6]
   end
 
+  # https://www.hackerrank.com/challenges/maxsubarray/problem
+  test "string_reduce - Reduce string and count unique character(s)" do
+    assert string_reduce("cab") == 2
+    assert string_reduce("bcab") == 1
+    assert string_reduce("ccccc") == 5
+  end
 end
