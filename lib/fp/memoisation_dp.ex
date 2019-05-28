@@ -60,4 +60,18 @@ defmodule FP.MemoiDP do
     {p, Map.merge(c_new, %{n => p})} # update cache with p entry
   end
 
+  @doc """
+  Fibonacci - compute large Fibonacci numbers
+
+  https://www.hackerrank.com/challenges/fibonacci-fp/problem
+  """
+
+  def fibonacci(numbers, results \\ [])
+  def fibonacci([], results), do: results |> Enum.reverse
+  def fibonacci([i|j], results), do: fibonacci(j, [_fibonacci(i) | results])
+
+  def _fibonacci(0), do: 0
+  def _fibonacci(1), do: 1
+  def _fibonacci(n), do: _fibonacci(n - 2) + _fibonacci(n - 1)
+
 end

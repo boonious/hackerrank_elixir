@@ -7,7 +7,7 @@ defmodule FPMemoiDPTest do
   describe "memoisation dp" do
     @describetag :memoi_dp
 
-    #  https://www.hackerrank.com/challenges/pentagonal-numbers/problem
+    # https://www.hackerrank.com/challenges/pentagonal-numbers/problem
     test "p - Pentagonal numbers, compute number of dots for recursive overlapping pentagons" do
       assert p(1) == 1
       assert p(2) == 5
@@ -27,6 +27,11 @@ defmodule FPMemoiDPTest do
       # compute a series of p values
       # - cache being generated and looked up within the function
       assert p([1,2,3,4,5]) == [1, 5, 12, 22, 35]
+    end
+
+    # https://www.hackerrank.com/challenges/fibonacci-fp/problem
+    test "fibonacci - compute large Fibonacci numbers" do
+      assert fibonacci([0,1,5,10]) == [0, 1, 5, 55]
     end
 
   end
