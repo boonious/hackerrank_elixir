@@ -65,13 +65,27 @@ defmodule FP.MemoiDP do
 
   https://www.hackerrank.com/challenges/fibonacci-fp/problem
   """
+  @spec fibonacci(list, map, list) :: list
+  def fibonacci(numbers, cache \\ %{0 => 0, 1 => 1}, results \\ [])
+  def fibonacci([], _, results), do: results |> Enum.reverse
 
-  def fibonacci(numbers, results \\ [])
-  def fibonacci([], results), do: results |> Enum.reverse
-  def fibonacci([i|j], results), do: fibonacci(j, [_fibonacci(i) | results])
+  def fibonacci([i|j], cache, results) do
+    {n, c} = _fibonacci(i, cache)
 
-  def _fibonacci(0), do: 0
-  def _fibonacci(1), do: 1
-  def _fibonacci(n), do: _fibonacci(n - 2) + _fibonacci(n - 1)
+    fibonacci(j, c, [n|results])
+  end
+
+  defp _fibonacci(n, cache) do
+    if cache[n] do
+      {cache[n], cache}
+    else
+      {n1, c1} = _fibonacci(n - 1, cache)
+      {n2, c2} = _fibonacci(n - 2, c1)
+
+      # compute number in modulo 10^8+7
+      fibonnaci_n = rem((n1+n2), 100000007)
+      {fibonnaci_n, Map.merge(c2, %{n => fibonnaci_n})}
+    end
+  end
 
 end

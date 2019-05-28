@@ -32,6 +32,7 @@ defmodule FPMemoiDPTest do
     # https://www.hackerrank.com/challenges/fibonacci-fp/problem
     test "fibonacci - compute large Fibonacci numbers" do
       assert fibonacci([0,1,5,10]) == [0, 1, 5, 55]
+      assert fibonacci([100]) == [24278230]
     end
 
   end
