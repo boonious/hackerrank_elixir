@@ -18,4 +18,5 @@ defmodule AlgoDPTest do
     assert string_reduce("bcab") == 1
     assert string_reduce("ccccc") == 5
   end
+
 end

@@ -35,6 +35,12 @@ defmodule FPMemoiDPTest do
       assert fibonacci([100]) == [24278230]
     end
 
+    # https://www.hackerrank.com/challenges/reverse-factorization/problem
+    test "reverse_factor - Find lexicographically smallest series to reach N, given a list of plausible factors" do
+      assert reverse_factor(12, [2,3,4]) == [1,3,12]
+      assert reverse_factor(15, [2,10,6,9,11]) == [-1]
+      assert reverse_factor(175840877, [4,5,6,7,8,10,12,17,18,19]) == [-1]
+    end
   end
 
 end
