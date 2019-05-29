@@ -19,4 +19,11 @@ defmodule AlgoDPTest do
     assert string_reduce("ccccc") == 5
   end
 
+  # https://www.hackerrank.com/challenges/k-factorization/problem
+  test "k_factor - Find lexicographically smallest series to reach N, given a list of plausible factors" do
+    assert k_factor(12, [2,3,4]) == [1,3,12]
+    assert k_factor(15, [2,10,6,9,11]) == [-1]
+    assert k_factor(175840877, [4,5,6,7,8,10,12,17,18,19]) == [-1]
+  end
+
 end

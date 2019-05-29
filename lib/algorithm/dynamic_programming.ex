@@ -56,4 +56,44 @@ defmodule Algo.DP do
     end
   end
 
+  #==========================================================================
+  @doc """
+  K Factorisation - dynamic programming
+
+  https://www.hackerrank.com/challenges/k-factorization/problem
+  """
+
+  # DP algorithm: find smallest series by recursive factorisation using the largest factor
+  # solved via the same functional programming challenge
+  # https://www.hackerrank.com/challenges/reverse-factorization/problem
+
+  @spec k_factor(integer, list(integer)) :: list(integer)
+  def k_factor(num, series) do
+    # identify all factors related to the num
+    factors = series
+    |> Enum.filter(&(rem(num,&1) == 0))
+    |> Enum.sort
+    |> Enum.reverse # sort factors in desc order (largest first)
+
+    results = [num]
+    if factors == [], do: [-1], else: k_factor(num, factors, results)
+  end
+
+  # recursive factorisation by the largest factor
+  def k_factor(1, _, results), do: results
+  def k_factor(_, [], _), do: [-1]
+  def k_factor(num, series, results) do
+    # re-compute factors
+    factors = series
+    |> Enum.filter(&(rem(num,&1) == 0))
+
+    if factors != [] do
+      x = div(num, factors |> hd) # new num by the largest factor division
+      k_factor(x, factors, [x|results]) # repeat factorisation
+    else
+      # no factors found, i.e. unable to complete factorisation
+      k_factor(num, [], results)
+    end
+  end
+
 end
