@@ -251,6 +251,56 @@ defmodule FP.AdHoc do
     rotate(y ++ [x], iterations - 1, results ++ [(y |> Enum.join("")) <> x])
   end
 
+  # use binary matching to solve the string rotation challenge (above)
+  # this solution eliminates list creation and the use of ++
+  #
+  # benchmarking suggests this solution to be more performant - see below
+  #
+  # https://www.hackerrank.com/challenges/rotate-string/problem
+  def rotate_binary(str) when is_bitstring(str), do: rotate_binary(str, String.length(str))
+
+  def rotate_binary(str, iterations, results \\ [])
+  def rotate_binary(_str, 0, results), do: results |> Enum.reverse()
+
+  def rotate_binary(<<head::utf8, rest::binary>>, iterations, results) do
+    rotate_binary(<<rest::binary, head>>, iterations - 1, [<<rest::binary, head>> | results])
+  end
+
+  #   from: mix run benchmark/string_rotation.exs
+  #
+  #   Operating System: macOS
+  #   CPU Information: Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz
+  #   Number of Available Cores: 8
+  #   Available memory: 16 GB
+  #   Elixir 1.11.2
+  #   Erlang 21.3.8.7
+  #
+  #   Benchmark suite executing with the following configuration:
+  #   warmup: 2 s
+  #   time: 10 s
+  #   memory time: 2 s
+  #   parallel: 1
+  #   inputs: none specified
+  #   Estimated total run time: 28 s
+  #
+  #   Benchmarking String rotation - binary matching...
+  #   Benchmarking String rotation - list-based...
+  #
+  #   Name                                        ips        average  deviation         median         99th %
+  #   String rotation - binary matching         43.77       22.85 ms     ±5.73%       23.08 ms       28.43 ms
+  #   String rotation - list-based              14.26       70.15 ms     ±8.92%       68.09 ms       84.69 ms
+  #
+  #   Comparison:
+  #   String rotation - binary matching         43.77
+  #   String rotation - list-based              14.26 - 3.07x slower +47.30 ms
+  #
+  #   Memory usage statistics:
+  #
+  #   Name                                 Memory usage
+  #   String rotation - binary matching         8.13 MB
+  #   String rotation - list-based             40.27 MB - 4.95x memory usage +32.14 MB
+
+  # ===============================================================================================
   @doc """
   Huge GCD
 

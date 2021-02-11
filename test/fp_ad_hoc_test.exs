@@ -21,6 +21,14 @@ defmodule FPAdHocTest do
       assert FP.AdHoc.rotate("z") == ["z"]
     end
 
+    test "rotate - Rotate string binary matching" do
+      assert FP.AdHoc.rotate_binary("abc") == ["bca", "cab", "abc"]
+      assert FP.AdHoc.rotate_binary("abcde") == ["bcdea", "cdeab", "deabc", "eabcd", "abcde"]
+      assert FP.AdHoc.rotate_binary("abab") == ["baba", "abab", "baba", "abab"]
+      assert FP.AdHoc.rotate_binary("aaa") == ["aaa", "aaa", "aaa"]
+      assert FP.AdHoc.rotate_binary("z") == ["z"]
+    end
+
     # https://www.hackerrank.com/challenges/huge-gcd-fp/problem
     test "prime_factorise - Huge GCD numbers" do
       # 'prime_factorise' function is required to factorise number into primes
