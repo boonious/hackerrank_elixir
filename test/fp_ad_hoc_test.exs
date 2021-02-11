@@ -1,18 +1,18 @@
 defmodule FPAdHocTest do
   use ExUnit.Case
   doctest FP.AdHoc
-  
+
   describe "ad hoc" do
     @describetag :ad_hoc
-    
-    #https://www.hackerrank.com/challenges/remove-duplicates/problem
+
+    # https://www.hackerrank.com/challenges/remove-duplicates/problem
     test "dedup - Remove duplicates (char)" do
       assert FP.AdHoc.dedup("aabc") == "abc"
       assert FP.AdHoc.dedup("ccbabacc") == "cba"
       assert FP.AdHoc.dedup("sdfsdewrmmweswerpsdfpmssfaql") == "sdfewrmpaql"
     end
 
-    #https://www.hackerrank.com/challenges/rotate-string/problem
+    # https://www.hackerrank.com/challenges/rotate-string/problem
     test "rotate - Rotate string" do
       assert FP.AdHoc.rotate("abc") == ["bca", "cab", "abc"]
       assert FP.AdHoc.rotate("abcde") == ["bcdea", "cdeab", "deabc", "eabcd", "abcde"]
@@ -21,7 +21,7 @@ defmodule FPAdHocTest do
       assert FP.AdHoc.rotate("z") == ["z"]
     end
 
-    #https://www.hackerrank.com/challenges/huge-gcd-fp/problem
+    # https://www.hackerrank.com/challenges/huge-gcd-fp/problem
     test "prime_factorise - Huge GCD numbers" do
       # 'prime_factorise' function is required to factorise number into primes
       # for computing GCD of huge numbers by prime decomposition
@@ -41,10 +41,8 @@ defmodule FPAdHocTest do
       x = [[2, 3, 5], [4, 5]]
       assert FP.AdHoc.gcd(x) == 10
 
-      x = [[55,555,5,64,23,66,23,45,33,563], [2,3,4,5,7]]
+      x = [[55, 555, 5, 64, 23, 66, 23, 45, 33, 563], [2, 3, 4, 5, 7]]
       assert FP.AdHoc.gcd(x) == 120
     end
-
   end
-
 end

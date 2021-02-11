@@ -3,7 +3,7 @@ defmodule Algo.Constructive do
   Elixir solutions for HackerRank algorithm challenges: constructive algorithm.
   """
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   New year chaos
 
@@ -13,8 +13,8 @@ defmodule Algo.Constructive do
   def minimum_bribes(queue) do
     bribes = 0
     sorted = []
-    swaps = 0 
-    minimum_bribes(queue, sorted, swaps, bribes)   
+    swaps = 0
+    minimum_bribes(queue, sorted, swaps, bribes)
   end
 
   # use recursive bubble sort to sort queue hypothesis into an order queue
@@ -32,14 +32,14 @@ defmodule Algo.Constructive do
   end
 
   defp bubble_sorted(_, sorted, _, swaps, "Too chaotic"), do: {sorted, swaps, "Too chaotic"}
-  defp bubble_sorted([], sorted, _, swaps, bribes), do: {sorted |> Enum.reverse, swaps, bribes}
+  defp bubble_sorted([], sorted, _, swaps, bribes), do: {sorted |> Enum.reverse(), swaps, bribes}
 
-  defp bubble_sorted([x1, x2], sorted, pos, swaps, bribes) when x1 < x2 do    
-    bubble_sorted([], [x2|[x1|sorted]], pos + 1, swaps, bribes)
+  defp bubble_sorted([x1, x2], sorted, pos, swaps, bribes) when x1 < x2 do
+    bubble_sorted([], [x2 | [x1 | sorted]], pos + 1, swaps, bribes)
   end
 
   defp bubble_sorted([x1, x2], sorted, pos, swaps, bribes) when x1 > x2 do
-    bubble_sorted([], [x1|[x2|sorted]], pos + 1, swaps + 1, bribes + 1)
+    bubble_sorted([], [x1 | [x2 | sorted]], pos + 1, swaps + 1, bribes + 1)
   end
 
   defp bubble_sorted(queue, sorted, pos, swaps, bribes) do
@@ -47,10 +47,9 @@ defmodule Algo.Constructive do
     y = Enum.drop(queue, 2)
 
     cond do
-      (x1 - pos) > 2 -> bubble_sorted(y, sorted, pos + 1, swaps, "Too chaotic")
-      x1 < x2 -> bubble_sorted([x2|y], [x1|sorted], pos + 1, swaps, bribes)
-      x1 > x2 -> bubble_sorted([x1|y], [x2|sorted], pos + 1, swaps + 1, bribes + 1)
+      x1 - pos > 2 -> bubble_sorted(y, sorted, pos + 1, swaps, "Too chaotic")
+      x1 < x2 -> bubble_sorted([x2 | y], [x1 | sorted], pos + 1, swaps, bribes)
+      x1 > x2 -> bubble_sorted([x1 | y], [x2 | sorted], pos + 1, swaps + 1, bribes + 1)
     end
   end
-
 end

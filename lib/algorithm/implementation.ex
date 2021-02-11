@@ -3,7 +3,7 @@ defmodule Algo.Imp do
   Elixir solutions for HackerRank algorithm challenges: implementation.
   """
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   Repeated string
 
@@ -11,21 +11,23 @@ defmodule Algo.Imp do
   """
   @spec repeated_string(binary, integer) :: integer
   def repeated_string(str, length) do
-    len = String.length str
+    len = String.length(str)
     times_repeated = div(length, len)
 
     len_remaining = rem(length, len)
-    y = String.split(str, "", trim: true)
-    |> Enum.take(len_remaining)
-    |> Enum.join("")
 
-    (Regex.scan(~r/a/, str) |> length)*times_repeated + (Regex.scan(~r/a/, y) |> length)
+    y =
+      String.split(str, "", trim: true)
+      |> Enum.take(len_remaining)
+      |> Enum.join("")
+
+    (Regex.scan(~r/a/, str) |> length) * times_repeated + (Regex.scan(~r/a/, y) |> length)
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   Kangaroo 
-  
+
   Determine if jump distance to be equal eventually from different starting points
   and hop velocity.
 
@@ -39,20 +41,22 @@ defmodule Algo.Imp do
 
   @spec f(list(integer)) :: boolean
   # guard for division over 0
-  def f([x1, v1, x2, v2]) when v1 == v2, do: if x1 == x2, do: true, else: false
+  def f([x1, v1, x2, v2]) when v1 == v2, do: if(x1 == x2, do: true, else: false)
+
   def f([x1, v1, x2, v2]) do
-    y = ((x1 - x2) / (v2 - v1))
+    y = (x1 - x2) / (v2 - v1)
 
     # get decimal points, jumps can't coincide "mid air"
     # i.e. y needs to integer, e.g 4.0, not 4.22
-    [_, z] = y
-    |> Float.to_string
-    |> String.split(".")
+    [_, z] =
+      y
+      |> Float.to_string()
+      |> String.split(".")
 
     if y >= 0 and z == "0", do: true, else: false
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   Divisible sum pairs
 
@@ -65,15 +69,18 @@ defmodule Algo.Imp do
 
   @doc false
   def divisible_sum_pairs([], _, _, count), do: count
-  def divisible_sum_pairs([x|y], b, k, count) do
-    sums = for a <- b do
-      a+x
-    end
+
+  def divisible_sum_pairs([x | y], b, k, count) do
+    sums =
+      for a <- b do
+        a + x
+      end
+
     c = sums |> Enum.filter(&(rem(&1, k) == 0)) |> length
     divisible_sum_pairs(y, b |> Enum.drop(1), k, count + c)
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   The grid search - find 2D subarray within a grid array
 
@@ -91,16 +98,18 @@ defmodule Algo.Imp do
   @spec grid_search(list(binary), list(binary), integer) :: boolean
   def grid_search(g, p, str_len) when is_list(p) do
     p0 = p |> hd
-    candidates = grid_search(g, p0) # a list of start positions of potential matches
+    # a list of start positions of potential matches
+    candidates = grid_search(g, p0)
 
     # send to a recursive function to determine match for all candidates
-    if candidates == [], do: false, else:  _grid_search(candidates, g, p, str_len)
+    if candidates == [], do: false, else: _grid_search(candidates, g, p, str_len)
   end
 
   # recursively check all candidates
-  defp _grid_search(candidates, grid, pattern, str_len, match \\ false)  
-  defp _grid_search(_, _, _, _, true), do: true  
-  defp _grid_search([], _, _, _, _), do: false # all candidates checked without a positive outcome
+  defp _grid_search(candidates, grid, pattern, str_len, match \\ false)
+  defp _grid_search(_, _, _, _, true), do: true
+  # all candidates checked without a positive outcome
+  defp _grid_search([], _, _, _, _), do: false
 
   defp _grid_search([{offset, row} | c], g, p, n, m) do
     g_rest = g |> Enum.drop(row)
@@ -126,38 +135,39 @@ defmodule Algo.Imp do
 
   def grid_search([g0 | g], p, r, c) do
     regex = Regex.compile!("(?=(#{p}))")
-    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten
+    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten()
 
     if match? == [] do
-      grid_search(g, p, r+1, c)
+      grid_search(g, p, r + 1, c)
     else
-      x = Enum.map(match?, fn {offset,_} -> {offset,r} end)
-      grid_search(g, p, r+1, c ++ x)
+      x = Enum.map(match?, fn {offset, _} -> {offset, r} end)
+      grid_search(g, p, r + 1, c ++ x)
     end
   end
 
   # determine whether the rest of pattern matches the next few lines in grid
   defp _grid_search_rest(grid, pattern, offset, len, matches \\ [])
-  defp _grid_search_rest(_, [], _, _, matches), do: not(Enum.member?(matches, false))
+  defp _grid_search_rest(_, [], _, _, matches), do: not Enum.member?(matches, false)
 
   # grid ends (reached bottom) before a match can be checked thoroughly
   # return false
   defp _grid_search_rest([], _, offset, len, matches) do
-    _grid_search_rest([], [], offset , len, [false|matches])
+    _grid_search_rest([], [], offset, len, [false | matches])
   end
 
-  defp _grid_search_rest([g0|g], [p0|p], offset, len, matches) do
+  defp _grid_search_rest([g0 | g], [p0 | p], offset, len, matches) do
     regex = Regex.compile!("(?=(#{p0}))")
-    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten
+    match? = Regex.scan(regex, g0, return: :index, capture: :all_but_first) |> List.flatten()
 
     cond do
       match? == [] ->
-        _grid_search_rest(g, p, offset, len, [false|matches])
-      Enum.member? match?, {offset, len} ->
-        _grid_search_rest(g, p, offset, len, [true|matches])
+        _grid_search_rest(g, p, offset, len, [false | matches])
+
+      Enum.member?(match?, {offset, len}) ->
+        _grid_search_rest(g, p, offset, len, [true | matches])
+
       true ->
-        _grid_search_rest(g, p, offset, len, [false|matches])
+        _grid_search_rest(g, p, offset, len, [false | matches])
     end
   end
-
 end

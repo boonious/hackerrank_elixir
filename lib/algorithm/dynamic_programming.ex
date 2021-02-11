@@ -6,30 +6,30 @@ defmodule Algo.DP do
   # reuse max subarray codes developed in functional programming challenges
   import FP.Structures, only: [kadane_max: 1]
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   The Maximum Subarray sums
 
   https://www.hackerrank.com/challenges/maxsubarray/problem
   """
   @spec max_subarray_sums(list(integer), integer) :: list(integer)
-  def max_subarray_sums(a,n) do
-    index = 0..n-1
-    a_with_index = Enum.zip(a, index) # create a tuple sequence containing index
+  def max_subarray_sums(a, n) do
+    index = 0..(n - 1)
+    # create a tuple sequence containing index
+    a_with_index = Enum.zip(a, index)
 
     {_span, max} = kadane_max(a_with_index)
 
     if max != 0 do
       non_negative_sequence = a |> Enum.reject(&(&1 < 0))
-      [max, non_negative_sequence |> Enum.sum]
+      [max, non_negative_sequence |> Enum.sum()]
     else
-      least_negative = a |> Enum.max
+      least_negative = a |> Enum.max()
       [least_negative, least_negative]
     end
-
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   String reduction by dynamic programming
 
@@ -43,20 +43,20 @@ defmodule Algo.DP do
   #
   @spec string_reduce(binary) :: integer
   def string_reduce(str) do
-    char_list = String.split str, "", trim: true
+    char_list = String.split(str, "", trim: true)
 
     if Enum.uniq(char_list) |> length == 1 do
       length(char_list)
     else
-      a = Enum.count(char_list, &(&1=="a")) |> rem(2)
-      b = Enum.count(char_list, &(&1=="b")) |> rem(2)
-      c = Enum.count(char_list, &(&1=="c")) |> rem(2)
+      a = Enum.count(char_list, &(&1 == "a")) |> rem(2)
+      b = Enum.count(char_list, &(&1 == "b")) |> rem(2)
+      c = Enum.count(char_list, &(&1 == "c")) |> rem(2)
 
       if a == b and b == c, do: 2, else: 1
     end
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   K Factorisation - dynamic programming
 
@@ -70,10 +70,12 @@ defmodule Algo.DP do
   @spec k_factor(integer, list(integer)) :: list(integer)
   def k_factor(num, series) do
     # identify all factors related to the num
-    factors = series
-    |> Enum.filter(&(rem(num,&1) == 0))
-    |> Enum.sort
-    |> Enum.reverse # sort factors in desc order (largest first)
+    factors =
+      series
+      |> Enum.filter(&(rem(num, &1) == 0))
+      |> Enum.sort()
+      # sort factors in desc order (largest first)
+      |> Enum.reverse()
 
     results = [num]
     if factors == [], do: [-1], else: k_factor(num, factors, results)
@@ -82,18 +84,21 @@ defmodule Algo.DP do
   # recursive factorisation by the largest factor
   def k_factor(1, _, results), do: results
   def k_factor(_, [], _), do: [-1]
+
   def k_factor(num, series, results) do
     # re-compute factors
-    factors = series
-    |> Enum.filter(&(rem(num,&1) == 0))
+    factors =
+      series
+      |> Enum.filter(&(rem(num, &1) == 0))
 
     if factors != [] do
-      x = div(num, factors |> hd) # new num by the largest factor division
-      k_factor(x, factors, [x|results]) # repeat factorisation
+      # new num by the largest factor division
+      x = div(num, factors |> hd)
+      # repeat factorisation
+      k_factor(x, factors, [x | results])
     else
       # no factors found, i.e. unable to complete factorisation
       k_factor(num, [], results)
     end
   end
-
 end

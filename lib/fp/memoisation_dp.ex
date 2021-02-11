@@ -15,7 +15,7 @@ defmodule FP.MemoiDP do
   @doc false
   @spec p(integer) :: integer
   def p(1), do: 1
-  def p(n) when is_integer(n), do: p(n-1) + (1 + (n-1) * 3)
+  def p(n) when is_integer(n), do: p(n - 1) + (1 + (n - 1) * 3)
 
   @doc """
   Pentagonal numbers - compute number of dots for recursive and
@@ -32,17 +32,17 @@ defmodule FP.MemoiDP do
   # Note: rather storing results in a list,
   # the solution on HackerRank involves Stream.map 
   # and outputting numbers directly to :stdio
-  
+
   # recursively generate p values, using a cache
   # to speed the process
   @spec p(list, map, list) :: list
-  def p(n, cache \\ %{1 => 1} , results \\ [])
-  def p([], _, results), do: results |> Enum.reverse
+  def p(n, cache \\ %{1 => 1}, results \\ [])
+  def p([], _, results), do: results |> Enum.reverse()
 
-  def p([n|n_rest], cache, results) do
-      {p_value, c} = p_cache(n, cache)
+  def p([n | n_rest], cache, results) do
+    {p_value, c} = p_cache(n, cache)
 
-      p(n_rest, c, [p_value|results])
+    p(n_rest, c, [p_value | results])
   end
 
   @doc false
@@ -50,14 +50,15 @@ defmodule FP.MemoiDP do
   def p_cache(1, cache), do: {1, cache}
 
   def p_cache(n, c) do
-    x = (1 + (n-1) * 3)
+    x = 1 + (n - 1) * 3
 
     # y = p(n-1)
     # lookup a cache for p(n - 1) or compute if one doesn't exist
-    {y, c_new} = if c[n-1], do: {c[n-1], c}, else: p_cache((n-1), c)
+    {y, c_new} = if c[n - 1], do: {c[n - 1], c}, else: p_cache(n - 1, c)
     p = y + x
 
-    {p, Map.merge(c_new, %{n => p})} # update cache with p entry
+    # update cache with p entry
+    {p, Map.merge(c_new, %{n => p})}
   end
 
   @doc """
@@ -67,12 +68,12 @@ defmodule FP.MemoiDP do
   """
   @spec fibonacci(list, map, list) :: list
   def fibonacci(numbers, cache \\ %{0 => 0, 1 => 1}, results \\ [])
-  def fibonacci([], _, results), do: results |> Enum.reverse
+  def fibonacci([], _, results), do: results |> Enum.reverse()
 
-  def fibonacci([i|j], cache, results) do
+  def fibonacci([i | j], cache, results) do
     {n, c} = _fibonacci(i, cache)
 
-    fibonacci(j, c, [n|results])
+    fibonacci(j, c, [n | results])
   end
 
   defp _fibonacci(n, cache) do
@@ -83,12 +84,12 @@ defmodule FP.MemoiDP do
       {n2, c2} = _fibonacci(n - 2, c1)
 
       # compute number in modulo 10^8+7
-      fibonnaci_n = rem((n1+n2), 100000007)
+      fibonnaci_n = rem(n1 + n2, 100_000_007)
       {fibonnaci_n, Map.merge(c2, %{n => fibonnaci_n})}
     end
   end
 
-  #==========================================================================
+  # ==========================================================================
   @doc """
   Reverse factorisation - dynamic programming
 
@@ -99,10 +100,12 @@ defmodule FP.MemoiDP do
   @spec reverse_factor(integer, list(integer)) :: list(integer)
   def reverse_factor(num, series) do
     # identify all factors related to the num
-    factors = series
-    |> Enum.filter(&(rem(num,&1) == 0))
-    |> Enum.sort
-    |> Enum.reverse # sort factors in desc order (largest first)
+    factors =
+      series
+      |> Enum.filter(&(rem(num, &1) == 0))
+      |> Enum.sort()
+      # sort factors in desc order (largest first)
+      |> Enum.reverse()
 
     results = [num]
     if factors == [], do: [-1], else: reverse_factor(num, factors, results)
@@ -111,18 +114,21 @@ defmodule FP.MemoiDP do
   # recursive factorisation by the largest factor
   def reverse_factor(1, _, results), do: results
   def reverse_factor(_, [], _), do: [-1]
+
   def reverse_factor(num, series, results) do
     # re-compute factors
-    factors = series
-    |> Enum.filter(&(rem(num,&1) == 0))
+    factors =
+      series
+      |> Enum.filter(&(rem(num, &1) == 0))
 
     if factors != [] do
-      x = div(num, factors |> hd) # new num by the largest factor division
-      reverse_factor(x, factors, [x|results]) # repeat factorisation
+      # new num by the largest factor division
+      x = div(num, factors |> hd)
+      # repeat factorisation
+      reverse_factor(x, factors, [x | results])
     else
       # no factors found, i.e. unable to complete factorisation
       reverse_factor(num, [], results)
     end
   end
-
 end
